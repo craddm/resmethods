@@ -17,3 +17,16 @@ knitr::opts_chunk$set(echo = FALSE)
 
 - [Slides](slides/Week-23-messy-data.html)
 
+### 2. 23/03/2021, Statistical power and effect sizes
+
+### 3. 13/04/2021, Multiple and logistic regression
+
+### 4. 20/04/2021, Multilevel analysis
+
+### 5. 27/04/2021, Mediation and aoderation
+
+### 6. 04/05/2021, Factor analysis
+
+### 7. 11/05/2021, Statistics done wrong
+
+### 8. 18/05/2021, R from start to finish
