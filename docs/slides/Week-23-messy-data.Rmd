@@ -15,7 +15,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
+options(htmltools.dir.version = FALSE,
+        dplyr.summarise.inform = FALSE)
 xaringanExtra::use_webcam()
 xaringanExtra::use_tile_view()
 xaringanExtra::use_extra_styles()
@@ -164,6 +165,15 @@ aov_ez(dv = "RT",
 
 .pull-left[
 ![:scale 50%](images/rstudio-primers.png)
+]
+.pull-right[
+[RStudio.cloud](https://rstudio.cloud) has a selection of built-in exercises covering a lot of the topics we've done before. 
+
+If you need a bit of practice, try going through them again!
+
+Also **USE THE DROP-INS**, use the discussion board, and use the Teams channel!
+
+Each week, Matt will go over the exercises for that week, twice, half-way through the scheduled drop-in times - so at 1000 and 1200!
 ]
 
 ---
