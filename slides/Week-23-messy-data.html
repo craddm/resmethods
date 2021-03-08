@@ -61,29 +61,25 @@ class: center, middle, inverse, title-slide
 .pull-left[
 
 ```
-## `summarise()` has grouped output by 'Participant', 'Viewpoint'. You can override using the `.groups` argument.
-```
-
-```
 ## # A tibble: 16 x 4
 ##    Participant Viewpoint Block     RT
 ##          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
-##  1           1 Different First   476.
-##  2           1 Different Second  527.
-##  3           1 Same      First   583.
-##  4           1 Same      Second  448.
-##  5           2 Different First   497.
-##  6           2 Different Second  314.
-##  7           2 Same      First   563.
-##  8           2 Same      Second  334.
-##  9           3 Different First   449.
-## 10           3 Different Second  370.
-## 11           3 Same      First   511.
-## 12           3 Same      Second  403.
-## 13           4 Different First   555.
-## 14           4 Different Second  378.
-## 15           4 Same      First   551.
-## 16           4 Same      Second  364.
+##  1           1 Different First   493.
+##  2           1 Different Second  498.
+##  3           1 Same      First   472.
+##  4           1 Same      Second  487.
+##  5           2 Different First   528.
+##  6           2 Different Second  364.
+##  7           2 Same      First   511.
+##  8           2 Same      Second  399.
+##  9           3 Different First   472.
+## 10           3 Different Second  393.
+## 11           3 Same      First   432.
+## 12           3 Same      Second  325.
+## 13           4 Different First   514.
+## 14           4 Different Second  437.
+## 15           4 Same      First   475.
+## 16           4 Same      Second  325.
 ```
 ]
 .pull-right[
@@ -164,13 +160,13 @@ t.test(RT~Block, data = example_rt_df)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  RT by Block
-## t = 15.547, df = 198, p-value &lt; 2.2e-16
+## t = 17.069, df = 195, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##   89.96918 116.10828
+##   95.03358 119.86422
 ## sample estimates:
 ##  mean in group First mean in group Second 
-##             504.7827             401.7439
+##             506.1324             398.6835
 ```
 
 ---
@@ -191,9 +187,9 @@ aov_ez(dv = "RT",
 ## 
 ## Response: RT
 ##            Effect    df     MSE          F  ges p.value
-## 1           Block 1, 49 2179.64 243.55 *** .554   &lt;.001
-## 2       Viewpoint 1, 49 2532.54       0.70 .004    .405
-## 3 Block:Viewpoint 1, 49 2015.71       2.74 .013    .105
+## 1           Block 1, 49 1827.64 315.85 *** .597   &lt;.001
+## 2       Viewpoint 1, 49 1411.44       0.43 .002    .515
+## 3 Block:Viewpoint 1, 49 1887.00       1.17 .006    .284
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
 ```
@@ -203,6 +199,15 @@ aov_ez(dv = "RT",
 
 .pull-left[
 ![:scale 50%](images/rstudio-primers.png)
+]
+.pull-right[
+[RStudio.cloud](https://rstudio.cloud) has a selection of built-in exercises covering a lot of the topics we've done before. 
+
+If you need a bit of practice, try going through them again!
+
+Also **USE THE DROP-INS**, use the discussion board, and use the Teams channel!
+
+Each week, Matt will go over the exercises for that week, twice, half-way through the scheduled drop-in times - so at 1000 and 1200!
 ]
 
 ---
@@ -250,16 +255,16 @@ Data can be *missing*...
 
 ```
 ##           X1        X2
-## 1         NA 12.354733
-## 2         NA 11.219671
-## 3         NA 11.032111
-## 4         NA  9.732985
-## 5         NA 10.573809
-## 6   9.324079        NA
-## 7  10.136083        NA
-## 8   9.914143  9.483711
-## 9  11.576908  9.484393
-## 10 10.502017 11.297246
+## 1         NA  8.187229
+## 2         NA 10.618545
+## 3         NA  9.205802
+## 4         NA  8.962955
+## 5         NA 11.315911
+## 6  11.055051        NA
+## 7  11.206932        NA
+## 8   9.313605 11.129617
+## 9  10.936711 10.615366
+## 10  9.680644 10.359386
 ```
 Complete cases = 193
 ]
@@ -597,16 +602,16 @@ For example, all your participants filled out three different questionnaires. Un
 
 ```
 ##           X1        X2       X3
-## 1         NA  9.075095 14.00508
-## 2         NA 10.961725 14.28846
-## 3         NA  9.628197 12.79230
-## 4         NA 10.481451 15.09579
-## 5         NA  9.792219 12.98713
-## 6   9.700088  8.728199 12.39058
-## 7   9.082696  8.694749 13.87018
-## 8  10.199386  7.589782 11.55013
-## 9  11.098623  7.697553 12.21655
-## 10 11.631170  8.486657 13.22657
+## 1         NA  9.088653 12.53607
+## 2         NA  9.094702 12.64888
+## 3         NA  9.051507 11.24390
+## 4         NA 11.214726 12.68628
+## 5         NA  8.757448 12.45727
+## 6   8.642882  7.858930 13.39132
+## 7  10.106670  9.023142 12.96492
+## 8  10.507231  8.572339 14.30972
+## 9   9.271251  8.546671 11.19039
+## 10 10.866934  9.027300 12.98126
 ```
 ]
 
@@ -617,16 +622,16 @@ For example, all your participants filled out three different questionnaires. Un
 
 ```
 ##           X1        X2       X3 age
-## 1  10.284968  8.536346 13.58791  19
-## 2   9.968460  9.831109       NA  36
-## 3  10.372126  5.662701 11.37057  19
-## 4  11.123917  9.274361 13.11056  20
-## 5   9.167731 10.294923 11.70130  18
-## 6   9.015982  9.652939 12.76359  19
-## 7   8.583906  9.837637 14.36052  20
-## 8  11.543484  8.885838 13.62754  19
-## 9  10.073846 10.049325 13.16961  20
-## 10  9.790379  8.091457 13.07923  19
+## 1   9.480976  9.000443 12.26069  19
+## 2   9.422998 10.779785 15.18144  19
+## 3  10.829593  9.687199 12.86248  19
+## 4  11.286268  8.788620 13.40144  18
+## 5  10.368057  7.786666 14.24528  19
+## 6  11.960286  9.825269       NA  22
+## 7   9.942966  8.603764 13.36350  18
+## 8  10.567030  7.931891 13.85720  19
+## 9   8.539181  9.029024 13.22592  18
+## 10 11.168047  9.917534 13.75884  20
 ```
 ]
 .pull-right[
@@ -644,16 +649,16 @@ This data is MAR - whether the data in the third column is missing is related to
 
 ```
 ##           X1        X2       X3 age
-## 1   8.104185  9.386107 12.41754  18
-## 2   8.920971  7.908768 10.86843  19
-## 3  10.757268  8.293476       NA  48
-## 4   9.147990  9.867417       NA  20
-## 5  10.234672  7.173117 12.69767  19
-## 6   9.341238 10.124051 12.59772  19
-## 7  10.892278  9.295903 13.10786  32
-## 8  11.192085  9.981432 10.84104  18
-## 9   9.572271  8.831269 12.71710  19
-## 10 11.393309  8.914425 12.17337  61
+## 1  10.713982  8.791766       NA  18
+## 2   9.628016  7.985629 12.97972  19
+## 3   9.113761  9.328709 13.25017  20
+## 4   9.646511  8.114715 12.39306  18
+## 5  10.177288 10.026316 12.48092  20
+## 6  10.196475  9.337201 13.14053  20
+## 7  10.299557  8.908330 12.55333  22
+## 8  10.644433  8.202620 12.24832  18
+## 9  10.439646  9.231142       NA  18
+## 10  8.259970  8.130322       NA  23
 ```
 ]
 .pull-right[
@@ -689,7 +694,7 @@ mean(temp_df_missing$X1, na.rm = TRUE)
 ```
 
 ```
-## [1] 9.986581
+## [1] 9.97575
 ```
 
 ```r
