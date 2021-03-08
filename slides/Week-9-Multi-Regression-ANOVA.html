@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Multiple predictors and multiple means</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Multiple predictors and multiple means
+### 8/12/2020
+
+---
+
+
+
+
+
+# Different correlations
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/corr-dir-1.png)&lt;!-- --&gt;
+
+---
+# Correlation summary
+
+.large[
+Correlation coefficients are bound in a range from -1 to 1.
+
+Negative coefficients mean that as one variable increases, the other decreases.
+
+Positive coefficients mean that as one variable increases, the other also increases.
+]
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/corr-dir-again-1.png)&lt;!-- --&gt;
+
+---
+#Correlation, regression and prediction
+
+.pull-left[
+Correlation quantifies the *strength* and *direction* of an association between two continuous variables.
+
+But what if we want to *predict* the values of one variable from those of another?
+
+For example, as Emotionality increases, *how much* does Fear of Crime change?
+
+
+```r
+ggplot(crime, 
+       aes(x = E, y = FoC)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE) +
+  theme_classic() +
+  labs(x = "Emotionality",
+       y = "Fear of crime")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+]
+.pull-right[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/basic-lm-1.png)
+]
+
+---
+# Simple linear regression
+
+.pull-left[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/basic-lm-1.png)
+]
+.pull-right[
+The line added to this scatterplot is the *line of best fit*.
+
+A line like this can be described by two parameters - the *intercept* and the *slope*.
+
+The *intercept* is where the line crosses the *y-axis*.
+
+The *slope* is the *steepness* of the line.
+
+Given these parameters, we can predict the value of **y** - the dependent variable -  at each value of **x** - the independent, predictor variable - using the following formula:
+
+`\(y = a + bX\)`
+]
+
+---
+class: inverse, middle, center
+# Multiple linear regression
+
+---
+# Predicting children's reading ability
+
+.pull-left[
+
+```r
+child_data &lt;- read_csv("data/child_data.csv")
+head(child_data)
+```
+
+```
+## # A tibble: 6 x 5
+##   participant    IQ   age mem_span read_ab
+##         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+## 1           1    92   4.7      3.5    5.81
+## 2           2   103   5.9      4.8    6.47
+## 3           3   104   5        4.4    6.54
+## 4           4    97   6.5      4.3    5.62
+## 5           5    92   6.2      4      7.05
+## 6           6   106   4.2      4.2    4.98
+```
+]
+.pull-right[
+.large[
+This data is from a study investigating whether children's reading ability can be predicted from their working memory capacity.
+]
+]
+
+---
+# Predicting children's reading ability
+
+.pull-left[
+As a starting point, we look at a plot of the relationship between memory span and reading ability, which suggests a positive relationship between the two variables. 
+
+```r
+ggplot(child_data, 
+       aes(x = mem_span, 
+           y = read_ab)) +
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+]
+.pull-right[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/membyread-1.png)
+]
+
+---
+# Simple linear regression
+
+
+```r
+simple_model &lt;- lm(read_ab ~ mem_span, data = child_data)
+summary(simple_model)
+```
+
+```
+## 
+## Call:
+## lm(formula = read_ab ~ mem_span, data = child_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.28124 -0.49524  0.04498  0.45723  1.43695 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   1.3709     0.5828   2.352   0.0207 *  
+*## mem_span      1.1647     0.1397   8.337 4.81e-13 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.647 on 98 degrees of freedom
+## Multiple R-squared:  0.415,	Adjusted R-squared:  0.409 
+*## F-statistic: 69.51 on 1 and 98 DF,  p-value: 4.811e-13
+```
+
+
+---
+# Simple vs multiple regression
+
+.pull-left[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+--
+
+.pull-right[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+
+---
+# Simple vs multiple regression
+
+.pull-left[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+--
+
+.pull-right[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+
+---
+# Expanding our equation 
+
+.pull-left[
+Multiple linear regression deals with multiple predictors.
+
+The *bX* in our regression equation - `\(y = a + bX + \varepsilon\)` - can be expanded. For example, with two predictors, our equation would be:
+
+`\(y = a_0 + b_1 \times X_1 + b_2 \times X_2 + \varepsilon\)`
+
+
+```r
+a &lt;- 2    # Our intercept term
+b1 &lt;- 0.65  # Our first regression coefficient
+X1 &lt;- rnorm(1000, 6, 1) # Our first predictor 
+b2 &lt;- -0.8 # Our second regression coefficient
+X2 &lt;- rnorm(1000, 3, 1) # Our second predictor
+err &lt;- rnorm(1000, 0, 1) # Our error term
+y &lt;- a + b1 * X1 +  b2 * X2 + err # Our response variable
+```
+]
+
+.pull-right[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+# Multiple linear regression
+
+
+```r
+full_model &lt;- lm(read_ab ~ mem_span + age + IQ, data = child_data)
+summary(full_model)
+```
+
+```
+## 
+## Call:
+## lm(formula = read_ab ~ mem_span + age + IQ, data = child_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.03868 -0.41781  0.02087  0.47195  0.94678 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.49864    1.31135   0.380   0.7046    
+*## mem_span     0.41993    0.19724   2.129   0.0358 *  
+*## age          0.41941    0.08362   5.016 2.42e-06 ***
+*## IQ           0.01532    0.01351   1.134   0.2597    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5723 on 96 degrees of freedom
+## Multiple R-squared:  0.5516,	Adjusted R-squared:  0.5375 
+## F-statistic: 39.36 on 3 and 96 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Is the more complex model better?
+
+We can explicitly compare models using the **anova()** function.
+
+
+```r
+anova(simple_model, full_model)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: read_ab ~ mem_span
+## Model 2: read_ab ~ mem_span + age + IQ
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     98 41.019                                  
+*## 2     96 31.442  2    9.5772 14.621 2.864e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+# Comparing regression models
+
+An alternative way to compare models is using the Akaike Information Criterion. 
+
+
+```r
+AIC(simple_model)
+```
+
+```
+## [1] 200.6738
+```
+
+```r
+AIC(full_model)
+```
+
+```
+## [1] 178.084
+```
+
+AIC **penalizes** model complexity. A complex model that explains as much variance as a simple model is considered *worse*.
+
+Lower is better!
+
+---
+# Comparing predictors
+
+.large[The relative size of a predictor's effect can't *(always)* be judged from their coefficients, since the variables can be on different *scales*.
+
+
+```r
+full_model$coefficients
+```
+
+```
+## (Intercept)    mem_span         age          IQ 
+##   0.4986437   0.4199321   0.4194150   0.0153186
+```
+
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
+## # A tibble: 4 x 4
+##   variable   min    max    sd
+##   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 age       4      8    1.16 
+## 2 IQ       88    108    5.16 
+## 3 mem_span  3.4    5.3  0.465
+## 4 read_ab   4.20   8.22 0.842
+```
+
+]
+
+
+---
+# Standardizing variables
+
+We can standardize our variables to put them on the same scale.
+
+The **scale()** function *mean-centres* and *scales* variables: it subtracts the mean and divides by the standard deviation.
+
+
+```
+## Warning: attributes are not identical across measure variables;
+## they will be dropped
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/scale_pic-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+summary(lm(read_ab ~ mem_span + age + IQ,
+           data = mutate_all(child_data, scale)))
+```
+
+```
+## 
+## Call:
+## lm(formula = read_ab ~ mem_span + age + IQ, data = mutate_all(child_data, 
+##     scale))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.2342 -0.4965  0.0248  0.5608  1.1250 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 3.826e-16  6.800e-02   0.000   1.0000    
+## mem_span    2.323e-01  1.091e-01   2.129   0.0358 *  
+## age         5.775e-01  1.151e-01   5.016 2.42e-06 ***
+## IQ          9.394e-02  8.287e-02   1.134   0.2597    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.68 on 96 degrees of freedom
+## Multiple R-squared:  0.5516,	Adjusted R-squared:  0.5375 
+## F-statistic: 39.36 on 3 and 96 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Standardized coefficients
+
+These coefficients now represent the change in the dependent variable from a **1 standard deviation** change from the **independent variable's mean**.
+
+Standardized coefficients are often called `\(\beta\)` (**beta**) values.
+
+
+```r
+library(QuantPsyc)
+lm.beta(full_model)
+```
+
+```
+##   mem_span        age         IQ 
+## 0.23226076 0.57751580 0.09394477
+```
+
+---
+# Standardized coefficients
+
+sjPlot's `tab_model()` function can also do this for us:
+
+
+```r
+tab_model(full_model, show.std = TRUE)
+```
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="5" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;read_ab&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Beta&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;standardized CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.50&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.00&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;2.10&amp;nbsp;&amp;ndash;&amp;nbsp;3.10&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.13&amp;nbsp;&amp;ndash;&amp;nbsp;0.13&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.705&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;mem_span&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.42&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.23&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.03&amp;nbsp;&amp;ndash;&amp;nbsp;0.81&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.02&amp;nbsp;&amp;ndash;&amp;nbsp;0.45&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;0.036&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;age&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.42&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.58&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.25&amp;nbsp;&amp;ndash;&amp;nbsp;0.59&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.35&amp;nbsp;&amp;ndash;&amp;nbsp;0.81&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;IQ&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.02&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.09&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.01&amp;nbsp;&amp;ndash;&amp;nbsp;0.04&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.07&amp;nbsp;&amp;ndash;&amp;nbsp;0.26&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.260&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5"&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;R&lt;sup&gt;2&lt;/sup&gt; / R&lt;sup&gt;2&lt;/sup&gt; adjusted&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5"&gt;0.552 / 0.538&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+---
+class: inverse, middle, center
+# How many predictors
+
+---
+# Which predictors should be in your model?
+  
+If we look back at the Fear of Crime dataset, there are many potential predictors you could include.
+
+
+```r
+head(crime)
+```
+
+```
+## # A tibble: 6 x 15
+##   Participant       sex      age victim_crime     H     E     X     A     C     O    SA    TA   OHQ   FoC  Foc2
+##   &lt;chr&gt;             &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 R_01TjXgC191rVSst male      55 yes            3.7   3     3.4   3.9   3.2   3.6  1.15  1.55  3.41   2.6     3
+## 2 R_0dN5YeULcyms2qN female    20 no             2.5   3.1   2.5   2.4   2.2   3.1  2.05  2.95  2.38   2       3
+## 3 R_0DPiPYWhncWS1TX male      57 yes            2.6   3.1   3.3   3.1   4.3   2.8  2     2.6   3      1.2     2
+## 4 R_0f7bSsH6Up0yelz male      19 no             3.5   1.8   3.3   3.4   2.1   2.7  1.55  2.1   3.48   3.2     5
+## 5 R_0rov2RoSkPEOvlv female    20 no             3.3   3.4   3.9   3.2   2.8   3.9  1.3   1.8   3.59   2.8     3
+## 6 R_0wioqGERxElVTh3 female    20 no             2.6   2.6   3     2.6   2.9   3.4  2.55  1.5   3.76   2       4
+```
+
+How do we decide which are important and which to include?
+  
+---
+# What predictors should be in your model?
+
+There are several different common methods.
+
+|Method| Meaning|
+|------|-----|
+|Hierarchical regression| Variables entered in the order of their known or theoretical importance; known variables are added first, then additional predictors are added and the model fits compared to see which predictors improve model fit.|
+|Forced entry| All predictors are entered at once. |
+|Stepwise| Predictors are added (forwards, starting with no predictors) or removed (backwards, starting with all predictors) sequentially. Can be performed using **step()**. But please don't. Use *backwards* if you must.|
+
+(see Discovering Statistics using R, section 7.6.4, pages 263-266)
+
+
+---
+class: inverse, middle, center
+# Linear regression assumptions
+
+---
+## Assumptions of linear regression
+
+Like the t-test and other parametric statistical procedures, linear regression has assumptions.
+
+|Assumption| Description | Comment|
+|----------|------|------|
+|Independence| Each datapoint should be independent from the others |No repeated measures (for those, you need linear mixed models...)|
+|Normally distributed errors| The residuals should be approximately normally distributed around zero. Note that this is often confused with the need for the data to be normally distributed, but it's what's left over from the model that's important! | Best assessed using plots (e.g. **plot()**) |
+|Homoscedasticity| The variance at each level of the predictor should be approximately the same (i.e. the residuals should be spread around zero by the same amount) |Best assessed using plots (e.g. **plot()**)|
+|Linearity| The relationship between the outcome variable and the predictors should be approximately linear| Use *polynomial* predictors - check the **poly()** function|
+
+See Discovering Statistics Using R, section 7.7.2.1 for more details.
+
+---
+# Checking assumptions
+
+
+```r
+plot(full_model)
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-17-2.png)&lt;!-- --&gt;![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-17-3.png)&lt;!-- --&gt;![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-17-4.png)&lt;!-- --&gt;
+
+---
+# Normality of residuals
+
+
+```r
+diag_plots &lt;- plot_model(full_model, type = "diag")
+diag_plots[[2]]
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+# Normality of residuals
+
+
+```r
+diag_plots[[3]]
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+# Homoscedasticity
+
+
+```r
+diag_plots[[4]]
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+# Multicollinearity
+
+A potential issue with multiple predictors is that they may be correlated with each other.
+
+Collinearity is a correlation between two predictors; multicollinearity is correlation between *two or more* predictors.
+
+Multicollinearity makes it harder to evaluate the individual contribution of a predictor to a model: it increases the estimated variability of correlated predictors.
+
+
+```r
+cor(child_data[, c("IQ", "age", "mem_span")])
+```
+
+```
+##                   IQ        age   mem_span
+## IQ        1.00000000 -0.3324964 0.09567667
+## age      -0.33249644  1.0000000 0.69769263
+## mem_span  0.09567667  0.6976926 1.00000000
+```
+
+---
+# Multicollinearity
+
+.pull-left[
+
+```r
+diag_plots[[1]]
+```
+
+```r
+library(car)
+vif(full_model)
+```
+
+```
+## mem_span      age       IQ 
+## 2.547630 2.838068 1.470024
+```
+
+[Graham, 2003. CONFRONTING MULTICOLLINEARITY IN ECOLOGICAL MULTIPLE REGRESSION](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/02-3114)
+
+]
+.pull-right[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/multico-1.png)
+]
+
+---
+# Reporting results
+
+
+```r
+tab_model(full_model, show.std = TRUE)
+```
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="5" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;read_ab&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;std. Beta&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;standardized CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.50&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.00&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;2.10&amp;nbsp;&amp;ndash;&amp;nbsp;3.10&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.13&amp;nbsp;&amp;ndash;&amp;nbsp;0.13&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.705&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;mem_span&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.42&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.23&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.03&amp;nbsp;&amp;ndash;&amp;nbsp;0.81&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.02&amp;nbsp;&amp;ndash;&amp;nbsp;0.45&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;0.036&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;age&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.42&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.58&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.25&amp;nbsp;&amp;ndash;&amp;nbsp;0.59&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.35&amp;nbsp;&amp;ndash;&amp;nbsp;0.81&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;IQ&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.02&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.09&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.01&amp;nbsp;&amp;ndash;&amp;nbsp;0.04&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;0.07&amp;nbsp;&amp;ndash;&amp;nbsp;0.26&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;0.260&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5"&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;R&lt;sup&gt;2&lt;/sup&gt; / R&lt;sup&gt;2&lt;/sup&gt; adjusted&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5"&gt;0.552 / 0.538&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+Tables can be particularly useful with multiple regression - especially with a lot of predictors. 
+
+---
+class: inverse, middle, center
+# Comparing multiple means with categorical predictors
+
+---
+# Comparing the means of two groups
+
+Previously, we saw how to use **t.test()** to compare the means of two groups.
+
+
+```r
+t.test(FoC ~ sex, data = crime, var.equal = TRUE)
+```
+
+```
+## 
+## 	Two Sample t-test
+## 
+## data:  FoC by sex
+## t = 4.7664, df = 299, p-value = 2.932e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.3753039 0.9031487
+## sample estimates:
+## mean in group female   mean in group male 
+##             2.584681             1.945455
+```
+
+---
+# Comparing three or more means with ANOVA
+
+The *t.test()* can only handle two groups. 
+
+When we have three or more groups, we need to use a One-Way Analysis of Variance (ANOVA).
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/hypothetical-norms-1.png)&lt;!-- --&gt;
+
+---
+# How does ANOVA work?
+
+With a t-test, we typically ask the question "Is the difference between these two means significantly different from zero?"  
+
+`$$\mu^1 \neq \mu^2$$`
+
+With an ANOVA, we ask the question "Are any of these means different from each other?"
+
+`$$\mu^1 \neq \mu^2 \neq \mu^3 ...$$`
+
+Another way to phrase this is "Do any of these means differ from the *grand* mean?"
+
+---
+# The (grand) mean and the variance
+
+The *grand* mean is the mean across all conditions. 
+
+## A worked example
+.pull-left[
+A researcher wants to examine the effect of noisy environments on test performance. 
+She recruits 150 participants and splits them into three groups. 
+
+One group performs the test without any environmental noise. A second group performs the test with fairly quiet noise. A third group performs the test with loud noise. The dependent variable is their score (out of 10) on the test.
+
+]
+
+.pull-right[
+
+```r
+noise_test &lt;- 
+  gather(tibble(none = rnorm(50, 8, 1),
+                quiet = rnorm(50, 7, 1),
+                loud = rnorm(50, 5, 1)),
+         noise, test_score) %&gt;%
+  mutate(participant = 1:150)
+```
+]
+
+---
+# How the data is structured
+
+.pull-left[
+
+```r
+noise_test
+```
+
+```
+## # A tibble: 150 x 3
+##    noise test_score participant
+##    &lt;chr&gt;      &lt;dbl&gt;       &lt;int&gt;
+##  1 none        5.93           1
+##  2 none        8.39           2
+##  3 none        7.95           3
+##  4 none        7.09           4
+##  5 none        9.76           5
+##  6 none        7.80           6
+##  7 none        6.73           7
+##  8 none        7.41           8
+##  9 none        9.05           9
+## 10 none       10.3           10
+## # ... with 140 more rows
+```
+]
+.pull-right[
+One column per variable!
+
+One column - *noise* - is the categorical predictor variable that tells which group each participant was in.
+
+One column - *test_score* - is the dependent variable.
+
+The final column - participant - is a (unique - each participant always has the same identifier) participant identifier.
+]
+
+---
+# The mean as a model (again)
+
+We went through this in detail last time, but here's how it applies here.
+
+The simplest model of this data is to use the grand mean across all conditions.
+
+.pull-left[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+The grand mean test score is 6.75, shown by the black line.
+
+The total variability in our data is the sum of the squared differences from the grand mean - the Total Sum of Squares, `\(SS_t\)`.
+
+]
+
+---
+# The group means as a model 
+
+The model we're interested in is the means as a function of group.
+
+.pull-left[
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+Our Model Sum of Squares - `\(SS_m\)` - is the sum of the squared differences of each group's mean from the *grand mean*.
+
+The group means are shown here using coloured lines.
+
+The final quantity, the Residual Sum of Squares - `\(SS_r\)` is the sum of the squared differences of each individual observation from the mean of the group to which it belongs.
+
+]
+
+---
+# Degrees of freedom
+
+.large[
+We now have measures of the total amount of variability explained by the data, the total amount explained by our model, and the amount left over by our model.
+
+However, these numbers are biased because different amounts of values went into their calculation - 3 were used to calculate the `\(SS_m\)`, while many more were used to calculate `\(SS_t\)` and `\(SS_r\)`. 
+
+We correct these using the *degrees of freedom*. Specifically, we need to correct `\(SS_r\)` and `\(SS_m\)` with the residual degrees of freedom - `\(df_r\)` and the model degrees of freedom - `\(df_m\)`.
+]
+
+---
+# Degrees of freedom
+
+.large[
+The model degrees of freedom is simply the number of groups - 1; where *k* = number of groups:
+
+`$$df_m = k - 1$$`
+
+The residual degrees of freedom is the sum of all the degrees of freedom for each group.
+
+`$$df_r = \sum{df_{group^k}}$$`
+]
+
+---
+# Mean squared error and the F-ratio
+
+Finally, we divide our sums of squares - `\(SS_m\)` and `\(SS_r\)` by `\(df_m\)` and `\(df_r\)` respectively, giving us the mean squared error of the model - `\(MS_m\)` - and mean squared error of the residuals - `\(MS_r\)`.
+
+`$$MS_m = \frac{SS_m}{df_m}$$`
+
+`$$MS_r = \frac{SS_r}{df_r}$$`
+
+The ratio of these two quantities is the *F-ratio*.
+
+`$$F = \frac{MS_m}{MS_r}$$`
+
+In English, the F-ratio is the ratio of the variability explained by the model to variability unexplained by the model. So, higher is better.
+
+---
+class: inverse, center, middle
+# How to run a one-way between subjects ANOVA
+
+---
+# How to run ANOVA with the *afex* package
+
+Although the standard R function for ANOVA, **aov()**, works, it can be fiddly to use.
+
+The **afex** package provides several easier methods for running ANOVA.
+
+We'll use the **aov_ez()** function.
+
+
+```r
+noise_aov &lt;- aov_ez(dv = "test_score",
+                    between = "noise",
+                    id = "participant",
+                    data = noise_test)
+```
+
+```
+## Converting to factor: noise
+```
+
+```
+## Contrasts set to contr.sum for the following variables: noise
+```
+
+
+---
+# Checking the results
+
+
+```r
+noise_aov
+```
+
+```
+## Anova Table (Type 3 tests)
+## 
+## Response: test_score
+##   Effect     df  MSE          F  ges p.value
+*## 1  noise 2, 147 1.01 104.56 *** .587   &lt;.001
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
+```
+
+There's a highly significant effect of the factor *noise*.
+
+But ANOVA only tells us that there is a difference; not what the difference is!
+
+---
+# Follow-up contrasts
+
+We can use the **emmeans** package to get more information about our results.
+
+First, let's run the **emmeans()** function to get the means for each condition.
+
+
+```r
+means_noise &lt;- emmeans(noise_aov, ~noise)
+means_noise
+```
+
+```
+##  noise emmean    SE  df lower.CL upper.CL
+##  loud    5.18 0.142 147     4.89     5.46
+##  none    8.04 0.142 147     7.76     8.32
+##  quiet   7.02 0.142 147     6.74     7.31
+## 
+## Confidence level used: 0.95
+```
+
+It looks like performance was best is when there was no noise, with the worst performance when there was loud noise.
+
+---
+# Follow-up contrasts
+
+After calculating the means, we can then compare all of the means to each other using the **pairs()** function.
+
+
+```r
+pairs(means_noise)
+```
+
+```
+##  contrast     estimate    SE  df t.ratio p.value
+##  loud - none     -2.86 0.201 147 -14.261 &lt;.0001 
+##  loud - quiet    -1.85 0.201 147  -9.207 &lt;.0001 
+##  none - quiet     1.01 0.201 147   5.053 &lt;.0001 
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates
+```
+
+Note that this corrects the p-values for multiple comparisons. There are three possible comparisons, each with a significance threshold of p = .05; the more possible comparisons, the more you have to correct for false positives.
+
+---
+# Visualizing the results
+
+As ever, it's best to support your inferences with visualizations. 
+
+**afex_plot()** from the **afex** package can automatically create plots from the fitted ANOVA.
+
+
+```r
+afex_plot(noise_aov, x = "noise") + theme_classic()
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+---
+# Assumptions of ANOVA
+
+Just like the t-test and our linear regressions, homogeneity of variance is assumed.
+
+The data should be normally distributed for each group.
+
+
+```r
+ggplot(noise_test, aes(x = test_score)) + geom_histogram(bins = 9) + facet_wrap(~noise)
+```
+
+![](Week-9-Multi-Regression-ANOVA_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+---
+# Assumptions of ANOVA
+
+This can be explicitly tested using the **leveneTest()** function from the **car** package.
+
+
+```r
+library(car)
+leveneTest(test_score ~ noise, data = noise_test)
+```
+
+```
+## Warning in leveneTest.default(y = y, group = group, ...): group coerced to factor.
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)
+## group   2   0.849 0.4299
+##       147
+```
+
+
+---
+# Assumptions of (between-subjects) ANOVA
+
+Each observation should be independent - i.e. there should be no repeated measures. 
+
+Each participant is in one group and one group only, and contributes one data point to that group.
+
+
+
+---
+# Next week
+
+Repeated-measures ANOVA.
+
+Factorial and mixed ANOVA.
+
+These are covered in chapters 12-14 of Discovering Statistics Using R.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

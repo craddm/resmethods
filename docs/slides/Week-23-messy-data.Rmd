@@ -1,0 +1,805 @@
+---
+title: "Getting back into R - and how to handle messy data"
+subtitle: "Advanced Research Methods and Skills"
+date: "2021/03/16"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+      beforeInit: ["js/macros.js","https://platform.twitter.com/widgets.js"]
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_extra_styles()
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6)
+library(xaringanthemer)
+style_solarized_light(base_font_size = "22px")
+library(tidyverse)
+library(ggstatsplot)
+library(patchwork)
+library(afex)
+crime <- read_csv("data/crime.csv")
+```
+
+# Topics previously covered
+
+- Data visualization
+    - Using **ggplot2**
+    
+- Data manipulation
+    - Using **dplyr**
+
+- Basic statistics
+    - t-tests, correlations
+    - regression
+    - ANOVA
+
+---
+# Themes for today
+
+.pull-left[
+- Refamiliarizing yourself with R
+
+- Basic data transformations
+
+- Missing data
+]
+.pull-right[
+![:scale 70%](images/RStudioCloud_proj_circ.png)
+![:scale 70%](images/tidy-1.png)
+]
+
+---
+# Tabular data
+
+.pull-left[
+```{r examp_df, echo = FALSE}
+example_rt_df <- 
+  data.frame(Participant = rep(1:50,
+                               each = 10),
+             Viewpoint = c("Same", "Different"),
+             First = rnorm(500, 500, 100),
+             Second = rnorm(500, 400, 100)) %>% 
+  gather(Block, RT, First, Second) %>%
+  group_by(Participant, Viewpoint, Block) %>%
+  summarise(RT = mean(RT)) %>%
+  ungroup
+head(example_rt_df, 16)
+```
+]
+.pull-right[
+Tables of data are what you're most commonly dealing with in R.
+
+This one confirms to the **tidy data** principles:
+
+One row per observation, one column per variable
+
+![:scale 80%](images/tidy-1.png)
+]
+
+---
+# Different types of file
+
+The most common file formats you'll deal with are either Excel files or text files, but you may also find dealing with SPSS files useful.
+
+Fortunately, R has several functions and packages for importing data!
+
+|File formats| File extension| Functions| Package|
+|-|-|-|-|
+|SPSS  | .sav| **read_sav()**| library(haven)|
+|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
+|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
+
+
+---
+background-image: url(../images/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+# Data wrangling
+
+**dplyr** is a really useful package for manipulation of data tables.
+
+|Function |Effect|
+|------------|----|
+| select()   |Include or exclude variables (columns)|
+| arrange()  |Change the order of observations (rows)|
+| filter()   |Include or exclude observations (rows)|
+| mutate()   |Create new variables (columns)|
+| group_by() |Create groups of observations|
+| summarise()|Aggregate or summarise groups of observations (rows)|
+
+---
+background-image: url(../images/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Quickly plotting your data
+
+.pull-left[
+Plottting data is really important for all aspects of data analysis.
+
+The **ggplot2** package provides a framework for doing this:
+```{r dens-plot, fig.show = "hide", fig.height=5}
+ggplot(example_rt_df,
+       aes(x = RT, fill = Block)) +
+  geom_density(alpha = 0.5) +
+  theme_bw()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("dens-plot", "png")`)
+]
+
+---
+# Running statistics
+
+The humble t-test...
+
+```{r}
+t.test(RT~Block, data = example_rt_df)
+```
+
+---
+# Running statistics
+
+The factorial ANOVA... (the aov_ez() function from the *afex* package)
+
+```{r}
+aov_ez(dv = "RT",
+       within = c("Block", "Viewpoint"),
+       id = "Participant",
+       data = example_rt_df)
+```
+
+---
+# Reminder! 
+
+.pull-left[
+![:scale 50%](images/rstudio-primers.png)
+]
+
+---
+class: center, inverse, middle
+# How to handle "messy" or otherwise awkward data
+
+---
+# The ideal data
+
+In an ideal world all our data would be beautifully normal:
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+temp_df <- 
+  data.frame(MASS::mvrnorm(200,
+                           c(10, 10),
+                           matrix(c(1, 0.2, 0.2, 1),
+                                  2, 2),
+                           empirical = TRUE))
+orig_cor <- cor(temp_df$X1,
+                temp_df$X2)
+scatter1 <- ggplot(temp_df,
+                   aes(X1, X2)) +
+  geom_point() +
+  stat_smooth(method = lm) + theme_bw() +
+  annotate("text", x = 7, y = 13,
+           label = paste("r = ", round(orig_cor, 3)), size = 11) +
+  scale_x_continuous(limits = c(6, 14)) +
+  scale_y_continuous(limits = c(6, 14))
+hist_2 <- temp_df %>%
+  gather(group, measurement) %>% 
+  ggplot(aes(x = measurement)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~group)+ theme_bw()
+hist_2 + scatter1 + plot_layout(ncol= 1)
+```
+
+
+---
+# The real data
+
+But reality is rarely so kind. Data can be all kinds of messy. It can have *outliers*...
+
+```{r outlier-plot, echo = FALSE, fig.height = 5, fig.width = 8}
+temp_df_out <- temp_df
+temp_df_out[100, ] <- c(16, 24)
+temp_df_out[101, ] <- c(15, 25)
+
+out_cor <- cor(temp_df_out$X1, temp_df_out$X2)
+
+scatter1_out <- ggplot(temp_df_out, aes(X1, X2)) +
+  geom_point() +
+  stat_smooth(method = lm) + theme_bw() +
+  annotate("text", x = 9, y = 16,
+           label = paste("r = ", round(out_cor, 3)), size = 11)
+hist_2_out <- temp_df_out %>%
+  gather(group, measurement) %>% 
+  ggplot(aes(x = measurement)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~group)+ theme_bw()
+hist_2_out + scatter1_out + plot_layout(ncol= 1)
+
+```
+
+---
+# The real data
+
+Data can be *missing*...
+.pull-left[
+```{r missing-plot, echo = FALSE, fig.height = 5, fig.width = 8, warning = FALSE}
+temp_df_missing <- temp_df
+
+temp_df_missing[1:5, 1] <- NA
+temp_df_missing[6:7, 2] <- NA
+
+out_cor_miss <- cor(temp_df_missing$X1,
+                    temp_df_missing$X2, use = "complete.obs")
+
+scatter1_miss <- ggplot(temp_df_missing,
+                        aes(X1, X2)) +
+  geom_point() +
+  stat_smooth(method = lm) + theme_bw() +
+  annotate("text", x = 7, y = 12,
+           label = paste("r = ", round(out_cor_miss, 3)),
+           size = 11) + 
+  scale_x_continuous(limits = c(6, 14)) +
+  scale_y_continuous(limits = c(6, 14))
+
+
+hist_2_miss <- temp_df_missing %>%
+  gather(group, measurement) %>% 
+  ggplot(aes(x = measurement)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~group)+ theme_bw()
+hist_2_miss + scatter1_miss + plot_layout(ncol= 1)
+```
+]
+.pull-right[
+```{r, echo = FALSE}
+head(temp_df_missing, 10)
+```
+Complete cases = `r sum(complete.cases(temp_df_missing$X1, temp_df_missing$X2))`
+]
+
+---
+# The real data
+
+Data can be *skewed*...
+
+```{r echo = FALSE, fig.height = 5, fig.width = 8}
+temp_df_skew <- data.frame(`Left-tailed` = -rgamma(100, 2, 1),
+                           `Normal` = rnorm(100, 0, 2), 
+                           `Right-tailed` = rgamma(100, 2, 1))
+
+temp_df_skew %>%
+  gather(group, measure) %>%
+  ggplot(aes(x = measure)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~group) + theme_bw()
+```
+
+---
+# The real data
+
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5, fig.width = 8, warning = FALSE}
+temp_df_all <- data.frame(`Left-tailed` = -rgamma(100, 2, 1),
+                           `Normal` = rnorm(100, 0, 2), 
+                           `Right-tailed` = rgamma(100, 2, 1))
+temp_df_all[30:70, 1] <- NA
+temp_df_all[52:54, 2] <- c(14, -10, 18)
+temp_df_all %>%
+  gather(group, measure) %>%
+  ggplot(aes(x = measure)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~group) + theme_bw()
+
+```
+]
+.pull-right[
+There can be any combination of these things...
+
+All of these pose problems for estimating the properties of our data, the relationships between variables, and the phenomena we are investigating.
+]
+
+---
+class: center, inverse, middle
+# Handling outliers
+
+---
+# What is an outlier?
+
+Two out of the 200 pairs of x-y values were replaced. 
+
+The resulting coefficient (approx *r* = .49) is *way-off* the true coefficient for these data. 
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5.5}
+scatter1
+```
+]
+.pull-right[
+```{r echo = FALSE, fig.height = 5.5}
+scatter1_out
+```
+]
+
+---
+# What is an outlier?
+
+.pull-left[
+The problem gets even worse with smaller sample sizes.
+
+Here there are 50 datapoints with two outliers, rather than 200.
+
+The correlation coefficient becomes even *more* biased than it was previously.
+]
+
+.pull-right[
+```{r echo = FALSE, fig.height = 6, fig.width = 8}
+small_df_out <- temp_df[1:50, ]
+small_df_out[10, ] <- c(16, 24)
+small_df_out[21, ] <- c(15, 25)
+
+out_cor <- cor(small_df_out$X1, small_df_out$X2)
+
+scatter1_out <- ggplot(small_df_out, aes(X1, X2)) +
+  geom_point() +
+  stat_smooth(method = lm) + theme_bw() +
+  annotate("text", x = 9, y = 16,
+           label = paste("r = ", round(out_cor, 3)), size = 11)
+hist_2_out <- small_df_out %>%
+  gather(group, measurement) %>% 
+  ggplot(aes(x = measurement)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~group)+ theme_bw()
+hist_2_out + scatter1_out + plot_layout(ncol= 1)
+```
+]
+
+---
+# What should we do with outliers?
+
+Three common approaches:
+
+1. **Remove them**
+    
+    - If you're sure these reflect an error, not genuine data, then removal is a possibility. 
+
+--
+2. **Transformation**
+    
+    - *rescaling* or *transforming* your data may help reduce the influence of outliers. (We'll come back to this!)
+
+--
+3. **Replace them**
+    
+    - Replacing the outliers with values $\pm$ 2-3 standard deviations away from the mean. 
+
+
+---
+class: center, inverse, middle
+# Identifying and replacing outliers
+
+---
+# Identifying outliers
+
+Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
+
+```{r echo = FALSE, fig.height = 6}
+scatter1_out
+```
+
+---
+# Identifying outliers
+
+Plotting the residuals of your linear model will also help you identify troublesome observations.
+```{r fig.height = 6, eval = FALSE}
+plot(lm(X1 ~ X2, data = temp_df_out))
+```
+.pull-left[
+```{r echo = FALSE, fig.height = 6}
+plot(lm(X1 ~ X2, data = temp_df_out), which = 1)
+```
+]
+.pull-right[
+```{r echo = FALSE, fig.height = 6}
+plot(lm(X1 ~ X2, data = temp_df_out), which = 2)
+```
+]
+
+---
+# Identifying outliers
+
+Plotting the residuals of your linear model will also help you identify troublesome observations.
+.pull-left[
+```{r echo = FALSE, fig.height = 6}
+plot(lm(X1 ~ X2, data = temp_df_out), which = 3)
+```
+]
+.pull-right[
+```{r echo = FALSE, fig.height = 6}
+plot(lm(X1 ~ X2, data = temp_df_out), which = 4)
+```
+]
+
+---
+# Identifying outliers
+
+.pull-left[
+Sometimes a *threshold* is used to determine whether an observation is an outlier.
+
+Sometimes this is driven by common sense: e.g. a value of 120 for a participant's age is **extremely** unlikely to be genuine.
+
+Sometimes this is *data-driven*: e.g. values more than $\pm$ 3 standard deviations away from the mean are *unusual*.
+]
+.pull-right[
+```{r echo = FALSE, fig.height = 5}
+tibble(iq = 40:160,
+       density = dnorm(iq, mean = 100, sd = 15)) %>%
+  ggplot(aes(x = iq, y = density)) +
+  geom_line() +
+  geom_vline(xintercept = 55, linetype = "dashed") +
+  geom_vline(xintercept = 145, linetype = "dashed") +
+  theme_classic() 
+
+```
+]
+
+---
+# Removing values above a threshold
+
+The **filter()** function from dplyr can be used to remove outliers easily!
+.pull-left[
+```{r fig.height = 4}
+temp_df_out %>%
+  ggplot(aes(x = X1, y = X2)) + 
+  geom_point() +
+  theme_bw() + 
+  stat_smooth(method = "lm")
+```
+]
+.pull-right[
+```{r fig.height = 4}
+temp_df_out %>%
+  dplyr::filter(X1 < 15) %>%
+  ggplot(aes(x = X1, y = X2)) + 
+  geom_point() + theme_bw() + 
+  stat_smooth(method = "lm")
+```
+]
+
+---
+# Scaling by the mean and standard deviation
+
+The **scale()** function centres a numeric vector on its mean and divides it by its standard deviation.
+
+.pull-left[
+```{r}
+example <- c(1:6, 12)
+example
+mean(example)
+sd(example)
+```
+
+]
+.pull-right[
+```{r}
+scale(example)
+```
+]
+
+---
+class: center, inverse, middle
+# Data transformation
+
+---
+# Skewed data
+
+Skewed data is data that *leans* in a particular direction. 
+
+These are often described by the direction of the "long-tail" - so a left-skewed distribution means a distribution with long tail on the left, rather than most values on the left.
+.center[
+```{r fig.height=5, echo = FALSE}
+temp_df_skew <- data.frame(`Left-tailed` = -rgamma(100, 2, 1),
+                           `Normal` = rnorm(100, 0, 2), 
+                           `Right-tailed` = rgamma(100, 2, 1))
+
+temp_df_skew %>%
+  gather(group, measure) %>%
+  ggplot(aes(x = measure)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~group) + theme_bw() 
+```
+]
+
+---
+# Skewed data
+
+.pull-left[
+```{r echo = FALSE, fig.height=5}
+skewed_dat <- rgamma(100, 2, 1)
+qplot(skewed_dat, bins = 20) +
+  geom_vline(xintercept = mean(skewed_dat),
+             colour = "blue") +
+  geom_vline(xintercept = median(skewed_dat),
+             colour = "red", linetype = "dashed")
+left_skew <- skewed_dat
+```
+]
+.pull-right[
+This data is *right-tailed*. This is sometimes also called *positively skewed*. For this type of data, the mean (blue line) is usually higher than the median (red, dashed line).
+
+This type of skew is relatively common with data that is *bounded* at zero. e.g. reaction time data, the distribution of wages 
+]
+
+---
+# Left-tailed skew
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5}
+skewed_dat <- rgamma(100, 2, 1)
+skewed_dat <- max(skewed_dat) + 1 - skewed_dat
+qplot(skewed_dat, bins = 20) +
+  geom_vline(xintercept = mean(skewed_dat), colour = "blue") +
+  geom_vline(xintercept = median(skewed_dat), colour = "red", linetype = "dashed")
+right_skew <- skewed_dat
+```
+]
+.pull-right[
+Data skewed the opposite way - many high scores but few low scores - has a long *left* tail. This is also called *negative skew*. The mean (blue solid line) is usually less than the median (red dashed line).
+]
+
+
+---
+# Transformation of skewed data
+
+One way to handle skew is to transform the data to a different *scale*.
+
+Transformation type| code|
+-------|---|
+Log|log(X)|
+Square root|sqrt(X)|
+Reciprocal | 1 / X|
+
+(See Section 5.8.2 in Field et al., DSUR)
+---
+# Transformation of skewed data
+
+The different transformations each have different effects on the data, but the general pattern on right-tailed data is that they (mostly) reduce the skew, bringing extreme values closer to the centre of the distribution. The transformations aren't as effective on left-tailed data.
+
+Moral: consider alternatives to transformations... (see later!)
+.pull-left[
+```{r fig.height=5, echo = FALSE}
+data.frame(original = left_skew,
+           log = log(left_skew),
+           `square root` = sqrt(left_skew),
+           reciprocal = 1 / left_skew) %>%
+  gather(transform, results) %>%
+  ggplot(aes(x = results)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~transform, scales = "free") + 
+  theme_bw()
+```
+]
+.pull-right[
+```{r echo = FALSE, fig.height=5}
+data.frame(original = right_skew,
+           log = log(right_skew),
+           `square root` = sqrt(right_skew),
+           reciprocal = 1 / right_skew) %>%
+  gather(transform, results) %>%
+  ggplot(aes(x = results)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~transform, scales = "free") + 
+  theme_bw()
+```
+]
+
+---
+class: center, inverse, middle
+# Handling missing data
+
+---
+# Types of missing data
+
+.pull-left[
+- Missing Completely At Random
+    - Missingness does not depend on anything
+
+- Missing At Random
+    - Missingness depends on the observed data
+
+- Missing Not At Random
+    - Missingness depends on the missing data
+]
+.pull-right[
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">In today&#39;s lecture, I tried to redefine missing data types (MCAR, MAR, MNAR) as different reasons a dog might eat your homework. This needs more work, but audience seemed to appreciate it. <a href="https://t.co/i9Z8sYrqWQ">pic.twitter.com/i9Z8sYrqWQ</a></p>&mdash; Richard McElreath (@rlmcelreath) <a href="https://twitter.com/rlmcelreath/status/1101435108995805185?ref_src=twsrc%5Etfw">March 1, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+]
+
+---
+# Missing Completely At Random
+
+.pull-left[
+If you have missing data, MCAR is the best kind of missing data. 
+
+There is nothing *systematic* about which data is missing. 
+
+For example, all your participants filled out three different questionnaires. Unfortunately, your dog chewed through a pile of them, and half of your participants now have only two questionnaires.
+]
+.pull-right[
+```{r echo = FALSE}
+three_vars <- 
+  data.frame(MASS::mvrnorm(200,
+                           c(10, 9, 13),
+                           matrix(c(1, 0.2, 0.3,
+                                    0.2, 1, 0.2,
+                                    0.3, 0.2, 1),
+                                  3, 3),
+                           empirical = TRUE))
+three_vars[1:5, 1] <- NA
+head(three_vars, 10)
+
+```
+]
+
+---
+# Missing At Random
+
+.pull-left[
+```{r agetib, echo = FALSE}
+three_vars <- 
+  data.frame(MASS::mvrnorm(200,
+                           c(10, 9, 13),
+                           matrix(c(1, 0.2, 0.3,
+                                    0.2, 1, 0.2,
+                                    0.3, 0.2, 1),
+                                  3, 3),
+                           empirical = TRUE)) 
+
+three_vars$age <- sample(crime$age, size = 200)
+three_vars$X3 <- ifelse(three_vars$age > 21, NA, three_vars$X3)
+
+head(three_vars, 10)
+
+```
+]
+.pull-right[
+Confusingly, Missing At Random (MAR) data is not missing (completely) at random. 
+
+For example, for some reason, people older than 21 typically failed to complete the third questionnaire.
+
+This data is MAR - whether the data in the third column is missing is related to the value of the fourth column.
+]
+
+---
+# Missing Not At Random
+
+.pull-left[
+```{r mnartib, echo = FALSE}
+three_vars <- 
+  data.frame(MASS::mvrnorm(200,
+                           c(10, 9, 13),
+                           matrix(c(1, 0.2, 0.3,
+                                    0.2, 1, 0.2,
+                                    0.3, 0.2, 1),
+                                  3, 3),
+                           empirical = TRUE)) 
+
+three_vars$age <- sample(crime$age, size = 200)
+three_vars$X3 <- ifelse(three_vars$X3 > 13.5, NA, three_vars$X3)
+
+head(three_vars, 10)
+```
+]
+.pull-right[
+The final, most troubling type of missing data is data that is Missing Not At Random (MNAR).
+
+For example, imagine that the questionnaire relates to depression; people who score high for depression are less likely to complete the final questionnaire.
+
+In this case, the values that are missing for the third questionnaire depends on the value of the responses to that questionnaire, so this data is MNAR.
+]
+
+---
+# Simple methods of dealing with missing data
+
+.pull-left[
+List-wise deletion: Cases with missing data are completely **removed** from **all** analysis.
+
+Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
+
+Many R functions have built-in methods of dealing with missing values that enforce the methods. By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+]
+.pull-right[
+```{r}
+mean(temp_df_missing$X1)
+mean(temp_df_missing$X1, na.rm = TRUE)
+sum(complete.cases(temp_df_missing))
+```
+]
+
+---
+# Imputation
+
+Imputation is a method of "filling-in" missing values with "best-guesses".
+
+### Single Imputation
+Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
+
+.pull-left[
+```{r}
+orig_data <- 1:12
+orig_data
+mean(orig_data)
+```
+]
+.pull-right[
+```{r}
+missing_one <- orig_data
+missing_one[6] <- NA
+missing_one
+mean(missing_one,  na.rm = TRUE)
+```
+]
+
+---
+# Single Imputation
+
+Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
+
+.pull-left[
+```{r}
+replace_one <- missing_one
+replace_one[6] <- mean(missing_one, na.rm = TRUE)
+mean(replace_one)
+
+mean(orig_data)
+```
+]
+
+Problem: the mean and median are biased by the missing data. And replacing a missing value with one of these values tends to artificially reduce variability.
+
+---
+
+## Multiple Imputation
+
+In **multiple** imputation, we replace missing values with estimates based on a *model* of the data that incorporates uncertainty about what the value should be. 
+
+We create a model based on the data that is not missing, and use its predictions to guess the values that the missing data has.
+
+We do this multiple times and then take an average or *pool* the results to fill in the gap.
+
+Packages such as **mice** and **Amelia** can do this for us, and help us identify patterns of missingness.
+
+---
+# Alternative approaches to missing data, skew, and other oddities
+
+Generalized Linear Models (as opposed to General Linear Models) allow modelling of data of many different types without necessitating transformations. 
+
+For example, counts can be modelled using Poisson regression, and categorical outcomes can be modelled with logistic regression.
+
+*Multilevel* or *mixed*-models can handle all of these things and much more besides; they are perfectly capable of handling missing data.
+
+We'll cover both of these later in the course.
+
+
+---
+# Next week
+
+Look into power and effect sizes:
+
+See Field et al, Discovering Statistics Using R, pages 56-59, Sections on:
+    - Type I and Type II error (2.6.3)
+    - effect sizes (2.6.4)
+    - statistical power (2.6.5)
+
+Cohen, J. (1992). A power primer. Psychological Bulletin, 112(1), 155-159.
+http://dx.doi.org/10.1037/0033-2909.112.1.155
+

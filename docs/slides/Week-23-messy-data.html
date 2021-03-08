@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Getting back into R - and how to handle messy data</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Getting back into R - and how to handle messy data
+## Advanced Research Methods and Skills
+### 2021/03/16
+
+---
+
+
+
+
+# Topics previously covered
+
+- Data visualization
+    - Using **ggplot2**
+    
+- Data manipulation
+    - Using **dplyr**
+
+- Basic statistics
+    - t-tests, correlations
+    - regression
+    - ANOVA
+
+---
+# Themes for today
+
+.pull-left[
+- Refamiliarizing yourself with R
+
+- Basic data transformations
+
+- Missing data
+]
+.pull-right[
+![:scale 70%](images/RStudioCloud_proj_circ.png)
+![:scale 70%](images/tidy-1.png)
+]
+
+---
+# Tabular data
+
+.pull-left[
+
+```
+## `summarise()` has grouped output by 'Participant', 'Viewpoint'. You can override using the `.groups` argument.
+```
+
+```
+## # A tibble: 16 x 4
+##    Participant Viewpoint Block     RT
+##          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
+##  1           1 Different First   476.
+##  2           1 Different Second  527.
+##  3           1 Same      First   583.
+##  4           1 Same      Second  448.
+##  5           2 Different First   497.
+##  6           2 Different Second  314.
+##  7           2 Same      First   563.
+##  8           2 Same      Second  334.
+##  9           3 Different First   449.
+## 10           3 Different Second  370.
+## 11           3 Same      First   511.
+## 12           3 Same      Second  403.
+## 13           4 Different First   555.
+## 14           4 Different Second  378.
+## 15           4 Same      First   551.
+## 16           4 Same      Second  364.
+```
+]
+.pull-right[
+Tables of data are what you're most commonly dealing with in R.
+
+This one confirms to the **tidy data** principles:
+
+One row per observation, one column per variable
+
+![:scale 80%](images/tidy-1.png)
+]
+
+---
+# Different types of file
+
+The most common file formats you'll deal with are either Excel files or text files, but you may also find dealing with SPSS files useful.
+
+Fortunately, R has several functions and packages for importing data!
+
+|File formats| File extension| Functions| Package|
+|-|-|-|-|
+|SPSS  | .sav| **read_sav()**| library(haven)|
+|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
+|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
+
+
+---
+background-image: url(../images/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+# Data wrangling
+
+**dplyr** is a really useful package for manipulation of data tables.
+
+|Function |Effect|
+|------------|----|
+| select()   |Include or exclude variables (columns)|
+| arrange()  |Change the order of observations (rows)|
+| filter()   |Include or exclude observations (rows)|
+| mutate()   |Create new variables (columns)|
+| group_by() |Create groups of observations|
+| summarise()|Aggregate or summarise groups of observations (rows)|
+
+---
+background-image: url(../images/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Quickly plotting your data
+
+.pull-left[
+Plottting data is really important for all aspects of data analysis.
+
+The **ggplot2** package provides a framework for doing this:
+
+```r
+ggplot(example_rt_df,
+       aes(x = RT, fill = Block)) +
+  geom_density(alpha = 0.5) +
+  theme_bw()
+```
+]
+.pull-right[
+![](Week-23-messy-data_files/figure-html/dens-plot-1.png)
+]
+
+---
+# Running statistics
+
+The humble t-test...
+
+
+```r
+t.test(RT~Block, data = example_rt_df)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  RT by Block
+## t = 15.547, df = 198, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##   89.96918 116.10828
+## sample estimates:
+##  mean in group First mean in group Second 
+##             504.7827             401.7439
+```
+
+---
+# Running statistics
+
+The factorial ANOVA... (the aov_ez() function from the *afex* package)
+
+
+```r
+aov_ez(dv = "RT",
+       within = c("Block", "Viewpoint"),
+       id = "Participant",
+       data = example_rt_df)
+```
+
+```
+## Anova Table (Type 3 tests)
+## 
+## Response: RT
+##            Effect    df     MSE          F  ges p.value
+## 1           Block 1, 49 2179.64 243.55 *** .554   &lt;.001
+## 2       Viewpoint 1, 49 2532.54       0.70 .004    .405
+## 3 Block:Viewpoint 1, 49 2015.71       2.74 .013    .105
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
+```
+
+---
+# Reminder! 
+
+.pull-left[
+![:scale 50%](images/rstudio-primers.png)
+]
+
+---
+class: center, inverse, middle
+# How to handle "messy" or otherwise awkward data
+
+---
+# The ideal data
+
+In an ideal world all our data would be beautifully normal:
+
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+
+---
+# The real data
+
+But reality is rarely so kind. Data can be all kinds of messy. It can have *outliers*...
+
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/outlier-plot-1.png)&lt;!-- --&gt;
+
+---
+# The real data
+
+Data can be *missing*...
+.pull-left[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/missing-plot-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```
+##           X1        X2
+## 1         NA 12.354733
+## 2         NA 11.219671
+## 3         NA 11.032111
+## 4         NA  9.732985
+## 5         NA 10.573809
+## 6   9.324079        NA
+## 7  10.136083        NA
+## 8   9.914143  9.483711
+## 9  11.576908  9.484393
+## 10 10.502017 11.297246
+```
+Complete cases = 193
+]
+
+---
+# The real data
+
+Data can be *skewed*...
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+# The real data
+
+
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+There can be any combination of these things...
+
+All of these pose problems for estimating the properties of our data, the relationships between variables, and the phenomena we are investigating.
+]
+
+---
+class: center, inverse, middle
+# Handling outliers
+
+---
+# What is an outlier?
+
+Two out of the 200 pairs of x-y values were replaced. 
+
+The resulting coefficient (approx *r* = .49) is *way-off* the true coefficient for these data. 
+
+.pull-left[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+# What is an outlier?
+
+.pull-left[
+The problem gets even worse with smaller sample sizes.
+
+Here there are 50 datapoints with two outliers, rather than 200.
+
+The correlation coefficient becomes even *more* biased than it was previously.
+]
+
+.pull-right[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+---
+# What should we do with outliers?
+
+Three common approaches:
+
+1. **Remove them**
+    
+    - If you're sure these reflect an error, not genuine data, then removal is a possibility. 
+
+--
+2. **Transformation**
+    
+    - *rescaling* or *transforming* your data may help reduce the influence of outliers. (We'll come back to this!)
+
+--
+3. **Replace them**
+    
+    - Replacing the outliers with values `\(\pm\)` 2-3 standard deviations away from the mean. 
+
+
+---
+class: center, inverse, middle
+# Identifying and replacing outliers
+
+---
+# Identifying outliers
+
+Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
+
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+# Identifying outliers
+
+Plotting the residuals of your linear model will also help you identify troublesome observations.
+
+```r
+plot(lm(X1 ~ X2, data = temp_df_out))
+```
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+
+---
+# Identifying outliers
+
+Plotting the residuals of your linear model will also help you identify troublesome observations.
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+---
+# Identifying outliers
+
+.pull-left[
+Sometimes a *threshold* is used to determine whether an observation is an outlier.
+
+Sometimes this is driven by common sense: e.g. a value of 120 for a participant's age is **extremely** unlikely to be genuine.
+
+Sometimes this is *data-driven*: e.g. values more than `\(\pm\)` 3 standard deviations away from the mean are *unusual*.
+]
+.pull-right[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+# Removing values above a threshold
+
+The **filter()** function from dplyr can be used to remove outliers easily!
+.pull-left[
+
+```r
+temp_df_out %&gt;%
+  ggplot(aes(x = X1, y = X2)) + 
+  geom_point() +
+  theme_bw() + 
+  stat_smooth(method = "lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```r
+temp_df_out %&gt;%
+  dplyr::filter(X1 &lt; 15) %&gt;%
+  ggplot(aes(x = X1, y = X2)) + 
+  geom_point() + theme_bw() + 
+  stat_smooth(method = "lm")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+---
+# Scaling by the mean and standard deviation
+
+The **scale()** function centres a numeric vector on its mean and divides it by its standard deviation.
+
+.pull-left[
+
+```r
+example &lt;- c(1:6, 12)
+example
+```
+
+```
+## [1]  1  2  3  4  5  6 12
+```
+
+```r
+mean(example)
+```
+
+```
+## [1] 4.714286
+```
+
+```r
+sd(example)
+```
+
+```
+## [1] 3.638419
+```
+
+]
+.pull-right[
+
+```r
+scale(example)
+```
+
+```
+##             [,1]
+## [1,] -1.02085147
+## [2,] -0.74600684
+## [3,] -0.47116222
+## [4,] -0.19631759
+## [5,]  0.07852704
+## [6,]  0.35337166
+## [7,]  2.00243942
+## attr(,"scaled:center")
+## [1] 4.714286
+## attr(,"scaled:scale")
+## [1] 3.638419
+```
+]
+
+---
+class: center, inverse, middle
+# Data transformation
+
+---
+# Skewed data
+
+Skewed data is data that *leans* in a particular direction. 
+
+These are often described by the direction of the "long-tail" - so a left-skewed distribution means a distribution with long tail on the left, rather than most values on the left.
+.center[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+]
+
+---
+# Skewed data
+
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+This data is *right-tailed*. This is sometimes also called *positively skewed*. For this type of data, the mean (blue line) is usually higher than the median (red, dashed line).
+
+This type of skew is relatively common with data that is *bounded* at zero. e.g. reaction time data, the distribution of wages 
+]
+
+---
+# Left-tailed skew
+
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+Data skewed the opposite way - many high scores but few low scores - has a long *left* tail. This is also called *negative skew*. The mean (blue solid line) is usually less than the median (red dashed line).
+]
+
+
+---
+# Transformation of skewed data
+
+One way to handle skew is to transform the data to a different *scale*.
+
+Transformation type| code|
+-------|---|
+Log|log(X)|
+Square root|sqrt(X)|
+Reciprocal | 1 / X|
+
+(See Section 5.8.2 in Field et al., DSUR)
+---
+# Transformation of skewed data
+
+The different transformations each have different effects on the data, but the general pattern on right-tailed data is that they (mostly) reduce the skew, bringing extreme values closer to the centre of the distribution. The transformations aren't as effective on left-tailed data.
+
+Moral: consider alternatives to transformations... (see later!)
+.pull-left[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+---
+class: center, inverse, middle
+# Handling missing data
+
+---
+# Types of missing data
+
+.pull-left[
+- Missing Completely At Random
+    - Missingness does not depend on anything
+
+- Missing At Random
+    - Missingness depends on the observed data
+
+- Missing Not At Random
+    - Missingness depends on the missing data
+]
+.pull-right[
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;In today&amp;#39;s lecture, I tried to redefine missing data types (MCAR, MAR, MNAR) as different reasons a dog might eat your homework. This needs more work, but audience seemed to appreciate it. &lt;a href="https://t.co/i9Z8sYrqWQ"&gt;pic.twitter.com/i9Z8sYrqWQ&lt;/a&gt;&lt;/p&gt;&amp;mdash; Richard McElreath (@rlmcelreath) &lt;a href="https://twitter.com/rlmcelreath/status/1101435108995805185?ref_src=twsrc%5Etfw"&gt;March 1, 2019&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+]
+
+---
+# Missing Completely At Random
+
+.pull-left[
+If you have missing data, MCAR is the best kind of missing data. 
+
+There is nothing *systematic* about which data is missing. 
+
+For example, all your participants filled out three different questionnaires. Unfortunately, your dog chewed through a pile of them, and half of your participants now have only two questionnaires.
+]
+.pull-right[
+
+```
+##           X1        X2       X3
+## 1         NA  9.075095 14.00508
+## 2         NA 10.961725 14.28846
+## 3         NA  9.628197 12.79230
+## 4         NA 10.481451 15.09579
+## 5         NA  9.792219 12.98713
+## 6   9.700088  8.728199 12.39058
+## 7   9.082696  8.694749 13.87018
+## 8  10.199386  7.589782 11.55013
+## 9  11.098623  7.697553 12.21655
+## 10 11.631170  8.486657 13.22657
+```
+]
+
+---
+# Missing At Random
+
+.pull-left[
+
+```
+##           X1        X2       X3 age
+## 1  10.284968  8.536346 13.58791  19
+## 2   9.968460  9.831109       NA  36
+## 3  10.372126  5.662701 11.37057  19
+## 4  11.123917  9.274361 13.11056  20
+## 5   9.167731 10.294923 11.70130  18
+## 6   9.015982  9.652939 12.76359  19
+## 7   8.583906  9.837637 14.36052  20
+## 8  11.543484  8.885838 13.62754  19
+## 9  10.073846 10.049325 13.16961  20
+## 10  9.790379  8.091457 13.07923  19
+```
+]
+.pull-right[
+Confusingly, Missing At Random (MAR) data is not missing (completely) at random. 
+
+For example, for some reason, people older than 21 typically failed to complete the third questionnaire.
+
+This data is MAR - whether the data in the third column is missing is related to the value of the fourth column.
+]
+
+---
+# Missing Not At Random
+
+.pull-left[
+
+```
+##           X1        X2       X3 age
+## 1   8.104185  9.386107 12.41754  18
+## 2   8.920971  7.908768 10.86843  19
+## 3  10.757268  8.293476       NA  48
+## 4   9.147990  9.867417       NA  20
+## 5  10.234672  7.173117 12.69767  19
+## 6   9.341238 10.124051 12.59772  19
+## 7  10.892278  9.295903 13.10786  32
+## 8  11.192085  9.981432 10.84104  18
+## 9   9.572271  8.831269 12.71710  19
+## 10 11.393309  8.914425 12.17337  61
+```
+]
+.pull-right[
+The final, most troubling type of missing data is data that is Missing Not At Random (MNAR).
+
+For example, imagine that the questionnaire relates to depression; people who score high for depression are less likely to complete the final questionnaire.
+
+In this case, the values that are missing for the third questionnaire depends on the value of the responses to that questionnaire, so this data is MNAR.
+]
+
+---
+# Simple methods of dealing with missing data
+
+.pull-left[
+List-wise deletion: Cases with missing data are completely **removed** from **all** analysis.
+
+Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
+
+Many R functions have built-in methods of dealing with missing values that enforce the methods. By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+]
+.pull-right[
+
+```r
+mean(temp_df_missing$X1)
+```
+
+```
+## [1] NA
+```
+
+```r
+mean(temp_df_missing$X1, na.rm = TRUE)
+```
+
+```
+## [1] 9.986581
+```
+
+```r
+sum(complete.cases(temp_df_missing))
+```
+
+```
+## [1] 193
+```
+]
+
+---
+# Imputation
+
+Imputation is a method of "filling-in" missing values with "best-guesses".
+
+### Single Imputation
+Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
+
+.pull-left[
+
+```r
+orig_data &lt;- 1:12
+orig_data
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+```
+
+```r
+mean(orig_data)
+```
+
+```
+## [1] 6.5
+```
+]
+.pull-right[
+
+```r
+missing_one &lt;- orig_data
+missing_one[6] &lt;- NA
+missing_one
+```
+
+```
+##  [1]  1  2  3  4  5 NA  7  8  9 10 11 12
+```
+
+```r
+mean(missing_one,  na.rm = TRUE)
+```
+
+```
+## [1] 6.545455
+```
+]
+
+---
+# Single Imputation
+
+Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
+
+.pull-left[
+
+```r
+replace_one &lt;- missing_one
+replace_one[6] &lt;- mean(missing_one, na.rm = TRUE)
+mean(replace_one)
+```
+
+```
+## [1] 6.545455
+```
+
+```r
+mean(orig_data)
+```
+
+```
+## [1] 6.5
+```
+]
+
+Problem: the mean and median are biased by the missing data. And replacing a missing value with one of these values tends to artificially reduce variability.
+
+---
+
+## Multiple Imputation
+
+In **multiple** imputation, we replace missing values with estimates based on a *model* of the data that incorporates uncertainty about what the value should be. 
+
+We create a model based on the data that is not missing, and use its predictions to guess the values that the missing data has.
+
+We do this multiple times and then take an average or *pool* the results to fill in the gap.
+
+Packages such as **mice** and **Amelia** can do this for us, and help us identify patterns of missingness.
+
+---
+# Alternative approaches to missing data, skew, and other oddities
+
+Generalized Linear Models (as opposed to General Linear Models) allow modelling of data of many different types without necessitating transformations. 
+
+For example, counts can be modelled using Poisson regression, and categorical outcomes can be modelled with logistic regression.
+
+*Multilevel* or *mixed*-models can handle all of these things and much more besides; they are perfectly capable of handling missing data.
+
+We'll cover both of these later in the course.
+
+
+---
+# Next week
+
+Look into power and effect sizes:
+
+See Field et al, Discovering Statistics Using R, pages 56-59, Sections on:
+    - Type I and Type II error (2.6.3)
+    - effect sizes (2.6.4)
+    - statistical power (2.6.5)
+
+Cohen, J. (1992). A power primer. Psychological Bulletin, 112(1), 155-159.
+http://dx.doi.org/10.1037/0033-2909.112.1.155
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

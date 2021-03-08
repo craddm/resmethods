@@ -1,0 +1,29 @@
+{
+  "articles": [
+    {
+      "path": "index.html",
+      "title": "Research Methods and Skills",
+      "description": "Data manipulation, research methods, and statistics in Psychology\n",
+      "author": [],
+      "contents": "\r\nThis is the homepage for the R-based sections of the University of Lincoln’s MSc programmes in Developmental Psychology, Research Methods in Psychology, and Forensic Psychology.\r\nModule co-ordinator: Matt Craddock\r\nSemester A - PSY9251M/PSY9219M\r\nResearch Methods in Psychology/Research Methods and Skills\r\nStaff:\r\nMatt Craddock\r\nTochukwu Onwuegbusi\r\nAva Horowitz\r\nPatrick Hylton\r\nSemester B - PSY9250M/PSY9003\r\nAdvanced Research Methods in Psychology/Advanced Research Methods and Skills\r\nStaff:\r\nMatt Craddock\r\nTochukwu Onwuegbusi\r\nMichael Mireku\r\nGetting set up for the course\r\nFor students enrolled on this course, you should generally use RStudio.cloud. Weekly exercises will be distributed as projects to be copied on the cloud through the course workspace.\r\nTo run any of the materials locally on your own machine, you will need the following:\r\nA recent version of R, download from here.\r\nA recent version of RStudio, download from here\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-03-08T11:23:08+00:00"
+    },
+    {
+      "path": "schedule_a.html",
+      "title": "Semester A",
+      "description": "",
+      "author": [],
+      "contents": "\r\n\r\nContents\r\nLectures\r\n\r\nLectures\r\n1. 13/10/2020, Introduction to R\r\nSlides\r\n2. 20/10/2020, Introduction to R, part 2\r\nSlides\r\n3. 27/10/2020,\r\nSlides\r\n4. 03/11/2020,\r\nSlides\r\n5. 10/11/2020,\r\nSlides\r\n6. 24/11/2020\r\nSlides\r\n7. 01/12/2020\r\nSlides\r\n8. 08/12/2020\r\nSlides\r\n9. 15/12/2020\r\nSlides\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-03-08T11:23:08+00:00"
+    },
+    {
+      "path": "schedule_b.html",
+      "title": "Semester B",
+      "description": "",
+      "author": [],
+      "contents": "\r\n\r\nContents\r\nLectures\r\n\r\nLectures\r\n1. 16/03/2021, Getting back into R with messy data\r\nSlides\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-03-08T11:23:09+00:00"
+    }
+  ],
+  "collections": []
+}

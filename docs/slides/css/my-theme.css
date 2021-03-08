@@ -1,0 +1,45 @@
+.large {
+  font-size: 120%;
+}
+
+/* custom.css */
+.left-code {
+  color: #777;
+  width: 38%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+
+.remark-slide-content {
+    font-size: 24px;
+    padding: 1em 4em 1em 4em;
+}
+
+.red {
+  color: red;
+}
+
+.orange{
+  color: #FEBC38;
+}
+
+.brown{
+  color: #F6893D;
+}
+
+.yellow{
+  color: yellow;
+}
+
+.blue{
+  color: blue;
+}
+
+.green{
+  color: green;
+}

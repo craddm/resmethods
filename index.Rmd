@@ -1,0 +1,49 @@
+---
+title: "Research Methods and Skills"
+description: |
+  Data manipulation, research methods, and statistics in Psychology
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This is the homepage for the R-based sections of the University of Lincoln's MSc programmes in Developmental Psychology, Research Methods in Psychology, and Forensic Psychology.
+
+Module co-ordinator: [Matt Craddock](https://www.mattcraddock.com)
+
+---
+
+## Semester A - PSY9251M/PSY9219M
+
+### Research Methods in Psychology/Research Methods and Skills
+
+**Staff:**
+
+- [Matt Craddock](https://www.mattcraddock.com)
+- [Tochukwu Onwuegbusi](https://staff.lincoln.ac.uk/tonwuegbusi)
+- [Ava Horowitz](https://staff.lincoln.ac.uk/ahorowitz)
+- [Patrick Hylton](https://staff.lincoln.ac.uk/phylton)
+
+## Semester B - PSY9250M/PSY9003
+
+### Advanced Research Methods in Psychology/Advanced Research Methods and Skills
+
+
+**Staff:**
+
+- [Matt Craddock](https://www.mattcraddock.com)
+- [Tochukwu Onwuegbusi](https://staff.lincoln.ac.uk/tonwuegbusi)
+- [Michael Mireku](https://staff.lincoln.ac.uk/mmireku)
+
+---
+
+## Getting set up for the course
+
+For students enrolled on this course, you should generally use [RStudio.cloud](https://rstudio.cloud). Weekly exercises will be distributed as projects to be copied on the cloud through the course workspace.
+
+To run any of the materials locally on your own machine, you will need the following:
+
+- A recent version of R, [download from here](https://cloud.r-project.org).
+- A recent version of RStudio, [download from here](https://rstudio.com/products/rstudio/download/#download)

@@ -1,0 +1,19 @@
+---
+title: "Semester B"
+description: ""
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Lectures
+
+### 1. 16/03/2021, Getting back into R with messy data
+
+- [Slides](slides/Week-23-messy-data.html)
+
