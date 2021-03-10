@@ -11,6 +11,8 @@
     <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
   </head>
@@ -64,22 +66,22 @@ class: center, middle, inverse, title-slide
 ## # A tibble: 16 x 4
 ##    Participant Viewpoint Block     RT
 ##          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
-##  1           1 Different First   493.
-##  2           1 Different Second  498.
-##  3           1 Same      First   472.
-##  4           1 Same      Second  487.
-##  5           2 Different First   528.
-##  6           2 Different Second  364.
-##  7           2 Same      First   511.
-##  8           2 Same      Second  399.
-##  9           3 Different First   472.
-## 10           3 Different Second  393.
-## 11           3 Same      First   432.
-## 12           3 Same      Second  325.
-## 13           4 Different First   514.
-## 14           4 Different Second  437.
-## 15           4 Same      First   475.
-## 16           4 Same      Second  325.
+##  1           1 Different First   517.
+##  2           1 Different Second  399.
+##  3           1 Same      First   550.
+##  4           1 Same      Second  420.
+##  5           2 Different First   454.
+##  6           2 Different Second  349.
+##  7           2 Same      First   632.
+##  8           2 Same      Second  357.
+##  9           3 Different First   374.
+## 10           3 Different Second  357.
+## 11           3 Same      First   556.
+## 12           3 Same      Second  425.
+## 13           4 Different First   496.
+## 14           4 Different Second  443.
+## 15           4 Same      First   537.
+## 16           4 Same      Second  487.
 ```
 ]
 .pull-right[
@@ -160,13 +162,13 @@ t.test(RT~Block, data = example_rt_df)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  RT by Block
-## t = 17.069, df = 195, p-value &lt; 2.2e-16
+## t = 16.158, df = 197.85, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##   95.03358 119.86422
+##   90.60909 115.80141
 ## sample estimates:
 ##  mean in group First mean in group Second 
-##             506.1324             398.6835
+##             503.8649             400.6597
 ```
 
 ---
@@ -186,10 +188,10 @@ aov_ez(dv = "RT",
 ## Anova Table (Type 3 tests)
 ## 
 ## Response: RT
-##            Effect    df     MSE          F  ges p.value
-## 1           Block 1, 49 1827.64 315.85 *** .597   &lt;.001
-## 2       Viewpoint 1, 49 1411.44       0.43 .002    .515
-## 3 Block:Viewpoint 1, 49 1887.00       1.17 .006    .284
+##            Effect    df     MSE          F   ges p.value
+## 1           Block 1, 49 1969.79 270.37 ***  .569   &lt;.001
+## 2       Viewpoint 1, 49 2172.63       0.15 &lt;.001    .699
+## 3 Block:Viewpoint 1, 49 2267.93       0.04 &lt;.001    .850
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
 ```
@@ -255,16 +257,16 @@ Data can be *missing*...
 
 ```
 ##           X1        X2
-## 1         NA  8.187229
-## 2         NA 10.618545
-## 3         NA  9.205802
-## 4         NA  8.962955
-## 5         NA 11.315911
-## 6  11.055051        NA
-## 7  11.206932        NA
-## 8   9.313605 11.129617
-## 9  10.936711 10.615366
-## 10  9.680644 10.359386
+## 1         NA  9.426102
+## 2         NA 10.037950
+## 3         NA 10.095301
+## 4         NA  9.376683
+## 5         NA 11.819401
+## 6  10.532486        NA
+## 7  10.764667        NA
+## 8  10.124343  9.856845
+## 9   8.412414  8.829608
+## 10  9.299633  8.516352
 ```
 Complete cases = 193
 ]
@@ -413,10 +415,71 @@ Sometimes this is *data-driven*: e.g. values more than `\(\pm\)` 3 standard devi
 ![](Week-23-messy-data_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 
+
+---
+# Scaling by the mean and standard deviation
+
+.panelset[
+.panel[.panel-name[The data]
+
+```r
+example &lt;- c(rnorm(15), 35)
+hist(example)
+```
+
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+.panel[.panel-name[Manually scale]
+
+```r
+example
+```
+
+```
+##  [1]  0.46022243  1.49799547 -0.82338515 -0.28118514  1.42268324 -0.79391589
+##  [7]  0.36079445 -1.16870954 -0.02524575  0.71011527 -0.01553508 -0.19555281
+## [13] -0.20691027 -1.09108919 -0.62968784 35.00000000
+```
+
+```r
+(example - mean(example)) / sd(example)
+```
+
+```
+##  [1] -0.19076686 -0.07282520 -0.33664732 -0.27502694 -0.08138435 -0.33329818
+##  [7] -0.20206673 -0.37589302 -0.24593974 -0.16236684 -0.24483613 -0.26529493
+## [13] -0.26658569 -0.36707156 -0.31463385  3.73463736
+```
+]
+.panel[.panel-name[`scale()`]
+
+```r
+# you don't need to use t() - that transposes the values so they fit on the slide :) 
+# Just use scale()
+t(scale(example)) 
+```
+
+```
+##            [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
+## [1,] -0.1907669 -0.0728252 -0.3366473 -0.2750269 -0.08138435 -0.3332982
+##            [,7]      [,8]       [,9]      [,10]      [,11]      [,12]
+## [1,] -0.2020667 -0.375893 -0.2459397 -0.1623668 -0.2448361 -0.2652949
+##           [,13]      [,14]      [,15]    [,16]
+## [1,] -0.2665857 -0.3670716 -0.3146339 3.734637
+## attr(,"scaled:center")
+## [1] 2.138787
+## attr(,"scaled:scale")
+## [1] 8.799037
+```
+]
+]
+
 ---
 # Removing values above a threshold
 
 The **filter()** function from dplyr can be used to remove outliers easily!
+.panelset[
+.panel[.panel-name[With outliers]
 .pull-left[
 
 ```r
@@ -430,10 +493,14 @@ temp_df_out %&gt;%
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
-
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
+![](Week-23-messy-data_files/figure-html/plot-with-1.png)
+]
+]
+.panel[
+.panel-name[Without outliers]
+.pull-left[
 
 ```r
 temp_df_out %&gt;%
@@ -446,63 +513,11 @@ temp_df_out %&gt;%
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
-
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
-]
-
----
-# Scaling by the mean and standard deviation
-
-The **scale()** function centres a numeric vector on its mean and divides it by its standard deviation.
-
-.pull-left[
-
-```r
-example &lt;- c(1:6, 12)
-example
-```
-
-```
-## [1]  1  2  3  4  5  6 12
-```
-
-```r
-mean(example)
-```
-
-```
-## [1] 4.714286
-```
-
-```r
-sd(example)
-```
-
-```
-## [1] 3.638419
-```
-
 ]
 .pull-right[
-
-```r
-scale(example)
-```
-
-```
-##             [,1]
-## [1,] -1.02085147
-## [2,] -0.74600684
-## [3,] -0.47116222
-## [4,] -0.19631759
-## [5,]  0.07852704
-## [6,]  0.35337166
-## [7,]  2.00243942
-## attr(,"scaled:center")
-## [1] 4.714286
-## attr(,"scaled:scale")
-## [1] 3.638419
-```
+![](Week-23-messy-data_files/figure-html/plot-without-1.png)
+]
+]
 ]
 
 ---
@@ -514,16 +529,16 @@ class: center, inverse, middle
 
 Skewed data is data that *leans* in a particular direction. 
 
-These are often described by the direction of the "long-tail" - so a left-skewed distribution means a distribution with long tail on the left, rather than most values on the left.
+These are often described by the direction of the "long-tail" - so a left-tailed distribution means a distribution with a long tail on the left, rather than most values on the left.
 .center[
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 ]
 
 ---
 # Skewed data
 
 .pull-left[
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 This data is *right-tailed*. This is sometimes also called *positively skewed*. For this type of data, the mean (blue line) is usually higher than the median (red, dashed line).
@@ -535,12 +550,11 @@ This type of skew is relatively common with data that is *bounded* at zero. e.g.
 # Left-tailed skew
 
 .pull-left[
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 Data skewed the opposite way - many high scores but few low scores - has a long *left* tail. This is also called *negative skew*. The mean (blue solid line) is usually less than the median (red dashed line).
 ]
-
 
 ---
 # Transformation of skewed data
@@ -548,23 +562,23 @@ Data skewed the opposite way - many high scores but few low scores - has a long 
 One way to handle skew is to transform the data to a different *scale*.
 
 Transformation type| code|
--------|---|
-Log|log(X)|
-Square root|sqrt(X)|
-Reciprocal | 1 / X|
+-------|---
+Log|log(X)
+Square root|sqrt(X)
+Reciprocal | 1 / X
+Square | x^2
 
 (See Section 5.8.2 in Field et al., DSUR)
 ---
 # Transformation of skewed data
 
-The different transformations each have different effects on the data, but the general pattern on right-tailed data is that they (mostly) reduce the skew, bringing extreme values closer to the centre of the distribution. The transformations aren't as effective on left-tailed data.
-
-Moral: consider alternatives to transformations... (see later!)
-.pull-left[
+.panelset[
+.panel[.panel-name[Right-tailed]
+![](Week-23-messy-data_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+.panel[.panel-name[Left-tailed]
 ![](Week-23-messy-data_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 ]
-.pull-right[
-![](Week-23-messy-data_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -602,16 +616,16 @@ For example, all your participants filled out three different questionnaires. Un
 
 ```
 ##           X1        X2       X3
-## 1         NA  9.088653 12.53607
-## 2         NA  9.094702 12.64888
-## 3         NA  9.051507 11.24390
-## 4         NA 11.214726 12.68628
-## 5         NA  8.757448 12.45727
-## 6   8.642882  7.858930 13.39132
-## 7  10.106670  9.023142 12.96492
-## 8  10.507231  8.572339 14.30972
-## 9   9.271251  8.546671 11.19039
-## 10 10.866934  9.027300 12.98126
+## 1         NA 10.564509 12.00366
+## 2         NA 11.134840 12.46372
+## 3         NA  8.197005 11.06698
+## 4         NA  9.704088 14.19018
+## 5         NA  8.706921 13.03839
+## 6   8.344476  9.537686 12.89438
+## 7  11.263166  7.791435 13.76203
+## 8   8.669327  8.276546 12.92337
+## 9   8.377079  9.164257 11.07893
+## 10  9.288548  6.947327 12.80245
 ```
 ]
 
@@ -622,16 +636,16 @@ For example, all your participants filled out three different questionnaires. Un
 
 ```
 ##           X1        X2       X3 age
-## 1   9.480976  9.000443 12.26069  19
-## 2   9.422998 10.779785 15.18144  19
-## 3  10.829593  9.687199 12.86248  19
-## 4  11.286268  8.788620 13.40144  18
-## 5  10.368057  7.786666 14.24528  19
-## 6  11.960286  9.825269       NA  22
-## 7   9.942966  8.603764 13.36350  18
-## 8  10.567030  7.931891 13.85720  19
-## 9   8.539181  9.029024 13.22592  18
-## 10 11.168047  9.917534 13.75884  20
+## 1  11.047154  9.130396 12.86073  19
+## 2   8.509500 10.760188 12.07602  20
+## 3  11.619125  9.636584 13.04400  19
+## 4  11.212559  7.600109 11.90494  20
+## 5  10.951217  9.341155 13.35871  19
+## 6   9.286955 10.227833 12.48842  19
+## 7   9.555602  8.320163       NA  36
+## 8  10.394811  7.726169 15.13988  19
+## 9   8.376943  8.289583       NA  26
+## 10 10.528843  8.812628 13.50900  20
 ```
 ]
 .pull-right[
@@ -649,16 +663,16 @@ This data is MAR - whether the data in the third column is missing is related to
 
 ```
 ##           X1        X2       X3 age
-## 1  10.713982  8.791766       NA  18
-## 2   9.628016  7.985629 12.97972  19
-## 3   9.113761  9.328709 13.25017  20
-## 4   9.646511  8.114715 12.39306  18
-## 5  10.177288 10.026316 12.48092  20
-## 6  10.196475  9.337201 13.14053  20
-## 7  10.299557  8.908330 12.55333  22
-## 8  10.644433  8.202620 12.24832  18
-## 9  10.439646  9.231142       NA  18
-## 10  8.259970  8.130322       NA  23
+## 1  11.095201  8.235348       NA  19
+## 2  11.159246  9.198542       NA  19
+## 3  11.026114 11.395065       NA  29
+## 4  10.723638 10.066800       NA  19
+## 5  11.399608 11.517779       NA  19
+## 6  10.051001  9.103957 12.61627  18
+## 7   9.073119  7.654592 13.10197  42
+## 8  10.110520 10.048114 12.38895  29
+## 9   9.729318 10.017504       NA  19
+## 10 11.901271  9.132584 13.14818  52
 ```
 ]
 .pull-right[
@@ -670,14 +684,14 @@ In this case, the values that are missing for the third questionnaire depends on
 ]
 
 ---
-# Simple methods of dealing with missing data
+# Dealing with missing data
 
 .pull-left[
 List-wise deletion: Cases with missing data are completely **removed** from **all** analysis.
 
 Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
 
-Many R functions have built-in methods of dealing with missing values that enforce the methods. By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+By default, functions such as **mean()** return NA if any value in the input is NA/missing.
 ]
 .pull-right[
 
@@ -694,7 +708,7 @@ mean(temp_df_missing$X1, na.rm = TRUE)
 ```
 
 ```
-## [1] 9.97575
+## [1] 10.01075
 ```
 
 ```r
@@ -707,11 +721,8 @@ sum(complete.cases(temp_df_missing))
 ]
 
 ---
-# Imputation
+# Single Imputation
 
-Imputation is a method of "filling-in" missing values with "best-guesses".
-
-### Single Imputation
 Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
 
 .pull-left[
@@ -803,8 +814,7 @@ For example, counts can be modelled using Poisson regression, and categorical ou
 
 *Multilevel* or *mixed*-models can handle all of these things and much more besides; they are perfectly capable of handling missing data.
 
-We'll cover both of these later in the course.
-
+We'll cover both logistic regression and multilevel models later in the course!
 
 ---
 # Next week

@@ -38,6 +38,7 @@ navbar:
       - text: "1: Messy Data and a Return to R"
         href: slides/Week-23-messy-data.html
       - text: "2: Statistical Power and Effect Sizes"
+        href: slides/2-power-and-effect-sizes.html
       - text: "3: Multiple and Logistic Regression"
       - text: "4: Multilevel Analysis - Linear Mixed Effects Models"
       - text: "5: Mediation and moderation"
