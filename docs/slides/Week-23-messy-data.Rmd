@@ -20,6 +20,7 @@ options(htmltools.dir.version = FALSE,
 xaringanExtra::use_webcam()
 xaringanExtra::use_tile_view()
 xaringanExtra::use_extra_styles()
+xaringanExtra::use_panelset()
 knitr::opts_chunk$set(fig.asp = .618,
                       fig.width = 6)
 library(xaringanthemer)
@@ -463,12 +464,40 @@ tibble(iq = 40:160,
 ```
 ]
 
+
+---
+# Scaling by the mean and standard deviation
+
+.panelset[
+.panel[.panel-name[The data]
+```{r}
+example <- c(rnorm(15), 35)
+hist(example)
+```
+]
+.panel[.panel-name[Manually scale]
+```{r}
+example
+(example - mean(example)) / sd(example)
+```
+]
+.panel[.panel-name[`scale()`]
+```{r}
+# you don't need to use t() - that transposes the values so they fit on the slide :) 
+# Just use scale()
+t(scale(example)) 
+```
+]
+]
+
 ---
 # Removing values above a threshold
 
 The **filter()** function from dplyr can be used to remove outliers easily!
+.panelset[
+.panel[.panel-name[With outliers]
 .pull-left[
-```{r fig.height = 4}
+```{r plot-with, fig.height = 4, fig.show="hide"}
 temp_df_out %>%
   ggplot(aes(x = X1, y = X2)) + 
   geom_point() +
@@ -477,7 +506,13 @@ temp_df_out %>%
 ```
 ]
 .pull-right[
-```{r fig.height = 4}
+![](`r knitr::fig_chunk("plot-with", "png")`)
+]
+]
+.panel[
+.panel-name[Without outliers]
+.pull-left[
+```{r plot-without, fig.height = 4, fig.show="hide"}
 temp_df_out %>%
   dplyr::filter(X1 < 15) %>%
   ggplot(aes(x = X1, y = X2)) + 
@@ -485,25 +520,10 @@ temp_df_out %>%
   stat_smooth(method = "lm")
 ```
 ]
-
----
-# Scaling by the mean and standard deviation
-
-The **scale()** function centres a numeric vector on its mean and divides it by its standard deviation.
-
-.pull-left[
-```{r}
-example <- c(1:6, 12)
-example
-mean(example)
-sd(example)
-```
-
-]
 .pull-right[
-```{r}
-scale(example)
-```
+![](`r knitr::fig_chunk("plot-without", "png")`)
+]
+]
 ]
 
 ---
@@ -515,9 +535,9 @@ class: center, inverse, middle
 
 Skewed data is data that *leans* in a particular direction. 
 
-These are often described by the direction of the "long-tail" - so a left-skewed distribution means a distribution with long tail on the left, rather than most values on the left.
+These are often described by the direction of the "long-tail" - so a left-tailed distribution means a distribution with a long tail on the left, rather than most values on the left.
 .center[
-```{r fig.height=5, echo = FALSE}
+```{r fig.height=5, fig.width = 6, echo = FALSE}
 temp_df_skew <- data.frame(`Left-tailed` = -rgamma(100, 2, 1),
                            `Normal` = rnorm(100, 0, 2), 
                            `Right-tailed` = rgamma(100, 2, 1))
@@ -535,6 +555,7 @@ temp_df_skew %>%
 
 .pull-left[
 ```{r echo = FALSE, fig.height=5}
+set.seed(2500)
 skewed_dat <- rgamma(100, 2, 1)
 qplot(skewed_dat, bins = 20) +
   geom_vline(xintercept = mean(skewed_dat),
@@ -567,31 +588,30 @@ right_skew <- skewed_dat
 Data skewed the opposite way - many high scores but few low scores - has a long *left* tail. This is also called *negative skew*. The mean (blue solid line) is usually less than the median (red dashed line).
 ]
 
-
 ---
 # Transformation of skewed data
 
 One way to handle skew is to transform the data to a different *scale*.
 
 Transformation type| code|
--------|---|
-Log|log(X)|
-Square root|sqrt(X)|
-Reciprocal | 1 / X|
+-------|---
+Log|log(X)
+Square root|sqrt(X)
+Reciprocal | 1 / X
+Square | x^2
 
 (See Section 5.8.2 in Field et al., DSUR)
 ---
 # Transformation of skewed data
 
-The different transformations each have different effects on the data, but the general pattern on right-tailed data is that they (mostly) reduce the skew, bringing extreme values closer to the centre of the distribution. The transformations aren't as effective on left-tailed data.
-
-Moral: consider alternatives to transformations... (see later!)
-.pull-left[
-```{r fig.height=5, echo = FALSE}
+.panelset[
+.panel[.panel-name[Right-tailed]
+```{r fig.width=7, echo = FALSE}
 data.frame(original = left_skew,
            log = log(left_skew),
            `square root` = sqrt(left_skew),
-           reciprocal = 1 / left_skew) %>%
+           reciprocal = 1 / left_skew,
+           square = left_skew^2) %>%
   gather(transform, results) %>%
   ggplot(aes(x = results)) +
   geom_histogram(bins = 20) +
@@ -599,18 +619,20 @@ data.frame(original = left_skew,
   theme_bw()
 ```
 ]
-.pull-right[
-```{r echo = FALSE, fig.height=5}
+.panel[.panel-name[Left-tailed]
+```{r echo = FALSE, fig.width=7}
 data.frame(original = right_skew,
            log = log(right_skew),
            `square root` = sqrt(right_skew),
-           reciprocal = 1 / right_skew) %>%
+           reciprocal = 1 / right_skew,
+           square = right_skew^2) %>%
   gather(transform, results) %>%
   ggplot(aes(x = results)) +
   geom_histogram(bins = 20) +
   facet_wrap(~transform, scales = "free") + 
   theme_bw()
 ```
+]
 ]
 
 ---
@@ -718,14 +740,14 @@ In this case, the values that are missing for the third questionnaire depends on
 ]
 
 ---
-# Simple methods of dealing with missing data
+# Dealing with missing data
 
 .pull-left[
 List-wise deletion: Cases with missing data are completely **removed** from **all** analysis.
 
 Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
 
-Many R functions have built-in methods of dealing with missing values that enforce the methods. By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+By default, functions such as **mean()** return NA if any value in the input is NA/missing.
 ]
 .pull-right[
 ```{r}
@@ -736,11 +758,8 @@ sum(complete.cases(temp_df_missing))
 ]
 
 ---
-# Imputation
+# Single Imputation
 
-Imputation is a method of "filling-in" missing values with "best-guesses".
-
-### Single Imputation
 Replace missing values with a simple "best-guess". e.g. Using the mean or the median for the condition.
 
 .pull-left[
@@ -797,8 +816,7 @@ For example, counts can be modelled using Poisson regression, and categorical ou
 
 *Multilevel* or *mixed*-models can handle all of these things and much more besides; they are perfectly capable of handling missing data.
 
-We'll cover both of these later in the course.
-
+We'll cover both logistic regression and multilevel models later in the course!
 
 ---
 # Next week

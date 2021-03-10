@@ -1,0 +1,726 @@
+---
+title: "Power and effect sizes"
+date: "2021/03/23"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+      beforeInit: "js/macros.js"
+---
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE,
+        dplyr.summarise.inform = FALSE)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_extra_styles()
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6)
+library(xaringanthemer)
+style_solarized_light(base_font_size = "22px")
+library(tidyverse)
+```
+
+class: center, middle, inverse
+# Replicability and reproducibility in psychology
+
+---
+background-image: url(images/headlines-repro.png)
+
+---
+background-image: url(images/F1.large.jpg)
+background-size: contain
+
+---
+class: center, middle, inverse
+# Null Hypothesis Significance Testing (again)
+
+---
+# Setting up our studies
+
+When we embark on a programme on research, we begin by identifying a **research question**.
+
+- Do people who have been a victim of crime express higher fear of crime?
+
+- Are people faster at saying the names of colours when the names are written in the same colour?
+
+---
+# Null Hypothesis Significance Testing (NHST) (again)
+
+Our typical way of answering questions such as these is to set up a Null Hypothesis as an alternative. 
+
+Typically, this hypothesis is that of **zero** effect. 
+
+We then pose the question:
+
+If there were no difference or relationship between these two variables in the population, how likely is it that we would observe this data in our sample?
+
+---
+# The process of NHST
+
+```{r}
+a <- rnorm(50)
+b <- rnorm(50, mean = 1)
+t.test(a, b)
+```
+
+---
+# Significance versus non-signifiance
+
+The standard criterion for significance in our field is *p* < .05. 
+
+If the p-value of our test falls **below** this threshold, we say we have a *significant* result, and we get all excited and break out the bubbly. 
+`r rep(emo::ji("champagne"), 3)`
+
+If the p-value falls **above** this threshold, we say we have a *non-significant* result, and we get extremely upset.
+`r  paste(emo::ji("disappointed"), emo::ji("sob"), emo::ji("disappointed"))`
+
+--
+
+(both these reactions are a little bit over-the-top)
+
+--
+.large[
+...and what does either of those things **mean**?
+]
+
+---
+# What does the p-value tell us?
+
+Does a significant effect tell us how likely it is our experimental hypothesis - that there is really an effect - is *true*?
+
+--
+
+.pull-left[
+![](images/GrumpyNo.png)
+]
+
+.pull-right[
+1) Even if there was an effect, it may not be for the reason we think. 
+
+2) A significant finding may also be a **false positive**.
+]
+
+---
+# What does the p-value tell us?
+
+Does a non-significant effect tell us that there is no effect, or that our hypothesis was false?
+
+--
+
+.pull-left[
+![](images/GrumpyNo.png)
+]
+.pull-right[
+1) A non-significant effect only tells us that we **failed to reject** the null hypothesis.
+
+2) A non-significant effect can be a **false negative**.
+]
+
+---
+# Type I and Type II errors
+
+Under NHST, there are **two** basic types of error we can make. 
+
+|         | Null hypothesis is false| Null hypothesis is true|
+|-        |   :-------------:       |  :---------------:     |
+|p <= .05 |True positive            | False positive         |
+|p > .05  |False negative           | True negative          |
+
+*False positives* - a significant result when there is *no* real effect - are called **Type I errors**.
+
+*False negatives* - a non-significant result when there *is* a real effect - are called **Type II errors**.
+
+---
+# The false-positive rate
+
+We typically set our significance criterion - *alpha*, or $\alpha$ - at .05.
+
+When the null hypothesis is **true**, *any p-value is equally likely*.
+
+So if the null hypothesis is true, and there is no real effect, we will get a **significant result** 5% of the time - **1 in every 20** repeats.
+
+In other words, setting $\alpha$ at .05 means we accept a **false positive rate** of 5%.
+
+---
+# The false-positive rate
+
+.pull-left[
+```{r echo = FALSE, message = FALSE, fig.height=5}
+normsim <- function(n = 100,
+                    mean = 0,
+                    sd = 1) {
+  run_test <- t.test(rnorm(n, mean, sd))
+  run_test$p.value
+}
+
+zz <- replicate(1000, normsim())
+
+ggplot() + 
+  geom_histogram(aes(zz),
+                 fill = "white",
+                 colour = "black",
+                 binwidth = 0.05,
+                 boundary = 0) +
+  geom_vline(xintercept = 0.05,
+             linetype = "dashed",
+             colour = "red") + 
+  labs(x = "P-value",
+       y = "Number of tests") +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+Here, I simulated *normally distributed* data with a mean of zero one thousand times.
+
+I then tested whether that data was significantly different from zero.
+
+Approx 5% of the p-values of these tests were < .05.
+
+]
+
+---
+# The false-negative rate
+
+When the null hypothesis is false, p-values lower than our threshold become *more likely*. But it's still not certain we'll get a *significant effect*. 
+.pull-left[
+```{r echo = FALSE, message = FALSE, fig.height=5}
+zz <- replicate(1000, normsim(mean = .15))
+
+ggplot() + 
+  geom_histogram(aes(zz),
+                 fill = "white",
+                 colour = "black",
+                 binwidth = 0.05,
+                 boundary = 0) +
+  geom_vline(xintercept = 0.05,
+             linetype = "dashed",
+             colour = "red") + 
+  labs(x = "P-value",
+       y = "Number of tests") +
+  theme(text = element_text(size = 20))
+```
+]
+.pull-right[
+Here, I simulate data with a mean of 0.15, 1000 times, and test whether it differs from zero.
+
+Approx 320 tests are significant - a true-positive rate of .32, and a false-negative rate of .68 - 68%.
+]
+
+---
+background-image: url(images/Type1vsType2.jpg)
+
+---
+class: inverse, center, middle
+# Statistical power
+
+---
+# Statistical power
+
+Statistical power is the inverse of the **false-negative rate**. 
+
+Also termed *beta*, or $\beta$, power is the probability of getting a significant result with a given design, statistical test, and *effect size*. 
+
+By convention, psychological studies aim for **80% power**.
+
+![](images/cohen-quote.png)
+
+---
+# Statistical power and sample size
+
+Sample size is an important factor determining statistical power:
+
+.pull-left[
+```{r echo = FALSE}
+sample_sizes <- seq(20, 700, by = 40)
+pvals <- purrr::map(sample_sizes,
+                    ~replicate(1000, normsim(n = ., mean = 0.1)))
+names(pvals) <- sample_sizes
+pvals <- bind_rows(pvals) 
+pvals %>%
+  gather(mean, p.vals) %>%
+  mutate(p.vals = 0 + (p.vals < .05)) %>%
+  ggplot(aes(x = as.numeric(mean), y = p.vals)) +
+  stat_summary(fun.data = mean_cl_boot) +
+  stat_summary(geom = "line",
+               fun = mean,
+               group = 1) +
+  theme_bw() +
+  theme(text = element_text(size = 22))+
+  labs(x = "Sample size (N)",
+       y = "Proportion of significant tests")
+```
+]
+.pull-right[
+Here I simulate the effects of **increasing sample size** on statistical power.
+
+The **effect size** stays constant - 0.1 difference between means.
+]
+
+---
+# Statistical power and effect size
+
+.pull-left[
+```{r echo = FALSE, message = FALSE, fig.height=5}
+zz <- replicate(1000, normsim(mean = .285))
+
+ggplot() + 
+  geom_histogram(aes(zz),
+                 fill = "white",
+                 colour = "black",
+                 binwidth = 0.05,
+                 boundary = 0) +
+  geom_vline(xintercept = 0.05,
+             linetype = "dashed",
+             colour = "red") + 
+  labs(x = "P-value",
+       y = "Number of significant tests") +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+Here, I simulate data with a mean of 0.285, 1000 times, and test whether it differs from zero. 
+
+The *sample size* remains constant at 100 participants.
+
+Approx 800 tests are significant - a true-positive rate of .80, and thus a statistical power - $\beta$ - of 80%.
+]
+
+---
+# Statistical power and effect sizes
+
+.pull-left[
+```{r power-curve, echo = FALSE, fig.height=5}
+effect_sizes <- seq(0, 0.5, by = 0.05)
+pvals <- purrr::map(effect_sizes, ~replicate(1000, normsim(mean = .)))
+names(pvals) <- effect_sizes
+pvals <- bind_rows(pvals) 
+pvals %>%
+  gather(mean, p.vals) %>%
+  mutate(p.vals = 0 + (p.vals < .05)) %>%
+  ggplot(aes(x = mean, y = p.vals)) +
+  stat_summary(fun.data = mean_cl_boot) +
+  stat_summary(geom = "line", fun.y = mean, group = 1) +
+  theme_bw() +
+  theme(text = element_text(size = 20))+
+  labs(x = "Difference of mean from 0",
+       y = "Proportion of significant tests")
+```
+]
+.pull-right[
+In this simulation, the general design of the study stays the same - there are 100 participants, we test against zero with a t-test.
+
+As the effect size increases, the **power** of the study increases.
+]
+
+---
+# Statistical power and effect sizes
+
+.pull-left[
+```{r echo = FALSE, fig.height=5}
+mean_pvals <- pvals %>%
+  gather(mean, p.vals) %>%
+  mutate(p.vals = 0 + (p.vals < .05)) %>%
+  group_by(mean) %>%
+  summarise(p.vals = mean(p.vals))
+
+pvals %>%
+  gather(mean, p.vals) %>%
+  mutate(p.vals = 0 + (p.vals < .05)) %>%
+  ggplot(aes(x = as.numeric(mean), y = p.vals)) +
+  stat_summary(fun.data = mean_cl_boot) +
+  stat_summary(geom = "line", fun.y = mean, group = 1) +
+  theme_bw() +
+  theme(text = element_text(size = 20)) +
+  labs(x = "Difference of mean from 0",
+       y = "Proportion of significant tests") + 
+  geom_vline(xintercept = 0.1, linetype = "dashed") +
+  geom_hline(yintercept = mean_pvals[3, 2, drop = TRUE], linetype = "dashed") +
+  geom_vline(xintercept = 0.3, linetype = "dotted") +
+  geom_hline(yintercept = mean_pvals[7, 2, drop = TRUE], linetype = "dotted")
+```
+]
+.pull-right[
+The study has approximately `r mean_pvals[3, 2, drop = TRUE] * 100`% power to detect a 0.1 difference in means.
+
+But the study also has approximately `r mean_pvals[7, 2, drop = TRUE] * 100`% power to detect a 0.3 difference in means.
+
+Studies have a **power curve**, not a single *power*.
+]
+
+---
+# Estimating sample size and statistical power
+
+To calculate the required sample size to achieve a certain level of statistical power, you need to know:
+
+1) The expected *effect size*
+
+2) The desired power - $\beta$
+
+3) The desired false-positive-rate - $\alpha$
+
+The hardest part of this is typically **knowing what effect size you expect**.
+
+---
+# Estimating sample size and statistical power
+
+We can estimate power, sample size, or required effect sizes for a specific design, as long as we have the other quantities.
+
+For example, if we have power and effect size, we can calculate the required sample size:
+
+```{r}
+library(pwr)
+pwr.t.test(n = 100, d = .3, type = "one.sample")
+```
+
+
+---
+# Critiquing the statistical power of a study
+
+A common critique of studies is that their sample size is **too low**, and thus that they lack statistical power.
+
+But any given study always has 80% power to detect **something**: power is a **curve**.
+
+A better critique is that a study has insufficient sample size to reliably detect a **meaningful, important effect**.
+
+
+---
+class: inverse, middle, center
+# Effect sizes
+
+---
+# What does the p-value tell us?
+
+How **big** the effect is?
+
+--
+
+.pull-left[
+![](images/GrumpyNo.png)
+]
+.pull-right[
+P-values tell us *absolutely nothing* about the size of the effect.
+
+All they tell us that the data is *unlikely* if the null hypothesis is true, not whether the effect is large or small. Tiny effects can have p-values just as tiny as large effects can.
+
+]
+
+---
+# What does the p-value tell us?
+
+How **important** the effect is?
+
+--
+.pull-left[
+![:scale 70%](images/Still-NO.jpg)
+]
+.pull-right[
+A tiny p-value does not mean the effect is any way *important*.
+
+Essentially meaningless effects can be highly significant.
+]
+
+---
+# Effect sizes
+
+*P-values* tell us how likely it was that the data we observed would happen if the null hypothesis were true. But to understand what our tests are really telling us, we need to look at *effect sizes*.
+
+Effect sizes:
+
+1) Communicate the practical significance of a result
+
+2) Enable comparison across different studies and different scales
+
+3) Allow you to perform *power analysis*
+
+---
+# Unstandardized effect sizes
+
+Unstandardized effect sizes are effects on the *measurement scale*.
+
+.pull-left[
+Easy to understand and interpret.
+
+e.g. Usain Bolt ran .12 seconds faster than Yohan Blake.
+]
+.pull-right[
+![:scale 110%](images/100m_results_focus.jpg)
+]
+
+---
+# Standardized effect sizes
+
+Standardized effect sizes place effects on a common scale.
+
+|1|2|3|4|5|
+|----|----|||
+|Definitely agree| Somewhat agree | Neither agree nor disagree | Somewhat disagree | Definitely disagree |
+
+----
+
+|1|2|3|4|5| 6| 7| 
+|----|----|||
+|Definitely agree| Somewhat agree | Slightly agree| Neither agree nor disagree | Slightly disagree| Somewhat disagree | Definitely disagree |
+
+---
+# Standardized effect sizes
+
+There are two major families of standardized effect size:
+
+|Measure|*Cohen's d*|*r*|
+|-|---|---|
+|**Definition**| Size of mean differences| Strength of association |
+|**Statistical tests**|t-tests|correlation, ANOVA, regression|
+|**Variations**| $d$, $d_z$, Hedge's $g$ | $r$, $r^2$, $\eta^2$, $\omega^2$|
+
+---
+class: inverse, center, middle
+# Standardized mean differences
+
+---
+# Cohen's d
+
+Cohen's *d* ranges from 0 to $\infty$ (infinity!)
+
+The basic calculation is pretty simple - it's the *mean difference* divided by the *standard deviation pooled across conditions*.
+
+
+$$ \frac{\mu_1 - \mu_2}{ SDpooled } $$
+
+All variations of Cohen's *d* for different types of design (e.g. $d_z$ for within-subjects designs) are variants of this formula.
+
+---
+# Pooled standard deviation
+
+The pooled standard deviation is calculated using this formula:
+
+$$ SD_{pooled} = \sqrt\frac{SD^2_1 + SD^2_2}{2} $$
+
+---
+# Quick example
+
+```{r}
+t.test(a, b)
+
+(mean(a) - mean(b)) / sqrt((sd(a)^2 + sd(b)^2) / 2)
+```
+
+---
+#Interpreting Cohen's d
+
+[RPsychologist Cohen's d](https://rpsychologist.com/d3/cohend/)
+
+---
+# The Facebook study
+![:scale 150%](images/facebook-article.png)
+---
+# The Facebook study
+
+![:scale 150%](images/facebook-quote.png)
+
+---
+# The Facebook study
+
+![:scale 150%](images/facebook-quote-highlight.png)
+.large[
+P = .007, *d* = .001. This is an absolutely **tiny** effect size.
+
+Approx 1 extra negative word for every 3570 words typed.
+]
+
+---
+class: inverse, center, middle
+# Strength of associations
+
+
+---
+# Guess the correlation
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5}
+corr_dat <- MASS::mvrnorm(n = 100,
+                     rep(0, 2),
+                     Sigma = matrix(c(1, 0.2, 0.2, 1), ncol = 2),
+                     empirical = TRUE)
+qplot(corr_dat[, 1], corr_dat[, 2]) 
+```
+]
+
+--
+
+.pull-right[
+.large[
+*r* = .2
+]
+]
+
+---
+# Guess the correlation
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5}
+corr_dat <- MASS::mvrnorm(n = 100,
+                     rep(0, 2),
+                     Sigma = matrix(c(1, 0.8, 0.8, 1), ncol = 2),
+                     empirical = TRUE)
+qplot(corr_dat[, 1], corr_dat[, 2]) 
+```
+]
+
+--
+
+.pull-right[
+.large[
+*r* = .8
+]
+]
+
+
+---
+# Guess the correlation
+
+RPsychologist correlation visualizations
+[https://rpsychologist.com/d3/correlation/](https://rpsychologist.com/d3/correlation/)
+
+[guessthecorrelation.com](http://guessthecorrelation.com)
+
+---
+# Converting from r to d
+
+Although the scale is different, *r* and *d* are closely related.
+
+The formula below can be used to convert between them.
+
+$$ r = \frac{d}{\sqrt{d^2_s + \frac{N^2 - 2N}{n_1n_2}}}$$
+
+---
+# Proportion of variance explained
+
+For regressions, and ANOVAs, we don't use the correlation coefficient on its own. Rather, we use one of the various *proportion of variance explained* effect sizes.
+
+
+|Symbol | name|
+|---- |---- |
+| $r^2$ | r-squared |
+| $\eta^2$ | eta-squared|
+| $\eta^2_p$ | partial eta-squared|
+| $\eta^2_g$ | generalized eta-squared|
+
+---
+# Proportion of variance explained
+
+Every one of these measures is a variation on the same thing: how much does the relationship between our variables reduce the error of our model.
+
+Remember the formula for R-squared ( $r^2$)? 
+
+$r^2 = \frac{SS_m}{SS_t}$
+
+It's the ratio of the variance explained by the model to the total variance in the model. Thus, it's the *percentage of variance explained by the model*. 
+
+---
+# Reporting effect sizes in your results
+
+When reporting your statistical results, it's best practice (though not always followed...) to report both standardized **and** unstandardized effect sizes.
+
+1) Reporting **unstandardized** effect sizes helps understand how big the effect is in *real terms*. 
+
+2) Reporting **standardized** effect sizes helps compare the effect to effects in different studies and on different scales.
+
+---
+# Which standardized effect should you report?
+
+|Statistical test| Standardized effect size|
+|---||
+| t-test| $d$ (between), $d_z$ (within), $d_s$|
+| ANOVA | $\eta^2$ (one-way), $\eta^2_p$ (factorial), $\eta^2_g$ (Any)|
+| Correlation | $r$|
+| Linear (simple or multiple) regression | $r^2$, $adjusted-r^2$|
+
+Note - not every possible test and every possible effect size can fit! We'll cover some more later in the course...
+
+---
+# Rules of thumb for interpreting standardized effect sizes
+
+|Effect size|small|medium| large|
+|-|-|-|-|
+|d|0.2|0.5|0.8|
+|r|.1|.3|.5|
+| $r^2$|.1|.19|.25|
+| $\eta^2$ |.01|.06|.14|
+| $\eta^2_p$ |.01|.09| .25|
+| $\eta^2_g$ |.02|.13|.26|
+
+These are *guidelines*, not *rules*.
+
+---
+# You're *already* been reporting effect sizes.
+
+Any time you report differences in means, the strength of correlations, the $r^2$ of a regression, you're reporting effect sizes!
+
+And when you run ANOVA using **afex** - i.e. using aov_ez() - $\eta^2_g$ is calculated for you! (It's the column *ges* in the output)
+
+```{r echo = FALSE}
+example_rt_df <- 
+  data.frame(Participant = rep(1:50,
+                               each = 10),
+             Viewpoint = c("Same", "Different"),
+             First = rnorm(500, 500, 100),
+             Second = rnorm(500, 400, 100)) %>% 
+  gather(Block, RT, First, Second) %>%
+  group_by(Participant, Viewpoint, Block) %>%
+  summarise(RT = mean(RT)) %>%
+  ungroup
+```
+
+```{r}
+afex::aov_ez(dv = "RT",
+             within = c("Block", "Viewpoint"),
+             id = "Participant", data = example_rt_df)
+```
+
+
+---
+# Some final advice
+
+1) (nearly) always report standardized and unstandardized effect sizes.
+
+2) Always interpret the effect sizes. Take care of the difference between *statistical* and *practical* significance.
+
+3) Many of the standardized effect sizes are somewhat *interchangeable*, but always try to report the right one for your test (e.g. Cohen's d for t-tests, $r^2$ / $adjusted-r^2$ for regression)
+
+---
+class: inverse, center, middle
+# So what *does* the p-value tell us?
+
+---
+background-image: url('images/drakememe.jpg')
+
+
+---
+# Further (suggested, not required) reading
+
+Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs. Frontiers in Psychology. https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00863/full
+
+Perugini, M., Gallucci, M., & Costantini, G. (2018). A Practical Primer To Power Analysis for Simple Experimental Designs. International Review of Social Psychology, 31(1), 20. DOI: http://doi.org/10.5334/irsp.181
+
+---
+# Next session
+
+Next week is **Reading week**.
+
+The following week, we'll be looking at **Factor Analysis**.
+
+Chapter 17 of Discovering Statistics Using R.
+
+---
+class: title-slide-final, middle, inverse
+background-image: url('images/University of Lincoln_logo_General White Landscape.png')
+background-size: 500px
+background-position: 50% 10%
