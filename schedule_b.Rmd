@@ -15,7 +15,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### 1. 16/03/2021, Getting back into R with messy data
 
-- [Slides](slides/Week-23-messy-data.html)
+- [HTML Slides](slides/Week-23-messy-data.html)
+- [PDF Slides](slides/B-1-messy-data.pdf)
 
 ### 2. 23/03/2021, Statistical power and effect sizes
 
