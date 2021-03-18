@@ -60,6 +60,10 @@ crime <- read_csv("data/crime.csv")
 ![:scale 70%](images/tidy-1.png)
 ]
 
+???
+
+Tidy data figure from https://r4ds.had.co.nz/tidy-data.html, distributed under a CC BY-NC-ND 3.0 US license
+
 ---
 # Tabular data
 
@@ -87,6 +91,10 @@ One row per observation, one column per variable
 
 ![:scale 80%](images/tidy-1.png)
 ]
+
+???
+
+Tidy data figure from https://r4ds.had.co.nz/tidy-data.html, distributed under a CC BY-NC-ND 3.0 US license
 
 ---
 # Different types of file

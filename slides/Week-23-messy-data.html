@@ -57,6 +57,10 @@ class: center, middle, inverse, title-slide
 ![:scale 70%](images/tidy-1.png)
 ]
 
+???
+
+Tidy data figure from https://r4ds.had.co.nz/tidy-data.html, distributed under a CC BY-NC-ND 3.0 US license
+
 ---
 # Tabular data
 
@@ -66,22 +70,22 @@ class: center, middle, inverse, title-slide
 ## # A tibble: 16 x 4
 ##    Participant Viewpoint Block     RT
 ##          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
-##  1           1 Different First   517.
-##  2           1 Different Second  399.
-##  3           1 Same      First   550.
-##  4           1 Same      Second  420.
-##  5           2 Different First   454.
-##  6           2 Different Second  349.
-##  7           2 Same      First   632.
-##  8           2 Same      Second  357.
-##  9           3 Different First   374.
-## 10           3 Different Second  357.
-## 11           3 Same      First   556.
-## 12           3 Same      Second  425.
-## 13           4 Different First   496.
-## 14           4 Different Second  443.
-## 15           4 Same      First   537.
-## 16           4 Same      Second  487.
+##  1           1 Different First   585.
+##  2           1 Different Second  443.
+##  3           1 Same      First   446.
+##  4           1 Same      Second  385.
+##  5           2 Different First   388.
+##  6           2 Different Second  310.
+##  7           2 Same      First   571.
+##  8           2 Same      Second  400.
+##  9           3 Different First   490.
+## 10           3 Different Second  424.
+## 11           3 Same      First   566.
+## 12           3 Same      Second  437.
+## 13           4 Different First   464.
+## 14           4 Different Second  406.
+## 15           4 Same      First   461.
+## 16           4 Same      Second  389.
 ```
 ]
 .pull-right[
@@ -93,6 +97,10 @@ One row per observation, one column per variable
 
 ![:scale 80%](images/tidy-1.png)
 ]
+
+???
+
+Tidy data figure from https://r4ds.had.co.nz/tidy-data.html, distributed under a CC BY-NC-ND 3.0 US license
 
 ---
 # Different types of file
@@ -162,13 +170,13 @@ t.test(RT~Block, data = example_rt_df)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  RT by Block
-## t = 16.158, df = 197.85, p-value &lt; 2.2e-16
+## t = 14.647, df = 195.62, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##   90.60909 115.80141
+##   84.85445 111.26025
 ## sample estimates:
 ##  mean in group First mean in group Second 
-##             503.8649             400.6597
+##             496.6045             398.5472
 ```
 
 ---
@@ -188,10 +196,10 @@ aov_ez(dv = "RT",
 ## Anova Table (Type 3 tests)
 ## 
 ## Response: RT
-##            Effect    df     MSE          F   ges p.value
-## 1           Block 1, 49 1969.79 270.37 ***  .569   &lt;.001
-## 2       Viewpoint 1, 49 2172.63       0.15 &lt;.001    .699
-## 3 Block:Viewpoint 1, 49 2267.93       0.04 &lt;.001    .850
+##            Effect    df     MSE          F  ges p.value
+## 1           Block 1, 49 2075.04 231.69 *** .525   &lt;.001
+## 2       Viewpoint 1, 49 2793.94       2.08 .013    .156
+## 3 Block:Viewpoint 1, 49 1886.08       1.39 .006    .244
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
 ```
@@ -256,17 +264,17 @@ Data can be *missing*...
 .pull-right[
 
 ```
-##           X1        X2
-## 1         NA  9.426102
-## 2         NA 10.037950
-## 3         NA 10.095301
-## 4         NA  9.376683
-## 5         NA 11.819401
-## 6  10.532486        NA
-## 7  10.764667        NA
-## 8  10.124343  9.856845
-## 9   8.412414  8.829608
-## 10  9.299633  8.516352
+##          X1        X2
+## 1        NA 10.947604
+## 2        NA 10.201614
+## 3        NA 11.187796
+## 4        NA 10.516434
+## 5        NA 11.432880
+## 6  11.34700        NA
+## 7  10.42997        NA
+## 8   9.40423 11.273099
+## 9  11.28971  9.676211
+## 10 11.23485 10.351039
 ```
 Complete cases = 193
 ]
@@ -436,9 +444,9 @@ example
 ```
 
 ```
-##  [1]  0.46022243  1.49799547 -0.82338515 -0.28118514  1.42268324 -0.79391589
-##  [7]  0.36079445 -1.16870954 -0.02524575  0.71011527 -0.01553508 -0.19555281
-## [13] -0.20691027 -1.09108919 -0.62968784 35.00000000
+##  [1] -0.08161556 -0.54103224 -1.61888484 -1.54202514 -0.22356538 -0.20636312
+##  [7] -0.62619258  0.54246671  0.68777589  0.93359173 -1.54955092  0.04244581
+## [13]  1.35347133 -1.66231487 -1.42252672 35.00000000
 ```
 
 ```r
@@ -446,9 +454,9 @@ example
 ```
 
 ```
-##  [1] -0.19076686 -0.07282520 -0.33664732 -0.27502694 -0.08138435 -0.33329818
-##  [7] -0.20206673 -0.37589302 -0.24593974 -0.16236684 -0.24483613 -0.26529493
-## [13] -0.26658569 -0.36707156 -0.31463385  3.73463736
+##  [1] -0.21338597 -0.26499671 -0.38608236 -0.37744796 -0.22933258 -0.22740008
+##  [7] -0.27456360 -0.14327675 -0.12695276 -0.09933788 -0.37829341 -0.19944896
+## [13] -0.05216873 -0.39096128 -0.36402355  3.72767256
 ```
 ]
 .panel[.panel-name[`scale()`]
@@ -460,16 +468,16 @@ t(scale(example))
 ```
 
 ```
-##            [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
-## [1,] -0.1907669 -0.0728252 -0.3366473 -0.2750269 -0.08138435 -0.3332982
-##            [,7]      [,8]       [,9]      [,10]      [,11]      [,12]
-## [1,] -0.2020667 -0.375893 -0.2459397 -0.1623668 -0.2448361 -0.2652949
-##           [,13]      [,14]      [,15]    [,16]
-## [1,] -0.2665857 -0.3670716 -0.3146339 3.734637
+##           [,1]       [,2]       [,3]      [,4]       [,5]       [,6]       [,7]
+## [1,] -0.213386 -0.2649967 -0.3860824 -0.377448 -0.2293326 -0.2274001 -0.2745636
+##            [,8]       [,9]       [,10]      [,11]     [,12]       [,13]
+## [1,] -0.1432768 -0.1269528 -0.09933788 -0.3782934 -0.199449 -0.05216873
+##           [,14]      [,15]    [,16]
+## [1,] -0.3909613 -0.3640235 3.727673
 ## attr(,"scaled:center")
-## [1] 2.138787
+## [1] 1.817855
 ## attr(,"scaled:scale")
-## [1] 8.799037
+## [1] 8.901572
 ```
 ]
 ]
@@ -708,7 +716,7 @@ mean(temp_df_missing$X1, na.rm = TRUE)
 ```
 
 ```
-## [1] 10.01075
+## [1] 10.00744
 ```
 
 ```r

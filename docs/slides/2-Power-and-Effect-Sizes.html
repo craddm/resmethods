@@ -11,6 +11,8 @@
     <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view/tile-view.js"></script>
     <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
   </head>
@@ -75,19 +77,24 @@ t.test(a, b)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  a and b
-## t = -6.5628, df = 96.716, p-value = 2.623e-09
+## t = -4.221, df = 97.697, p-value = 0.00005454
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -1.7024902 -0.9118317
+##  -1.2485064 -0.4499514
 ## sample estimates:
-##  mean of x  mean of y 
-## -0.2367629  1.0703981
+## mean of x mean of y 
+## 0.2426747 1.0919036
 ```
+
+
+---
+class: center, inverse, middle
+# Interpreting p-values
 
 ---
 # Significance versus non-signifiance
 
-The standard criterion for significance in our field is *p* &lt; .05. 
+In our field, we typically set our significance criterion - *alpha*, or `\(\alpha\)` - at .05. is *p* &lt; .05. 
 
 If the p-value of our test falls **below** this threshold, we say we have a *significant* result, and we get all excited and break out the bubbly. 
 🍾, 🍾, 🍾
@@ -99,15 +106,61 @@ If the p-value falls **above** this threshold, we say we have a *non-significant
 
 (both these reactions are a little bit over-the-top)
 
---
-.large[
-...and what does either of those things **mean**?
+---
+# Type I and Type II errors
+
+Under NHST, we are trying to decide whether our statistical results match reality. There are **two** basic types of error we can make. 
+
+|         | Null hypothesis is false| Null hypothesis is true|
+|-        |   :-------------:       |  :---------------:     |
+|p &lt;= .05 |True positive            | False positive         |
+|p &gt; .05  |False negative           | True negative          |
+
+*False positives* - a significant result when there is *no* real effect - are called **Type I errors**.
+
+*False negatives* - a non-significant result when there *is* a real effect - are called **Type II errors**.
+
+---
+# The false-positive rate
+
+When the null hypothesis is **true**, *any specific p-value is as likely as any other*.
+
+So if the null hypothesis is *true*, and there is *no* real effect, we will get a **significant result** 5% of the time - **1 in every 20** repeats.
+
+In other words, setting `\(\alpha\)` at .05 means we accept a **false positive rate** of 5%.
+
+---
+# The false-positive rate
+
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+Here, I simulated *normally distributed* data from 100 participants with a mean of zero, one thousand times.
+
+Each time, I tested whether that data was significantly different from zero.
+
+Approx 5% of the p-values of these 1000 tests were &lt; .05.
+]
+
+---
+# The false-negative rate
+
+When the null hypothesis is false, p-values lower than our threshold become *more likely*. But it's still not certain we'll get a *significant effect*. 
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+Here, I simulated data from 100 participants with a mean of 0.15, 1000 times, each time  testing whether the data differs from zero.
+
+Approx 320 tests out of 1000 were significant - a true-positive rate of .32, and a false-negative rate of .68 - 68%.
 ]
 
 ---
 # What does the p-value tell us?
 
-Does a significant effect tell us how likely it is our experimental hypothesis - that there is really an effect - is *true*?
+Does a significant p-value tell us how likely it is our experimental hypothesis - that there is really an effect - is *true*?
 
 --
 
@@ -124,7 +177,7 @@ Does a significant effect tell us how likely it is our experimental hypothesis -
 ---
 # What does the p-value tell us?
 
-Does a non-significant effect tell us that there is no effect, or that our hypothesis was false?
+Does a non-significant p-value tell us that there is no effect, or that our hypothesis was false?
 
 --
 
@@ -138,198 +191,7 @@ Does a non-significant effect tell us that there is no effect, or that our hypot
 ]
 
 ---
-# Type I and Type II errors
-
-Under NHST, there are **two** basic types of error we can make. 
-
-|         | Null hypothesis is false| Null hypothesis is true|
-|-        |   :-------------:       |  :---------------:     |
-|p &lt;= .05 |True positive            | False positive         |
-|p &gt; .05  |False negative           | True negative          |
-
-*False positives* - a significant result when there is *no* real effect - are called **Type I errors**.
-
-*False negatives* - a non-significant result when there *is* a real effect - are called **Type II errors**.
-
----
-# The false-positive rate
-
-We typically set our significance criterion - *alpha*, or `\(\alpha\)` - at .05.
-
-When the null hypothesis is **true**, *any p-value is equally likely*.
-
-So if the null hypothesis is true, and there is no real effect, we will get a **significant result** 5% of the time - **1 in every 20** repeats.
-
-In other words, setting `\(\alpha\)` at .05 means we accept a **false positive rate** of 5%.
-
----
-# The false-positive rate
-
-.pull-left[
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-Here, I simulated *normally distributed* data with a mean of zero one thousand times.
-
-I then tested whether that data was significantly different from zero.
-
-Approx 5% of the p-values of these tests were &lt; .05.
-
-]
-
----
-# The false-negative rate
-
-When the null hypothesis is false, p-values lower than our threshold become *more likely*. But it's still not certain we'll get a *significant effect*. 
-.pull-left[
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
-]
-.pull-right[
-Here, I simulate data with a mean of 0.15, 1000 times, and test whether it differs from zero.
-
-Approx 320 tests are significant - a true-positive rate of .32, and a false-negative rate of .68 - 68%.
-]
-
----
-background-image: url(images/Type1vsType2.jpg)
-
----
-class: inverse, center, middle
-# Statistical power
-
----
-# Statistical power
-
-Statistical power is the inverse of the **false-negative rate**. 
-
-Also termed *beta*, or `\(\beta\)`, power is the probability of getting a significant result with a given design, statistical test, and *effect size*. 
-
-By convention, psychological studies aim for **80% power**.
-
-![](images/cohen-quote.png)
-
----
-# Statistical power and sample size
-
-Sample size is an important factor determining statistical power:
-
-.pull-left[
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
-]
-.pull-right[
-Here I simulate the effects of **increasing sample size** on statistical power.
-
-The **effect size** stays constant - 0.1 difference between means.
-]
-
----
-# Statistical power and effect size
-
-.pull-left[
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-Here, I simulate data with a mean of 0.285, 1000 times, and test whether it differs from zero. 
-
-The *sample size* remains constant at 100 participants.
-
-Approx 800 tests are significant - a true-positive rate of .80, and thus a statistical power - `\(\beta\)` - of 80%.
-]
-
----
-# Statistical power and effect sizes
-
-.pull-left[
-
-```
-## Warning: `fun.y` is deprecated. Use `fun` instead.
-```
-
-![](2-Power-and-Effect-Sizes_files/figure-html/power-curve-1.png)&lt;!-- --&gt;
-]
-.pull-right[
-In this simulation, the general design of the study stays the same - there are 100 participants, we test against zero with a t-test.
-
-As the effect size increases, the **power** of the study increases.
-]
-
----
-# Statistical power and effect sizes
-
-.pull-left[
-
-```
-## Warning: `fun.y` is deprecated. Use `fun` instead.
-```
-
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
-]
-.pull-right[
-The study has approximately 15.6% power to detect a 0.1 difference in means.
-
-But the study also has approximately 84.6% power to detect a 0.3 difference in means.
-
-Studies have a **power curve**, not a single *power*.
-]
-
----
-# Estimating sample size and statistical power
-
-To calculate the required sample size to achieve a certain level of statistical power, you need to know:
-
-1) The expected *effect size*
-
-2) The desired power - `\(\beta\)`
-
-3) The desired false-positive-rate - `\(\alpha\)`
-
-The hardest part of this is typically **knowing what effect size you expect**.
-
----
-# Estimating sample size and statistical power
-
-We can estimate power, sample size, or required effect sizes for a specific design, as long as we have the other quantities.
-
-For example, if we have power and effect size, we can calculate the required sample size:
-
-
-```r
-library(pwr)
-pwr.t.test(n = 100, d = .3, type = "one.sample")
-```
-
-```
-## 
-##      One-sample t test power calculation 
-## 
-##               n = 100
-##               d = 0.3
-##       sig.level = 0.05
-##           power = 0.8439471
-##     alternative = two.sided
-```
-
-
----
-# Critiquing the statistical power of a study
-
-A common critique of studies is that their sample size is **too low**, and thus that they lack statistical power.
-
-But any given study always has 80% power to detect **something**: power is a **curve**.
-
-A better critique is that a study has insufficient sample size to reliably detect a **meaningful, important effect**.
-
-
----
-class: inverse, middle, center
-# Effect sizes
-
----
-# What does the p-value tell us?
-
-How **big** the effect is?
+# Ok, does the p-value tell us how **big** the effect is?
 
 --
 
@@ -344,9 +206,7 @@ All they tell us that the data is *unlikely* if the null hypothesis is true, not
 ]
 
 ---
-# What does the p-value tell us?
-
-How **important** the effect is?
+# Right. So does it tell us how **important** the effect is?
 
 --
 .pull-left[
@@ -355,21 +215,34 @@ How **important** the effect is?
 .pull-right[
 A tiny p-value does not mean the effect is any way *important*.
 
-Essentially meaningless effects can be highly significant.
+Essentially meaningless effects can have very small p-values.
 ]
+
+
+---
+class: inverse, center, middle
+# So what *does* the p-value tell us?
+
+---
+background-image: url('images/drakememe.jpg')
+
+
+---
+class: inverse, middle, center
+# Effect sizes
 
 ---
 # Effect sizes
 
-*P-values* tell us how likely it was that the data we observed would happen if the null hypothesis were true. But to understand what our tests are really telling us, we need to look at *effect sizes*.
+*p-values* tell us how likely it was that the data we observed would happen if the null hypothesis were true. But to understand what our tests are really telling us, we need to look at *effect sizes*.
 
 Effect sizes:
 
-1) Communicate the practical significance of a result
+1) Communicate the practical significance of a result.
 
-2) Enable comparison across different studies and different scales
+2) Enable comparison across different studies and different scales.
 
-3) Allow you to perform *power analysis*
+3) Allow you to perform *power analysis*.
 
 ---
 # Unstandardized effect sizes
@@ -377,7 +250,7 @@ Effect sizes:
 Unstandardized effect sizes are effects on the *measurement scale*.
 
 .pull-left[
-Easy to understand and interpret.
+Easy to understand and interpret, so they're particularly helpful for understanding the real-world relevance of statistical effects.
 
 e.g. Usain Bolt ran .12 seconds faster than Yohan Blake.
 ]
@@ -388,7 +261,7 @@ e.g. Usain Bolt ran .12 seconds faster than Yohan Blake.
 ---
 # Standardized effect sizes
 
-Standardized effect sizes place effects on a common scale.
+Standardized effect sizes place effects on a common scale - they're helpful when the dependent measure is measured in different units across different studies.
 
 |1|2|3|4|5|
 |----|----|||
@@ -422,10 +295,15 @@ Cohen's *d* ranges from 0 to `\(\infty\)` (infinity!)
 
 The basic calculation is pretty simple - it's the *mean difference* divided by the *standard deviation pooled across conditions*.
 
-
 $$ \frac{\mu_1 - \mu_2}{ SDpooled } $$
 
 All variations of Cohen's *d* for different types of design (e.g. `\(d_z\)` for within-subjects designs) are variants of this formula.
+
+---
+#Interpreting Cohen's d
+
+The website linked here provides a great interactive tool to visualize what Cohen's *d* is
+[RPsychologist Cohen's d](https://rpsychologist.com/d3/cohend/)
 
 ---
 # Pooled standard deviation
@@ -433,6 +311,15 @@ All variations of Cohen's *d* for different types of design (e.g. `\(d_z\)` for 
 The pooled standard deviation is calculated using this formula:
 
 $$ SD_{pooled} = \sqrt\frac{SD^2_1 + SD^2_2}{2} $$
+
+
+```r
+sqrt((sd(a)^2 + sd(b)^2) / 2)
+```
+
+```
+## [1] 1.005968
+```
 
 ---
 # Quick example
@@ -447,13 +334,13 @@ t.test(a, b)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  a and b
-## t = -6.5628, df = 96.716, p-value = 2.623e-09
+## t = -4.221, df = 97.697, p-value = 0.00005454
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -1.7024902 -0.9118317
+##  -1.2485064 -0.4499514
 ## sample estimates:
-##  mean of x  mean of y 
-## -0.2367629  1.0703981
+## mean of x mean of y 
+## 0.2426747 1.0919036
 ```
 
 ```r
@@ -461,13 +348,29 @@ t.test(a, b)
 ```
 
 ```
-## [1] -1.312551
+## [1] -0.844191
 ```
 
 ---
-#Interpreting Cohen's d
+# The `effectsize` package
 
-[RPsychologist Cohen's d](https://rpsychologist.com/d3/cohend/)
+A simpler way to calculate Cohen's *d* is to use the `cohens_d` function from the `effectsize` package.
+
+
+```r
+library(effectsize)
+cohens_d(a, b)
+```
+
+```
+## Cohen's d |         95% CI
+## --------------------------
+## -0.84     | [-1.25, -0.43]
+## 
+## - Estimated using pooled SD.
+```
+
+This also gives us *confidence intervals* around the effect size - a helpful reminder that these are *estimates*.
 
 ---
 # The Facebook study
@@ -485,18 +388,27 @@ t.test(a, b)
 P = .007, *d* = .001. This is an absolutely **tiny** effect size.
 
 Approx 1 extra negative word for every 3570 words typed.
+
+
+```r
+effectsize::interpret_d(.001)
+```
+
+```
+## [1] "very small"
+## (Rules: cohen1988)
+```
 ]
 
 ---
 class: inverse, center, middle
 # Strength of associations
 
-
 ---
 # Guess the correlation
 
 .pull-left[
-![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
 --
@@ -504,6 +416,15 @@ class: inverse, center, middle
 .pull-right[
 .large[
 *r* = .2
+
+```r
+interpret_r(.2)
+```
+
+```
+## [1] "medium"
+## (Rules: funder2019)
+```
 ]
 ]
 
@@ -519,6 +440,15 @@ class: inverse, center, middle
 .pull-right[
 .large[
 *r* = .8
+
+```r
+interpret_r(.8)
+```
+
+```
+## [1] "very large"
+## (Rules: funder2019)
+```
 ]
 ]
 
@@ -540,11 +470,27 @@ The formula below can be used to convert between them.
 
 $$ r = \frac{d}{\sqrt{d^2_s + \frac{N^2 - 2N}{n_1n_2}}}$$
 
+```r
+r_to_d(.8) # from the effectsize package again!
+```
+
+```
+## [1] 2.666667
+```
+
+```r
+interpret_d(r_to_d(.8))
+```
+
+```
+## [1] "large"
+## (Rules: cohen1988)
+```
+
 ---
 # Proportion of variance explained
 
 For regressions, and ANOVAs, we don't use the correlation coefficient on its own. Rather, we use one of the various *proportion of variance explained* effect sizes.
-
 
 |Symbol | name|
 |---- |---- |
@@ -565,6 +511,10 @@ Remember the formula for R-squared ( `\(r^2\)`)?
 It's the ratio of the variance explained by the model to the total variance in the model. Thus, it's the *percentage of variance explained by the model*. 
 
 ---
+class: center, middle, inverse
+# Reporting effect sizes in your results
+
+---
 # Reporting effect sizes in your results
 
 When reporting your statistical results, it's best practice (though not always followed...) to report both standardized **and** unstandardized effect sizes.
@@ -572,6 +522,10 @@ When reporting your statistical results, it's best practice (though not always f
 1) Reporting **unstandardized** effect sizes helps understand how big the effect is in *real terms*. 
 
 2) Reporting **standardized** effect sizes helps compare the effect to effects in different studies and on different scales.
+
+3) Always interpret the effect sizes. Take care of the difference between *statistical* and *practical* significance.
+
+4) Many of the standardized effect sizes are somewhat *interchangeable*, but always try to report the right one for your test (e.g. Cohen's d for t-tests, `\(r^2\)` / `\(adjusted-r^2\)` for regression)
 
 ---
 # Which standardized effect should you report?
@@ -597,62 +551,184 @@ Note - not every possible test and every possible effect size can fit! We'll cov
 | `\(\eta^2_p\)` |.01|.09| .25|
 | `\(\eta^2_g\)` |.02|.13|.26|
 
-These are *guidelines*, not *rules*.
-
----
-# You're *already* been reporting effect sizes.
-
-Any time you report differences in means, the strength of correlations, the `\(r^2\)` of a regression, you're reporting effect sizes!
-
-And when you run ANOVA using **afex** - i.e. using aov_ez() - `\(\eta^2_g\)` is calculated for you! (It's the column *ges* in the output)
-
-
-
-
-```r
-afex::aov_ez(dv = "RT",
-             within = c("Block", "Viewpoint"),
-             id = "Participant", data = example_rt_df)
-```
-
-```
-## Registered S3 methods overwritten by 'lme4':
-##   method                          from
-##   cooks.distance.influence.merMod car 
-##   influence.merMod                car 
-##   dfbeta.influence.merMod         car 
-##   dfbetas.influence.merMod        car
-```
-
-```
-## Anova Table (Type 3 tests)
-## 
-## Response: RT
-##            Effect    df     MSE          F   ges p.value
-## 1           Block 1, 49 2319.10 243.44 ***  .559   &lt;.001
-## 2       Viewpoint 1, 49 2502.85       0.14 &lt;.001    .714
-## 3 Block:Viewpoint 1, 49 2420.23       0.86  .005    .358
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
-```
-
-
----
-# Some final advice
-
-1) (nearly) always report standardized and unstandardized effect sizes.
-
-2) Always interpret the effect sizes. Take care of the difference between *statistical* and *practical* significance.
-
-3) Many of the standardized effect sizes are somewhat *interchangeable*, but always try to report the right one for your test (e.g. Cohen's d for t-tests, `\(r^2\)` / `\(adjusted-r^2\)` for regression)
+These are *guidelines*, not *rules*. (you can also try the `interpret` functions from `effectsize`)
 
 ---
 class: inverse, center, middle
-# So what *does* the p-value tell us?
+# Designing for statistical power
 
 ---
-background-image: url('images/drakememe.jpg')
+# Statistical power
 
+Statistical power is the inverse of the **false-negative rate**. 
+
+Also termed *beta*, or `\(\beta\)`, power is the probability of getting a significant result with a given *sample size*, *statistical test*, and *effect size*. 
+
+By convention, psychological studies aim for **80% power** - we accept a 20% false-negative rate!
+
+![](images/cohen-quote.png)
+
+???
+Cohen, J. (1992). A power primer. Psychological Bulletin. 112(1):155-9. doi: 10.1037//0033-2909.112.1.155.
+
+---
+# Statistical power and sample size
+
+Sample size is an important factor determining statistical power:
+
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+Here I simulate the effects of **increasing sample size** on statistical power.
+
+The **effect size** stays constant - there's a 0.1 difference between the means of each group.
+]
+
+---
+# Estimating sample size
+
+We can estimate the *required sample size* of a specific statistical test if we know the desired *power* and the *expected effect size*. The hardest part of this is typically **knowing what effect size you expect**.
+
+
+```r
+library(pwr)
+pwr.t.test(power = .8, # this is a proportion
+           d = .3, # Cohen's d
+           type = "one.sample") # we are doing a one-sample t.test
+```
+
+```
+## 
+##      One-sample t test power calculation 
+## 
+##               n = 89.14938
+##               d = 0.3
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+```
+
+---
+# Why don't we aim for 100% power?
+
+
+```r
+pwr.t.test(power = 1, # this is a proportion
+           d = .3, # Cohen's d
+           type = "one.sample") # we are doing a one-sample t.test
+```
+
+```
+## 
+##      One-sample t test power calculation 
+## 
+##               n = 1000000000
+##               d = 0.3
+##       sig.level = 0.05
+##           power = 1
+##     alternative = two.sided
+```
+
+100% power is often *just a little* impractical.
+
+---
+# Estimating effect size
+
+We can estimate the *effect size we'd have power to detect* if we know the *power* and the *sample size*. Suppose we *know* we'd have 100 participants - we can't get more, and we won't get [fewer](https://imgur.com/gallery/d3dQm6V).
+
+
+```r
+pwr.t.test(power = .8, # this is a proportion
+           n = 100, # Cohen's d
+           type = "one.sample") # we are doing a one-sample t.test
+```
+
+```
+## 
+##      One-sample t test power calculation 
+## 
+##               n = 100
+##               d = 0.2829005
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+```
+
+---
+# Statistical power and effect size
+
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+Here, I simulate data with a mean of 0.283, 1000 times, and test whether it differs from zero. 
+
+The *sample size* remains constant at 100 participants.
+
+Approx 800 tests are significant - a true-positive rate of .80, and thus a statistical power - `\(\beta\)` - of 80%.
+]
+
+---
+# Statistical power and effect size
+
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/power-curve-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+In this simulation, the general design of the study stays the same - there are 100 participants, we test against zero with a t-test.
+
+As the effect size increases, the **power** of the study increases.
+]
+
+---
+# Statistical power and effect sizes
+
+.pull-left[
+![](2-Power-and-Effect-Sizes_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+The study has approximately 17.2% power to detect a 0.1 difference in means.
+
+But the study also has approximately 84% power to detect a 0.3 difference in means.
+
+Studies have a **power curve**, not a single *power*.
+]
+
+---
+# Estimating power
+
+We can estimate the *power* of a specific statistical test if we know the *sample size* and the *effect size*. 
+
+
+```r
+pwr.t.test(n = 100, # this is a proportion
+           d = .3, # Cohen's d
+           type = "one.sample") # we are doing a one-sample t.test
+```
+
+```
+## 
+##      One-sample t test power calculation 
+## 
+##               n = 100
+##               d = 0.3
+##       sig.level = 0.05
+##           power = 0.8439471
+##     alternative = two.sided
+```
+
+... but this is not generally what you want to do. After you've done the study, it's too late. Before you run the study, you want to estimate sample size to know how many people you need.
+
+---
+# Critiquing the statistical power of a study
+
+A common critique of studies is that their sample size is **too low**, and thus that they lack statistical power.
+
+But any given study always has 80% power to detect **something**: power is a **curve**.
+
+A better critique is that a study has insufficient sample size to reliably detect a **meaningful, important effect**.
 
 ---
 # Further (suggested, not required) reading
@@ -664,17 +740,11 @@ Perugini, M., Gallucci, M., &amp; Costantini, G. (2018). A Practical Primer To P
 ---
 # Next session
 
-Next week is **Reading week**.
+We'll be skipping two weeks for **Easter!**.
 
-The following week, we'll be looking at **Factor Analysis**.
+The following week, we'll be returning to **Multiple regression** and looking at **logistic regression and Generalized linear models.**.
 
-Chapter 17 of Discovering Statistics Using R.
-
----
-class: title-slide-final, middle, inverse
-background-image: url('images/University of Lincoln_logo_General White Landscape.png')
-background-size: 500px
-background-position: 50% 10%
+Chapter 8 of Field et al, Discovering Statistics Using R.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
