@@ -81,7 +81,7 @@ class: center, inverse, middle
 ---
 # Significance versus non-signifiance
 
-In our field, we typically set our significance criterion - *alpha*, or $\alpha$ - at .05. is *p* < .05. 
+In our field, we typically set our significance criterion - *alpha*, or $\alpha$ - at .05.
 
 If the p-value of our test falls **below** this threshold, we say we have a *significant* result, and we get all excited and break out the bubbly. 
 `r paste(rep(emo::ji("champagne"), 3))`
