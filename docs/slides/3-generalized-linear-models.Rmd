@@ -1,0 +1,665 @@
+---
+title: "Multiple and logistic regression"
+date: "2021/04/13"
+header-includes:
+  - \usepackage{xcolor}
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+      beforeInit: "js/macros.js"
+---
+
+```{r setup, include = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE,
+        dplyr.summarise.inform = FALSE)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_extra_styles()
+xaringanExtra::use_panelset()
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6,
+                      fig.retina = 2)
+library(xaringanthemer)
+style_solarized_light(base_font_size = "20px")
+library(tidyverse)
+library(countdown)
+library(sjPlot)
+```
+
+class: inverse, middle, center
+# Linear regression - a (brief) recap
+
+---
+# Linear regression
+
+.pull-left[
+```{r examp-lm, echo = FALSE, fig.height = 5, fig.width= 6, fig.show = "hide"}
+set.seed(140)
+theme_set(theme_bw())
+a <- rnorm(300)
+X <- rnorm(300)
+Y <- a + X * 0.5 + 0.5 * rnorm(300)
+qplot(X, Y) +
+  theme(text = element_text(size = 18)) + 
+  stat_smooth(method = "lm")
+X1 <- rnorm(300)
+X2 <- rnorm(300)
+```
+![](`r knitr::fig_chunk("examp-lm", "png")`)
+]
+.pull-right[
+Our job is to figure out the mathematical relationship between our *predictor(s)* and our *outcome*.
+
+$$ Y = b_0 + b_1X_i + \varepsilon_i $$
+]
+
+---
+# Linear regression
+
+$$ Y = b_0 + b_1X_i + \varepsilon_i $$
+
+---
+# Linear regression
+
+$$ \color{red}Y = \color{#F6893D}{b_0} + \color{#FEBC38}{b_1}\color{blue}{X_i} + \color{green}{\varepsilon_i} $$
+
+.red[
+Y - The outcome - the dependent variable.
+]
+
+.brown[
+$b_0$ - The *intercept*. This is the value of $Y$ when $X$ = 0.
+]
+
+.orange[
+$b_1$ - The regression coefficients. This describes the steepness of the relationship between the outcome and *slope(s)*.
+]
+
+.blue[
+$X_i$ - The predictors - our independent variables.
+]
+
+.green[
+$\varepsilon_i$ - The *random error* - variability in our dependent variable that is not explained by our predictors. 
+]
+
+---
+class: inverse, middle, center
+# Regression assumptions
+
+---
+# Regression assumptions
+
+Linear regression has a number of assumptions:
+
+- Normally distributed errors
+
+- Homoscedasticity (of errors)
+
+- Independence of errors
+
+- Linearity
+
+- No perfect multicollinearity
+
+---
+# Normally distributed errors
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5, fig.width = 6}
+test_model <- lm(Y ~ X1 + X2)
+qplot(fitted(test_model),
+      scale(resid(test_model))) + 
+  xlab("Fitted values") + 
+  ylab("Standardized residuals") + 
+  theme(text = element_text(size = 18)) +
+  geom_hline(yintercept = 0)
+```
+]
+
+.pull-right[
+The *errors*, $\varepsilon_i$, are the variance left over after your model is fit.
+
+An example like that on the left is what you want to see!
+
+There is no clear pattern; the dots are evenly distributed around zero.
+]
+
+---
+# Skewed errors
+
+.pull-left[
+```{r echo = FALSE, fig.height = 5, fig.width = 6}
+test_skew <- lm(rgamma(300, 1) ~ X1 + X2)
+
+qplot(fitted(test_skew),
+      resid(test_skew)) + 
+  xlab("Fitted values") + 
+  ylab("Standardized residuals") + 
+  theme(text = element_text(size = 18)) +
+  geom_hline(yintercept = 0)
+```
+]
+.pull-right[
+In contrast, the residuals on the left are skewed.
+
+This most often happens with data that are *bounded*. For example, *reaction times* cannot be below zero; negative values are impossible.
+]
+
+---
+# Checking assumptions
+
+.pull-left[
+The `performance` package has a very handy function called `check_model()`, which shows a variety of ways of checking the assumptions all at once.
+
+```{r chck-mod, fig.show = "hide", message = FALSE, warning = FALSE}
+library(performance)
+check_model(test_skew)
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("chck-mod", "png")`)
+]
+
+---
+# Checking assumptions
+
+.pull-left[
+
+You can follow up suspicious looking plots with individual functions like `check_normality()`, which uses `shapiro.test()` to check the residuals and also provides nice plots.
+
+Rely on the plots more than significance tests...
+
+```{r chck-norm, fig.show = "hide", message = FALSE, warning = FALSE}
+plot(check_normality(test_skew),
+     type = "qq")
+```
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("chck-norm", "png")`)
+]
+
+---
+# So, about violated assumptions? `r emo::ji("scream")`
+
+1) We can think about [transformations](https://craddm.github.io/resmethods/slides/Week-23-messy-data.html?panelset3=the-data2&panelset4=with-outliers2&panelset5=right-tailed2#30) `r emo::ji("scream")`
+
+2) We could consider *non-parametric stats* - things like `wilcox.test()`, `friedman.test()`, `kruskal.test()`, all of which are based on rank transformations and thus are really more like point 1 `r emo::ji("scream")`
+
+3) We should think about **why** the assumptions might be violated. Is this just part of how the data is *generated*? `r emo::ji("thinking")`
+
+---
+class: center, middle, inverse
+# Generalized Linear Models
+
+---
+# Distributional families
+
+.pull-left[
+```{r hypothetical-norm, echo = FALSE, fig.height = 5}
+iq_tibble <- 
+  tibble(iq = 0:200,
+         density = dnorm(iq, mean = 100, sd = 15)) 
+iq_tibble %>%
+  ggplot(aes(x = iq, y = density)) +
+  geom_line() +
+  theme_classic() +
+  geom_vline(xintercept = 100, linetype = "dashed") +
+  geom_vline(xintercept = c(85, 115), linetype = "dotted") +
+  annotate(geom = "text", x = 150, y = 0.025, label = "Mean = 100") +
+  annotate(geom = "text", x = 150, y = 0.0235, label = "Standard deviation = 15")
+```
+]
+.pull-right[
+The *normal* distribution can also be called the *Gaussian* distribution.
+
+The linear regression models we've used so far assume a *Gaussian* distribution of errors.
+]
+
+---
+# Generalized linear models
+
+A *Generalized Linear Model* - fit with `glm()` - allows you to specify what type of family of probability distributions the data are drawn from. 
+.panelset[
+.panel[.panel-name[The data]
+```{r}
+skewed_var <- rgamma(300, 1)
+hist(skewed_var)
+```
+]
+.panel[.panel-name[With lm]
+```{r}
+lm(skewed_var ~ X1 + X2)
+```
+]
+.panel[.panel-name[With glm]
+```{r}
+glm(skewed_var ~ X1 + X2, family = "gaussian")
+```
+]
+]
+
+---
+# Categorical outcome variables
+
+Suppose you have a *discrete*, *categorical* outcome.
+
+Examples of categorical outcomes:
+- correct or incorrect answer
+- person commits an offence or does not
+
+Examples of counts:
+- Number of items successfully recalled
+- Number of offences committed
+
+---
+# The binomial distribution
+
+A coin only has two sides: heads or tails.
+
+Assuming the coin is fair, the probability - $P$ - that it lands on *heads* is *.5*. So the probability it lands on *tails* - $1 - P$ is also *.5*.
+
+This type of variable is called a **Bernoulli random variable**.
+
+If you toss the coin many times, the count of how many heads and how many tails occur is called a **binomial distribution**.
+
+---
+# Binomial distribution
+
+If we throw the coin 100 times, how many times do we get tails?
+
+```{r message = FALSE, fig.height= 5}
+coin_flips <- rbinom(n = 100, size = 1, prob = 0.5)
+qplot(coin_flips)
+```
+
+---
+# Binomial distribution
+
+What happens if we try to model individual coin flips with `lm()`?
+
+```{r message = FALSE, warning = FALSE, fig.width= 7}
+coin_flips <- rbinom(n = 100, size = 1, prob = 0.5)
+x3 <- rnorm(100) # this is just a random variable for the purposes of demonstration!
+check_model(lm(coin_flips ~ x3))
+```
+
+---
+# Logistic regression
+
+We get `glm()` to model a `binomial` distribution by specifying the *binomial* family. 
+
+```{r echo = FALSE}
+set.seed(150)
+```
+```{r}
+coin_flips <- rbinom(n = 100, size = 1, prob = 0.5)
+glm(coin_flips ~ 1,
+    family = binomial(link = "logit"))
+```
+
+---
+# Logistic regression
+
+.pull-left[
+The *logit* transformation is used to *link* our predictors to our discrete outcome variable.
+
+It helps us constrain the influence of our predictors to the range 0-1, and account for the change in *variance* with probability.
+]
+
+.pull-right[
+```{r logit-curve, echo = FALSE, fig.height = 5}
+scurve <- function(x){
+  y <- exp(x) / (1 + exp(x))
+  return(y)
+}
+log_scurve <- function(x){
+  y <- x + x
+  return(y)
+}
+p <- ggplot(data = data.frame(x = c(-5, 5)), aes(x))
+p +
+  stat_function(fun = scurve, n = 100) +
+  theme_classic() + 
+  theme(text = element_text(size = 18)) +
+  ylab("Probability")
+```
+]
+
+---
+# Logistic regression
+
+.pull-left[
+As probabilities approach zero or one, the range of possible values *decreases*.
+
+Thus, the influence of predictors on the *response scale* must also decrease as we reach one or zero.
+]
+.pull-right[
+![](`r knitr::fig_chunk("logit-curve", "png")`)
+]
+
+---
+# Logistic regression
+
+$$ \color{red}{P(Y)} = \frac{1}{1 + e^-(b_0 + b_1X_1 + \varepsilon_i)} $$
+
+.red[
+$P(Y)$ - The *probability* of the outcome happening.
+]
+
+---
+# Logistic regression
+
+$$ \color{red}{P(Y)} = \frac{\color{green}{1}}{\color{green}{1 + e^-(b_0 + b_1X_1 + \varepsilon_i)}} $$
+
+.red[
+$P(Y)$ - The *probability* of the outcome happening.
+]
+.green[
+$\frac{1}{1 + e^-(...)}$ - The *log-odds* (logits) of the predictors.
+]
+
+---
+# Odds ratios and log odds
+
+**Odds** are the ratio of one outcome versus the others. e.g. The odds of a randomly chosen day being a Friday are 1 to 6 (or 1/6 = .17)
+
+**Log odds** are the *natural log* of the odds:
+
+$$log(\frac{p}{1-p})$$
+
+The coefficients we get out are *log-odds* - they can be hard to interpret on their own.
+
+```{r}
+coef(glm(coin_flips ~ 1, family = binomial(link = "logit")))
+```
+
+---
+# Odds ratios and log odds
+
+If we exponeniate them, we get the *odds ratios* back.
+
+```{r}
+exp(coef(glm(coin_flips ~ 1, family = binomial(link = "logit"))))
+```
+
+So this one is roughly 1:1 heads and tails! But there's a nicer way to figure it out...
+
+---
+class: inverse, middle, center
+# Taking penalties
+
+--
+
+![](images/terry-penalty.gif)
+
+---
+# Taking penalties
+
+What's the probability that a particular penalty will be scored?
+
+```{r pen-dat,echo = FALSE}
+penalties <- read.delim("data/penalty.dat",
+                        header = TRUE,
+                        stringsAsFactors = TRUE)
+head(penalties)
+```
+
+- **PSWQ** = Penn State Worry Questionnaire
+- **Anxiety** = State Anxiety
+- **Previous** = Number of penalties scored previously
+
+---
+# Taking penalties
+
+```{r}
+pens <- glm(Scored ~ PSWQ + Anxious + Previous,
+            family = binomial(link = "logit"),
+            data = penalties)
+pens
+```
+
+---
+
+```{r echo = FALSE, highlight.output = 13}
+summary(pens)
+```
+
+---
+# The response scale and the link scale
+
+The model is fit on the *link* scale. 
+
+The coefficients returned by the GLM are in *logits*, or *log-odds*.
+
+```{r}
+coef(pens)
+```
+
+How do we interpret them?
+
+---
+# Converting logits to odds ratios
+
+```{r}
+coef(pens)[2:4]
+```
+
+We can *exponentiate* the log-odds using the **exp()** function.
+
+```{r}
+exp(coef(pens)[2:4])
+```
+
+---
+# Odds ratios
+
+An odds ratio greater than 1 means that the odds of an outcome increase.
+
+An odds ratio less than 1 means that the odds of an outcome decrease.
+
+```{r}
+exp(coef(pens)[2:4])
+```
+
+From this table, it looks like the odds of scoring a penalty decrease with increases in PSWQ but increase with increases in State Anxiety or Previous scoring rates.
+
+---
+# The response scale 
+
+The *response* scale is even *more* intuitive. It makes predictions using the *original* units. For a binomial distribution, that's *probabilities*. We can generate probabilities using the **predict()** function.
+
+```{r}
+penalties$prob <- predict(pens, type = "response")
+head(penalties)
+```
+
+---
+# Model predictions
+
+Note that these model predictions *don't need to use the original data*. Let's see how the probability of scoring changes as `PSWQ` increases.
+
+.panelset[
+.panel[.panel-name[Create new data]
+```{r fig.height = 4}
+new_dat <- 
+  tibble::tibble(PSWQ = seq(0, 30, by = 2),
+                 Anxious = mean(penalties$Anxious),
+                 Previous = mean(penalties$Previous))
+```
+]
+.panel[.panel-name[Make predictions]
+```{r}
+new_dat$probs <-
+  predict(pens,
+          newdata = new_dat,
+          type = "response")
+```
+]
+.panel[.panel-name[Plot predictions]
+.pull-left[
+```{r prob-fig, fig.height = 4, fig.show = "hide"}
+ggplot(new_dat, aes(x = PSWQ, y = probs)) +
+  geom_point() +
+  geom_line()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("prob-fig", "png")`)
+]
+]
+]
+
+---
+# Model predictions
+
+Imagine you wanted to the probability of scoring for somebody with a PSWQ score of 7, an Anxious rating of 12, and a Previous scoring record of 34.
+
+.panelset[
+.panel[.panel-name[Make the data]
+```{r}
+new_dat <- tibble::tibble(PSWQ = 7,
+                          Anxious = 22,
+                          Previous = 34)
+```
+]
+.panel[.panel-name[Predict log-odds]
+```{r}
+predict(pens, new_dat)
+```
+]
+.panel[.panel-name[Predict odds]
+```{r}
+exp(predict(pens, new_dat))
+```
+]
+.panel[.panel-name[Predict probabilities]
+```{r}
+predict(pens, new_dat, type = "response")
+```
+]
+]
+
+---
+# Plotting
+
+.pull-left[
+
+The **sjPlot** package has some excellent built in plotting tools - try the **plot_model()** function.
+
+```{r sj-plot, fig.show = "hide",fig.height = 5}
+library(sjPlot)
+plot_model(pens,
+           type = "pred",
+           terms = "PSWQ")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("sj-plot", "png")`)
+]
+
+---
+# Results tables
+
+```{r}
+sjPlot::tab_model(pens)
+```
+
+---
+class: inverse, middle, center
+# The Titanic dataset
+
+![](images/titanic.gif)
+
+---
+class: inverse, middle, center
+# The Titanic dataset
+
+![](images/rose84.gif)
+---
+# The Titanic dataset
+
+```{r echo = FALSE, message = FALSE}
+full_titanic <- read_csv("data/titanic.csv")
+```
+
+```{r}
+head(full_titanic)
+```
+
+Downloaded from [Kaggle](https://www.kaggle.com/c/titanic)
+
+---
+# The Titanic dataset
+
+![](images/titanic.png)
+
+---
+# The Titanic dataset
+
+.pull-left[
+```{r}
+full_titanic %>% 
+  group_by(Survived,
+           Sex) %>%
+  count()
+```
+]
+.pull-right[
+```{r}
+full_titanic %>%
+  group_by(Sex) %>%
+  summarise(p = mean(Survived),
+            Y = sum(Survived),
+            N = n())
+```
+]
+
+---
+# The Titanic dataset
+
+```{r echo = FALSE}
+full_titanic$Pclass <- factor(full_titanic$Pclass)
+age_class <- 
+  glm(Survived ~ Age + Pclass,
+            family = binomial(),
+            data = full_titanic)
+summary(age_class)
+```
+
+---
+# The Titanic dataset
+
+```{r message = FALSE}
+library(emmeans)
+emmeans(age_class,
+        ~Age|Pclass,
+        type = "response")
+```
+
+---
+# Some final notes on Generalized Linear Models
+
+Today has focussed on **logistic** regression with *binomial* distributions.
+
+But Generalized Linear Models can be expanded to deal with many different types of outcome variable!
+
+e.g. 
+*Counts* follow a Poisson distribution - use `family = "poisson"`
+
+Ordinal variables (e.g. Likert scale) can be modelled using *cumulative logit* models (using the **ordinal** or **brms** packages).
+
+---
+#Suggested reading for categorical ordinal regression
+
+[Liddell & Kruschke (2018). Analyzing ordinal data with metric models: What could possibly go Wrong?](https://www.sciencedirect.com/science/article/pii/S0022103117307746)
+
+[Buerkner & Vuorre (2018). Ordinal Regression Models in Psychology: A Tutorial](https://psyarxiv.com/x8swp/)
+
