@@ -19,12 +19,17 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF Slides](slides/B-1-messy-data.pdf)
 
 ### 2. 23/03/2021, Statistical power and effect sizes
+- [HTML Slides](slides/2-Power-and-Effect-Sizes.html)
+- [PDF Slides](slides/2-Power-and-Effect-Sizes.pdf)
+
 
 ### 3. 13/04/2021, Multiple and logistic regression
+- [HTML Slides](slides/3-generalized-linear-models.html)
+- [PDF Slides](slides/3-generalized-linear-models.pdf)
 
 ### 4. 20/04/2021, Multilevel analysis
 
-### 5. 27/04/2021, Mediation and aoderation
+### 5. 27/04/2021, Mediation and Moderation
 
 ### 6. 04/05/2021, Factor analysis
 
