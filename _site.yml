@@ -42,6 +42,7 @@ navbar:
       - text: "3: Multiple and Logistic Regression"
         href: slides/3-generalized-linear-models.html
       - text: "4: Multilevel Analysis - Linear Mixed Effects Models"
+        href: slides/4-multilevel-modelling.html
       - text: "5: Mediation and moderation"
       - text: "6: Factor Analysis with PCA"
       - text: "7: Statistics done wrong"
