@@ -30,7 +30,9 @@ knitr::opts_chunk$set(echo = FALSE)
 - [HTML Slides](slides/4-multilevel-modelling.html)
 - [PDF Slides](slides/4-multilevel-modelling.pdf)
 
-### 5. 27/04/2021, Mediation and Moderation
+### 5. 27/04/2021, Moderation and Mediation
+- [HTML Slides](slides/5-Moderation-Mediation.html)
+- [PDF Slides](slides/5-Moderation-Mediation.pdf)
 
 ### 6. 04/05/2021, Factor analysis
 
