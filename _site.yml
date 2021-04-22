@@ -49,5 +49,5 @@ navbar:
       - text: "7: Statistics done wrong"
       - text: "8: R from Start to Finish"
     - icon: fab fa-github
-      href: https://github.com/craddm/
+      href: https://github.com/craddm/resmethods
 output: distill::distill_article
