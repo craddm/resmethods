@@ -103,7 +103,7 @@ class: inverse, center, middle
 # Graphical representation of factor analysis
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 Each axis is a *dimension* relating to an underlying construct. 
@@ -116,7 +116,7 @@ In this example, based on the HEXACO scale, the x-axis represents the *Honesty-H
 # Graphical representation of factor analysis
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 Each axis is a *dimension* relating to an underlying construct. 
@@ -131,7 +131,7 @@ Each dot represents the score on an individual item. The points that cluster tog
 # Graphical representation of factor analysis
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 Each axis is a *dimension* relating to an underlying construct. 
@@ -155,7 +155,7 @@ Items that measure the *Honesty-Humility* factor load high on the x-axis.
 
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/class-dim-1.png)
+![](6-Factor-Analysis_files/figure-html/class-dim-1.png)
 ]
 
 ---
@@ -169,7 +169,7 @@ Items that measure the *Honesty-Humility* factor load high on the x-axis.
 The distance of an item from zero on a particular dimension indicates how heavily the item *loads* on that dimensions.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/both-facs-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/both-facs-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -179,7 +179,7 @@ The distance of an item from zero on a particular dimension indicates how heavil
 The items that load on the Honesty-Humility axis are close to the centre of the *y-axis*, but distant from zero on the *x-axis*.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/fac-load-emo-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/fac-load-emo-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -191,7 +191,7 @@ The items that load on the Honesty-Humility axis are close to the centre of the 
 The items that load on the Emotionality factor are close to the centre of the *x-axis*, but distant from zero on the *y-axis*.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/fac-dim-hum-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/fac-dim-hum-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -204,7 +204,7 @@ These clearly load negatively on both our existing factors, but we may need anot
 ]
 
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -218,7 +218,7 @@ These clearly load negatively on both our existing factors, but we may need anot
 For each distinct *factor*, we need an additional *dimension*.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -238,7 +238,7 @@ Here we take a look a small subset of those items.
 We have *two clusters* of items that correlate with *with each other* but not with the items in the *other* cluster.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/corr-dims-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/corr-dims-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -247,10 +247,10 @@ We have *two clusters* of items that correlate with *with each other* but not wi
 The matrix on the right is the *identity* matrix - this is what the correlation matrix would be like without structure.
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -329,7 +329,7 @@ In theory, we could have one per item.
 Here, it looks like there are at least five different groups.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -346,7 +346,7 @@ scree(hexaco_only, factors = FALSE)
 ]
 
 .pull_right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/scree-plot1-1.png)
+![](6-Factor-Analysis_files/figure-html/scree-plot1-1.png)
 ]
 
 ---
@@ -364,13 +364,15 @@ eigen(cor(hexaco_only))$values
 ```
 
 ```
-##  [1] 6.6794022 4.9331351 4.1642486 3.6237441 3.1055095 2.4175969 1.8303788 1.7109257 1.6276844
-## [10] 1.4397559 1.3272585 1.2604329 1.1922544 1.1163815 1.0921884 1.0615500 0.9873230 0.9548026
-## [19] 0.9119362 0.8633100 0.8313116 0.7990644 0.7715206 0.7308254 0.7084408 0.6727497 0.6619408
-## [28] 0.6319305 0.6145891 0.5917170 0.5852278 0.5682678 0.5418668 0.5317604 0.5112533 0.4972359
-## [37] 0.4697304 0.4557374 0.4375651 0.4280798 0.4018966 0.3945424 0.3844344 0.3547073 0.3484113
-## [46] 0.3357983 0.3289566 0.3065944 0.2977506 0.2890174 0.2725412 0.2599978 0.2595737 0.2436230
-## [55] 0.2312924 0.2221693 0.2179546 0.1937423 0.1609424 0.1554209
+##  [1] 6.6794022 4.9331351 4.1642486 3.6237441 3.1055095 2.4175969 1.8303788
+##  [8] 1.7109257 1.6276844 1.4397559 1.3272585 1.2604329 1.1922544 1.1163815
+## [15] 1.0921884 1.0615500 0.9873230 0.9548026 0.9119362 0.8633100 0.8313116
+## [22] 0.7990644 0.7715206 0.7308254 0.7084408 0.6727497 0.6619408 0.6319305
+## [29] 0.6145891 0.5917170 0.5852278 0.5682678 0.5418668 0.5317604 0.5112533
+## [36] 0.4972359 0.4697304 0.4557374 0.4375651 0.4280798 0.4018966 0.3945424
+## [43] 0.3844344 0.3547073 0.3484113 0.3357983 0.3289566 0.3065944 0.2977506
+## [50] 0.2890174 0.2725412 0.2599978 0.2595737 0.2436230 0.2312924 0.2221693
+## [57] 0.2179546 0.1937423 0.1609424 0.1554209
 ```
 
 ---
@@ -383,7 +385,7 @@ It's probably around 9 components here!
 ]
 
 .pull_right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/screeplotmark-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/screeplotmark-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -397,7 +399,7 @@ This would pick out around *16* factors here.
 Kaiser's criterion tends to keep too many factors.
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -422,7 +424,7 @@ fa.parallel(hexaco_only,
 ]
 
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/parallel-fa-1.png)
+![](6-Factor-Analysis_files/figure-html/parallel-fa-1.png)
 ]
 
 ---
@@ -553,7 +555,7 @@ pca_hexa
 fa.diagram(pca_hexa)
 ```
 
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -564,7 +566,7 @@ class: inverse, center, middle
 # Factor rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/class-dim-1.png)
+![](6-Factor-Analysis_files/figure-html/class-dim-1.png)
 ]
 .pull-right[
 Remember that each factor (or component!) adds an additional axis to this plot. Here, the items load highly on one particular component each.
@@ -576,7 +578,7 @@ But when there are many items and many components, the items tend to load on mul
 # Factor rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/class-dim-1.png)
+![](6-Factor-Analysis_files/figure-html/class-dim-1.png)
 ]
 .pull-right[
 Items tend to load largely on the most important (highest eigenvalue) components, and then a little bit on the smaller components.
@@ -587,7 +589,7 @@ We can alter how we place the axes, rotating them such that each individual item
 # Factor rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/class-dim-1.png)
+![](6-Factor-Analysis_files/figure-html/class-dim-1.png)
 ]
 .pull-right[
 There are two types of rotation:
@@ -602,7 +604,7 @@ There are two types of rotation:
 # Orthogonal rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 In this case, the items are slightly off the original axes.
@@ -612,7 +614,7 @@ In this case, the items are slightly off the original axes.
 # Orthogonal rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 In this case, the items are slightly off the original axes.
@@ -720,7 +722,7 @@ principal(hexaco_only,
 # Oblique rotation
 
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 In this case, the items are displaced from the axes slightly differently.
@@ -729,7 +731,7 @@ In this case, the items are displaced from the axes slightly differently.
 ---
 # Oblique rotation
 .pull-left[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](6-Factor-Analysis_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 In this case, the items are displaced from the axes slightly differently.
@@ -744,6 +746,10 @@ The typical method of oblique rotation is called *oblimin*.
 principal(hexaco_only,
           nfactors = 9,
           rotate = "oblimin")
+```
+
+```
+## Loading required namespace: GPArotation
 ```
 
 ```
@@ -975,67 +981,128 @@ print(pca_hexa,
 ## Principal Components Analysis
 ## Call: principal(r = hexaco_only, nfactors = 9, rotate = "varimax")
 ## Standardized loadings (pattern matrix) based upon correlation matrix
-##          item   RC1   RC2   RC3   RC6   RC9   RC5   RC4   RC7   RC8   h2   u2 com
-## hexaco21   21 -0.70                                                 0.58 0.42 1.4
-## hexaco45   45  0.68                                                 0.49 0.51 1.1
-## hexaco15   15 -0.65                                                 0.52 0.48 1.5
-## hexaco27   27  0.62                                                 0.54 0.46 1.9
-## hexaco33   33  0.62                                                 0.43 0.57 1.3
-## hexaco39   39  0.59                                                 0.39 0.61 1.2
-## hexaco3     3  0.59                                                 0.44 0.56 1.6
-## hexaco51   51  0.58                                                 0.44 0.56 1.7
-## hexaco9     9 -0.58                                                 0.42 0.58 1.6
-## hexaco57   57 -0.52                                                 0.37 0.63 1.9
-## hexaco59   59       -0.71                                           0.58 0.42 1.3
-## hexaco53   53       -0.71                                           0.55 0.45 1.2
-## hexaco41   41       -0.70                                           0.51 0.49 1.1
-## hexaco17   17        0.67                                           0.54 0.46 1.4
-## hexaco35   35       -0.61             -0.36                         0.61 0.39 2.3
-## hexaco23   23        0.58                                           0.45 0.55 1.8
-## hexaco47   47        0.57                                           0.36 0.64 1.2
-## hexaco29   29        0.53                                           0.39 0.61 1.8
-## hexaco12   12        0.53              0.37                         0.50 0.50 2.5
-## hexaco5     5        0.50                                           0.30 0.70 1.4
-## hexaco1     1              0.74                                     0.59 0.41 1.2
-## hexaco13   13             -0.65              0.36                   0.63 0.37 2.0
-## hexaco25   25             -0.64                                     0.51 0.49 1.5
-## hexaco31   31              0.62                                     0.48 0.52 1.5
-## hexaco7     7             -0.59                                     0.39 0.61 1.2
-## hexaco55   55              0.56                                     0.41 0.59 1.7
-## hexaco49   49              0.46        0.32 -0.36                   0.55 0.45 3.8
-## hexaco60   60                   -0.69                               0.57 0.43 1.5
-## hexaco36   36                    0.67                               0.53 0.47 1.4
-## hexaco10   10                   -0.66                               0.60 0.40 1.8
-## hexaco6     6                    0.64                               0.49 0.51 1.5
-## hexaco54   54                    0.57                               0.40 0.60 1.5
-## hexaco30   30                   -0.55                          0.30 0.43 0.57 1.9
-## hexaco18   18                    0.46                               0.33 0.67 2.2
-## hexaco42   42                   -0.44                               0.30 0.70 2.2
-## hexaco22   22                         -0.67                         0.64 0.36 2.0
-## hexaco52   52                          0.66                         0.60 0.40 1.8
-## hexaco28   28                          0.65                         0.49 0.51 1.3
-## hexaco4     4                         -0.59                         0.56 0.44 2.4
-## hexaco46   46                          0.52       -0.38             0.53 0.47 2.7
-## hexaco44   44                                0.65                   0.58 0.42 1.8
-## hexaco20   20                                0.64                   0.57 0.43 1.9
-## hexaco26   26                                0.63                   0.53 0.47 1.8
-## hexaco56   56                                0.61                   0.45 0.55 1.5
-## hexaco2     2                               -0.58                   0.48 0.52 1.9
-## hexaco34   34                                      0.75             0.63 0.37 1.2
-## hexaco58   58                                      0.71             0.64 0.36 1.6
-## hexaco16   16                                      0.65             0.58 0.42 1.9
-## hexaco11   11              0.32                   -0.64             0.60 0.40 2.1
-## hexaco40   40                                      0.56             0.49 0.51 2.2
-## hexaco38   38                                            0.66       0.51 0.49 1.4
-## hexaco50   50                                            0.63       0.50 0.50 1.5
-## hexaco8     8                                            0.61       0.53 0.47 2.0
-## hexaco14   14                                0.30       -0.48       0.43 0.57 2.9
-## hexaco37   37             -0.36              0.39        0.42       0.55 0.45 4.0
-## hexaco32   32                          0.36             -0.40       0.46 0.54 4.2
-## hexaco43   43                                            0.37       0.41 0.59 4.9
-## hexaco24   24                                                  0.74 0.62 0.38 1.3
-## hexaco48   48                                                  0.65 0.61 0.39 2.0
-## hexaco19   19              0.33                                0.47 0.45 0.55 3.1
+##          item   RC1   RC2   RC3   RC6   RC9   RC5   RC4   RC7   RC8   h2   u2
+## hexaco21   21 -0.70                                                 0.58 0.42
+## hexaco45   45  0.68                                                 0.49 0.51
+## hexaco15   15 -0.65                                                 0.52 0.48
+## hexaco27   27  0.62                                                 0.54 0.46
+## hexaco33   33  0.62                                                 0.43 0.57
+## hexaco39   39  0.59                                                 0.39 0.61
+## hexaco3     3  0.59                                                 0.44 0.56
+## hexaco51   51  0.58                                                 0.44 0.56
+## hexaco9     9 -0.58                                                 0.42 0.58
+## hexaco57   57 -0.52                                                 0.37 0.63
+## hexaco59   59       -0.71                                           0.58 0.42
+## hexaco53   53       -0.71                                           0.55 0.45
+## hexaco41   41       -0.70                                           0.51 0.49
+## hexaco17   17        0.67                                           0.54 0.46
+## hexaco35   35       -0.61             -0.36                         0.61 0.39
+## hexaco23   23        0.58                                           0.45 0.55
+## hexaco47   47        0.57                                           0.36 0.64
+## hexaco29   29        0.53                                           0.39 0.61
+## hexaco12   12        0.53              0.37                         0.50 0.50
+## hexaco5     5        0.50                                           0.30 0.70
+## hexaco1     1              0.74                                     0.59 0.41
+## hexaco13   13             -0.65              0.36                   0.63 0.37
+## hexaco25   25             -0.64                                     0.51 0.49
+## hexaco31   31              0.62                                     0.48 0.52
+## hexaco7     7             -0.59                                     0.39 0.61
+## hexaco55   55              0.56                                     0.41 0.59
+## hexaco49   49              0.46        0.32 -0.36                   0.55 0.45
+## hexaco60   60                   -0.69                               0.57 0.43
+## hexaco36   36                    0.67                               0.53 0.47
+## hexaco10   10                   -0.66                               0.60 0.40
+## hexaco6     6                    0.64                               0.49 0.51
+## hexaco54   54                    0.57                               0.40 0.60
+## hexaco30   30                   -0.55                          0.30 0.43 0.57
+## hexaco18   18                    0.46                               0.33 0.67
+## hexaco42   42                   -0.44                               0.30 0.70
+## hexaco22   22                         -0.67                         0.64 0.36
+## hexaco52   52                          0.66                         0.60 0.40
+## hexaco28   28                          0.65                         0.49 0.51
+## hexaco4     4                         -0.59                         0.56 0.44
+## hexaco46   46                          0.52       -0.38             0.53 0.47
+## hexaco44   44                                0.65                   0.58 0.42
+## hexaco20   20                                0.64                   0.57 0.43
+## hexaco26   26                                0.63                   0.53 0.47
+## hexaco56   56                                0.61                   0.45 0.55
+## hexaco2     2                               -0.58                   0.48 0.52
+## hexaco34   34                                      0.75             0.63 0.37
+## hexaco58   58                                      0.71             0.64 0.36
+## hexaco16   16                                      0.65             0.58 0.42
+## hexaco11   11              0.32                   -0.64             0.60 0.40
+## hexaco40   40                                      0.56             0.49 0.51
+## hexaco38   38                                            0.66       0.51 0.49
+## hexaco50   50                                            0.63       0.50 0.50
+## hexaco8     8                                            0.61       0.53 0.47
+## hexaco14   14                                0.30       -0.48       0.43 0.57
+## hexaco37   37             -0.36              0.39        0.42       0.55 0.45
+## hexaco32   32                          0.36             -0.40       0.46 0.54
+## hexaco43   43                                            0.37       0.41 0.59
+## hexaco24   24                                                  0.74 0.62 0.38
+## hexaco48   48                                                  0.65 0.61 0.39
+## hexaco19   19              0.33                                0.47 0.45 0.55
+##          com
+## hexaco21 1.4
+## hexaco45 1.1
+## hexaco15 1.5
+## hexaco27 1.9
+## hexaco33 1.3
+## hexaco39 1.2
+## hexaco3  1.6
+## hexaco51 1.7
+## hexaco9  1.6
+## hexaco57 1.9
+## hexaco59 1.3
+## hexaco53 1.2
+## hexaco41 1.1
+## hexaco17 1.4
+## hexaco35 2.3
+## hexaco23 1.8
+## hexaco47 1.2
+## hexaco29 1.8
+## hexaco12 2.5
+## hexaco5  1.4
+## hexaco1  1.2
+## hexaco13 2.0
+## hexaco25 1.5
+## hexaco31 1.5
+## hexaco7  1.2
+## hexaco55 1.7
+## hexaco49 3.8
+## hexaco60 1.5
+## hexaco36 1.4
+## hexaco10 1.8
+## hexaco6  1.5
+## hexaco54 1.5
+## hexaco30 1.9
+## hexaco18 2.2
+## hexaco42 2.2
+## hexaco22 2.0
+## hexaco52 1.8
+## hexaco28 1.3
+## hexaco4  2.4
+## hexaco46 2.7
+## hexaco44 1.8
+## hexaco20 1.9
+## hexaco26 1.8
+## hexaco56 1.5
+## hexaco2  1.9
+## hexaco34 1.2
+## hexaco58 1.6
+## hexaco16 1.9
+## hexaco11 2.1
+## hexaco40 2.2
+## hexaco38 1.4
+## hexaco50 1.5
+## hexaco8  2.0
+## hexaco14 2.9
+## hexaco37 4.0
+## hexaco32 4.2
+## hexaco43 4.9
+## hexaco24 1.3
+## hexaco48 2.0
+## hexaco19 3.1
 ## 
 ##                        RC1  RC2  RC3  RC6  RC9  RC5  RC4  RC7  RC8
 ## SS loadings           4.47 4.46 3.54 3.46 3.18 3.15 3.02 2.87 1.94
@@ -1060,18 +1127,18 @@ Down at the bottom of our output are statistics about the amount of variance our
 
 
 ```
-##                             RC1        RC2        RC3        RC6        RC9        RC5
-## SS loadings           4.4744097 4.45609263 3.54088899 3.46245860 3.18062363 3.14794568
-## Proportion Var        0.0745735 0.07426821 0.05901482 0.05770764 0.05301039 0.05246576
-## Cumulative Var        0.0745735 0.14884171 0.20785652 0.26556417 0.31857456 0.37104032
-## Proportion Explained  0.1486879 0.14807922 0.11766634 0.11506004 0.10569446 0.10460854
-## Cumulative Proportion 0.1486879 0.29676714 0.41443348 0.52949352 0.63518797 0.73979651
-##                              RC4        RC7        RC8
-## SS loadings           3.01616898 2.87416485 1.93987219
-## Proportion Var        0.05026948 0.04790275 0.03233120
-## Cumulative Var        0.42130980 0.46921255 0.50154376
-## Proportion Explained  0.10022951 0.09551061 0.06446337
-## Cumulative Proportion 0.84002602 0.93553663 1.00000000
+##                             RC1        RC2        RC3        RC6        RC9
+## SS loadings           4.4744097 4.45609263 3.54088899 3.46245860 3.18062363
+## Proportion Var        0.0745735 0.07426821 0.05901482 0.05770764 0.05301039
+## Cumulative Var        0.0745735 0.14884171 0.20785652 0.26556417 0.31857456
+## Proportion Explained  0.1486879 0.14807922 0.11766634 0.11506004 0.10569446
+## Cumulative Proportion 0.1486879 0.29676714 0.41443348 0.52949352 0.63518797
+##                              RC5        RC4        RC7        RC8
+## SS loadings           3.14794568 3.01616898 2.87416485 1.93987219
+## Proportion Var        0.05246576 0.05026948 0.04790275 0.03233120
+## Cumulative Var        0.37104032 0.42130980 0.46921255 0.50154376
+## Proportion Explained  0.10460854 0.10022951 0.09551061 0.06446337
+## Cumulative Proportion 0.73979651 0.84002602 0.93553663 1.00000000
 ```
 
 ---
@@ -1107,20 +1174,20 @@ head(pca_hexa$scores)
 ```
 
 ```
-##             RC1         RC2        RC3        RC6        RC9        RC5         RC4        RC7
-## [1,] -2.0370952 -0.74766949  1.0906981  2.4308437 -0.7581765 -0.5199759 -0.64786941  1.4417465
-## [2,] -1.3067772  0.07377406 -0.9048852  0.6698510 -1.3186814 -0.4670667 -0.49776904 -0.2658352
-## [3,] -0.4223559 -0.43381267 -1.0134896 -0.6835562  1.2656719 -1.1032942  0.19409792  0.6168094
-## [4,] -1.4688597 -2.01939403 -1.6466062  2.3991087  0.1195594 -1.3225573 -1.10714105 -0.1981588
-## [5,]  0.8065396  0.42209968 -0.6753594  0.9384934 -1.7880986 -0.7686581  1.06179528 -1.2344637
-## [6,]  0.4092487 -1.41218241 -1.5163114 -2.2545879  1.9586546 -1.7329438  0.03392348 -1.0618261
-##             RC8
-## [1,] -0.2530221
-## [2,] -0.8120384
-## [3,]  0.2996072
-## [4,] -0.4550324
-## [5,]  0.4208103
-## [6,] -1.5631121
+##             RC1         RC2        RC3        RC6        RC9        RC5
+## [1,] -2.0370952 -0.74766949  1.0906981  2.4308437 -0.7581765 -0.5199759
+## [2,] -1.3067772  0.07377406 -0.9048852  0.6698510 -1.3186814 -0.4670667
+## [3,] -0.4223559 -0.43381267 -1.0134896 -0.6835562  1.2656719 -1.1032942
+## [4,] -1.4688597 -2.01939403 -1.6466062  2.3991087  0.1195594 -1.3225573
+## [5,]  0.8065396  0.42209968 -0.6753594  0.9384934 -1.7880986 -0.7686581
+## [6,]  0.4092487 -1.41218241 -1.5163114 -2.2545879  1.9586546 -1.7329438
+##              RC4        RC7        RC8
+## [1,] -0.64786941  1.4417465 -0.2530221
+## [2,] -0.49776904 -0.2658352 -0.8120384
+## [3,]  0.19409792  0.6168094  0.2996072
+## [4,] -1.10714105 -0.1981588 -0.4550324
+## [5,]  1.06179528 -1.2344637  0.4208103
+## [6,]  0.03392348 -1.0618261 -1.5631121
 ```
 
 ---
@@ -1147,7 +1214,7 @@ ggplot(final_data,
 ```
 ]
 .pull-right[
-![](F:/GitHub/resmethods/slides/6-Factor-Analysis_files/figure-html/final-plot-1.png)
+![](6-Factor-Analysis_files/figure-html/final-plot-1.png)
 ]
 
 ---
