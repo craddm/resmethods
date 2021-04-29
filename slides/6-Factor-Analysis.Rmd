@@ -101,8 +101,9 @@ These questionnaires supposedly breaks personality down into six different facto
 ---
 #Example HEXACO items
 
-![](images/hexaco1-10.png)
-[www.hexaco.org](http://www.hexaco.org/)
+```{r echo = FALSE}
+knitr::include_graphics("images/hexaco1-10.png")
+```
 
 ---
 class: inverse, center, middle
@@ -1163,7 +1164,6 @@ class: center, middle, inverse
 2) Factor analysis helps you *condense* the information down, while still retaining the benefit of having many different, independent measurements of the underlying constructs.
 
 3) During the *design* of questionnaires, it helps you work out which items are measuring which thing, and which items are worth keeping!
-
 
 ---
 # This week's background
