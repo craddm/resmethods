@@ -35,6 +35,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF Slides](slides/5-Moderation-Mediation.pdf)
 
 ### 6. 04/05/2021, Factor analysis
+- [HTML Slides](slides/6-Factor-Analysis.html)
+- [PDF Slides](slides/6-Factor-Analysis.pdf)
 
 ### 7. 11/05/2021, Statistics done wrong
 
