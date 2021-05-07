@@ -48,6 +48,7 @@ navbar:
       - text: "6: Factor Analysis with PCA"
         href: slides/6-Factor-Analysis.html
       - text: "7: Statistics done wrong"
+        href: slides/7-stats-done-wrong.html
       - text: "8: R from Start to Finish"
     - icon: fab fa-github
       href: https://github.com/craddm/resmethods

@@ -39,5 +39,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF Slides](slides/6-Factor-Analysis.pdf)
 
 ### 7. 11/05/2021, Statistics done wrong
+- [HTML Slides](slides/7-stats-done-wrong.html)
+- [PDF Slides](slides/7-stats-done-wrong.pdf)
 
 ### 8. 18/05/2021, R from start to finish
