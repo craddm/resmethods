@@ -50,6 +50,7 @@ navbar:
       - text: "7: Statistics done wrong"
         href: slides/7-stats-done-wrong.html
       - text: "8: R from Start to Finish"
+        href: slides/8-R-from-start-to-finish.html
     - icon: fab fa-github
       href: https://github.com/craddm/resmethods
 output: distill::distill_article
