@@ -23,6 +23,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -455,7 +456,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </style>
 
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
   <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
@@ -2033,7 +2034,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2083,14 +2084,14 @@ Semester A
 </button>
 <div class="nav-dropdown-content">
 <a href="slides/Week-1-intro-to-R.html">1: Intro to R</a>
-<a href="slides/Week-2-Basic_R.html">2: Intro to R - part 2</a>
-<a href="slides/Week-3-More-on-Data.html">3: The Structure of Data</a>
-<a href="slides/Week-4-Exploring-data-graphically.html">4: Data Visualization</a>
-<a href="slides/Week-5-Import-and-wrangling.html">5: Importing, Transforming, and Summarising Data</a>
-<a href="slides/Week-7-NHST-two-means.html">6: The Basics of Statistical Testing</a>
-<a href="slides/Week-8-Correlation-Regression.html">7: Correlation and Regression</a>
-<a href="slides/Week-9-Multi-Regression-ANOVA.html">8: Multiple Regression and ANOVA</a>
-<a href="slides/Week-10-Repeated-and-Factorial-ANOVA.html">9: Repeated Measures and Factorial ANOVA</a>
+<span class="nav-dropdown-header">2: Intro to R - part 2</span>
+<span class="nav-dropdown-header">3: The Structure of Data</span>
+<span class="nav-dropdown-header">4: Data Visualization</span>
+<span class="nav-dropdown-header">5: Importing, Transforming, and Summarising Data</span>
+<span class="nav-dropdown-header">6: The Basics of Statistical Testing</span>
+<span class="nav-dropdown-header">7: Correlation and Regression</span>
+<span class="nav-dropdown-header">8: Multiple Regression and ANOVA</span>
+<span class="nav-dropdown-header">9: Repeated Measures and Factorial ANOVA</span>
 </div>
 </div>
 <div class="nav-dropdown">
@@ -2100,14 +2101,24 @@ Semester B
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="slides/Week-23-messy-data.html">1: Messy Data and a Return to R</a>
-<a href="slides/2-Power-and-Effect-Sizes.html">2: Statistical Power and Effect Sizes</a>
-<a href="slides/3-generalized-linear-models.html">3: Multiple and Logistic Regression</a>
-<a href="slides/4-multilevel-modelling.html">4: Multilevel Analysis - Linear Mixed Effects Models</a>
-<a href="slides/5-Moderation-Mediation.html">5: Moderation and Mediation</a>
-<a href="slides/6-Factor-Analysis.html">6: Factor Analysis with PCA</a>
-<a href="slides/7-stats-done-wrong.html">7: Statistics done wrong</a>
-<a href="slides/8-R-from-start-to-finish.html">8: R from Start to Finish</a>
+<span class="nav-dropdown-header">1: Messy Data and a Return to R</span>
+<span class="nav-dropdown-header">2: Statistical Power and Effect Sizes</span>
+<span class="nav-dropdown-header">3: Multiple and Logistic Regression</span>
+<span class="nav-dropdown-header">4: Multilevel Analysis - Linear Mixed Effects Models</span>
+<span class="nav-dropdown-header">5: Moderation and Mediation</span>
+<span class="nav-dropdown-header">6: Factor Analysis with PCA</span>
+<span class="nav-dropdown-header">7: Statistics done wrong</span>
+<span class="nav-dropdown-header">8: R from Start to Finish</span>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Archive
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="archive_2020_2021.html">2020/2021</a>
 </div>
 </div>
 <a href="https://github.com/craddm/resmethods">
@@ -2139,46 +2150,15 @@ Semester B
 </nav>
 </div>
 <h2 id="lectures">Lectures</h2>
-<h3 id="getting-back-into-r-with-messy-data">1. 16/03/2021, Getting back into R with messy data</h3>
-<ul>
-<li><a href="slides/Week-23-messy-data.html">HTML Slides</a></li>
-<li><a href="slides/B-1-messy-data.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="statistical-power-and-effect-sizes">2. 23/03/2021, Statistical power and effect sizes</h3>
-<ul>
-<li><a href="slides/2-Power-and-Effect-Sizes.html">HTML Slides</a></li>
-<li><a href="slides/2-Power-and-Effect-Sizes.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="multiple-and-logistic-regression">3. 13/04/2021, Multiple and logistic regression</h3>
-<ul>
-<li><a href="slides/3-generalized-linear-models.html">HTML Slides</a></li>
-<li><a href="slides/3-generalized-linear-models.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="multilevel-analysis">4. 20/04/2021, Multilevel analysis</h3>
-<ul>
-<li><a href="slides/4-multilevel-modelling.html">HTML Slides</a></li>
-<li><a href="slides/4-multilevel-modelling.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="moderation-and-mediation">5. 27/04/2021, Moderation and Mediation</h3>
-<ul>
-<li><a href="slides/5-Moderation-Mediation.html">HTML Slides</a></li>
-<li><a href="slides/5-Moderation-Mediation.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="factor-analysis">6. 04/05/2021, Factor analysis</h3>
-<ul>
-<li><a href="slides/6-Factor-Analysis.html">HTML Slides</a></li>
-<li><a href="slides/6-Factor-Analysis.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="statistics-done-wrong">7. 11/05/2021, Statistics done wrong</h3>
-<ul>
-<li><a href="slides/7-stats-done-wrong.html">HTML Slides</a></li>
-<li><a href="slides/7-stats-done-wrong.pdf">PDF Slides</a></li>
-</ul>
-<h3 id="r-from-start-to-finish">8. 18/05/2021, R from start to finish</h3>
-<ul>
-<li><a href="slides/8-R-from-start-to-finish.html">HTML Slides</a></li>
-<li><a href="slides/8-R-from-start-to-finish.pdf">PDF Slides</a></li>
-</ul>
+<p>Note that these dates and titles are <em>provisional</em></p>
+<h3 id="getting-back-into-r-with-messy-data">1. 15/03/2022, Getting back into R with messy data</h3>
+<h3 id="statistical-power-and-effect-sizes">2. 22/03/2022, Statistical power and effect sizes</h3>
+<h3 id="multiple-and-logistic-regression">3. 12/04/2022, Multiple and logistic regression</h3>
+<h3 id="multilevel-analysis">4. 19/04/2022, Multilevel analysis</h3>
+<h3 id="moderation-and-mediation">5. 26/04/2022, Moderation and Mediation</h3>
+<h3 id="factor-analysis">6. 03/05/2022, Factor analysis</h3>
+<h3 id="statistics-done-wrong">7. 10/05/2022, Statistics done wrong</h3>
+<h3 id="r-from-start-to-finish">8. 17/05/2022, R from start to finish</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
