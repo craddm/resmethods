@@ -1,0 +1,620 @@
+---
+title: "Importing, transforming, and summarising your data"
+date: "10/11/2020"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+      beforeInit: "js/macros.js"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_tachyons()
+xaringanExtra::use_extra_styles()
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6)
+library(tidyverse)
+library(readxl)
+library(readr)
+prison_pop <- read_excel("data/prison-population-data-tool-31-december-2017.xlsx",
+                         sheet = "PT Data")
+FearofCrime <- read_csv("data/FearofCrime.CSV")
+crime <- read_csv("data/crime.CSV")
+```
+```{r xaringantheme, include = FALSE, warning = FALSE}
+library(xaringanthemer)
+style_solarized_light(base_font_size = "20px")
+```
+
+# Plotting using ggplot2
+
+.pull-left[
+```{r scatter-cyls-smo, fig.height = 5, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Engine displacement (litres)",
+       y = "Highway miles per gallon",
+       colour = "Cylinders")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("scatter-cyls-smo", "png")`)
+]
+
+---
+class: center, middle, inverse
+# A quick reminder
+
+.large[
+For anyone that hasn't done this already, join the PSY9219M workspace on RStudio.cloud.
+
+# https://bit.ly/PSYWorkspace
+]
+
+---
+class: middle, center, inverse
+# Importing your data
+
+---
+# Different types of file
+
+Data comes in many different shapes, sizes, and formats.
+
+The most common file formats you'll deal with are either Excel files or text files, but you may also find dealing with SPSS files useful.
+
+Fortunately, R has several functions and packages for importing data!
+
+|File formats| File extension| Functions| Package|
+|-|-|-|-|
+|SPSS  | .sav| **read_sav()**| library(haven)|
+|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
+|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
+
+
+---
+# Importing data into R
+
+
+.pull-left[
+## Comma-separated values
+![:scale 90%](images/05/foc_csv.png)
+]
+.pull-right[
+## Excel spreadsheets
+![:scale 90%](images/05/excel_style.png)
+]
+
+
+---
+# Fear of Crime Dataset
+
+[Ellis & Renouf (2018)](https://doi.org/10.1080/14789949.2017.1410562) - the relationship between fear of crime and various personality measures.
+
+Their data is openly available, stored as text in a *comma-separated-values* format (*.csv*).
+
+Once again, we can use the import button or some code (with **read_csv()**) to load this data in and automatically format it into a *tibble*.
+
+```{r foc-dataset, eval = FALSE}
+library(readr)
+FearofCrime <- read_csv("data/FearofCrime.CSV")
+```
+
+See also [Ellis & Merdian, 2015](https://doi.org/10.3389/fpsyg.2015.01782), Frontiers in Psychology
+---
+# Fear of Crime Dataset
+
+Ellis & Renouf (2018) collected data online using Qualtrics.
+
+The file contains one column for each question that the participants answered, for a total of 169(!) columns.
+
+Each row is a single participant's answers, and their demographic information.
+
+```{r}
+FearofCrime
+```
+
+---
+background-image: url(images/05/import-data-button.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-text-dialog.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-text-browse.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-text-url.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-text-code-prev.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-foc.png)
+background-size: contain
+class: inverse
+
+---
+# Prison population 
+
+Last week, we looked at some data regarding the UK's prison population.
+
+The data is contained in an [Excel spreadsheet](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/676248/prison-population-data-tool-31-december-2017.xlsx), downloaded from [data.gov.uk](https://data.gov.uk).
+
+```{r read-pris, eval = FALSE}
+library(readxl)
+prison_pop <- read_excel("data/prison-population-data-tool-31-december-2017.xlsx",
+                         sheet = "PT Data")
+```
+
+We use the **read_excel()** function to read Excel files.
+
+Note how the file name and location come first, and then I specify a specific *sheet*.
+
+Excel spreadsheets often have multiple sheets with different information.
+
+---
+background-image: url(images/05/import-from-excel.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-from-excel-change.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/05/import-from-excel-changed.png)
+background-size: contain
+class: inverse
+
+---
+# Prison population
+
+Once the data is imported, we have a *tibble*.
+
+We can immediately see there are 6 columns with 22409 rows.
+
+```{r}
+prison_pop
+```
+
+We need to do more work to make this file useable...
+
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 50% 75%
+class: middle, center, inverse
+# dpylr and data transformation
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+# Data transformation
+
+With datasets like those we've loaded, there are often organisational issues. 
+
+For example, there could be many columns or rows we don't need, or the data would make more sense if it were sorted.
+
+This is where **dplyr** comes in!
+
+|Function |Effect|
+|------------|----|
+| select()   |Include or exclude variables (columns)|
+| arrange()  |Change the order of observations (rows)|
+| filter()   |Include or exclude observations (rows)|
+| mutate()   |Create new variables (columns)|
+| group_by() |Create groups of observations|
+| summarise()|Aggregate or summarise groups of observations (rows)|
+
+
+---
+class: inverse, middle, center
+# Selecting columns
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+# Selecting columns
+
+.large[
+Sometimes only some columns are of interest.
+
+The Fear of Crime dataset has 169 columns. Only some of them are useful; here are the first ten.
+]
+
+```{r foc-test}
+names(FearofCrime)[1:10]
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Selecting columns
+
+.pull-left[
+.large[
+We pass the name of the data frame that we want to select from, and the names of each column we want to keep after that.
+
+Suppose that, first of all, we were only interested in the age and sex of our participants.
+]
+]
+.pull-right[
+```{r age-and-sex}
+select(FearofCrime, age, sex)
+```
+]
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Selecting columns
+
+.pull-left[
+.large[
+The HEXACO-PI-R is a personality questionnaire that aims to measure six factors - Honesty-Humility, Emotionality, Extraversion, Agreeableness, Conscientiousness, and Openness to Experience.
+
+The Fear of Crime dataset has the participants answers to the 60 questions of the HEXACO-PI-R in 60 columns. 
+]
+]
+.pull-right[
+```{r eval = FALSE}
+select(FearofCrime, hexaco1,
+       hexaco2, hexaco3)
+```
+```{r echo = FALSE}
+head(select(FearofCrime, hexaco1, hexaco2, hexaco3), 8)
+```
+]
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+# Selecting columns
+
+Typing these out one by one would be ... *laborious*.
+
+Fortunately, there are some shorthands.
+
+The colon (*:*) operator can be used to say "everything between these columns (inclusive)".
+
+```{r}
+select(FearofCrime, hexaco1:hexaco5)
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Selecting columns
+.large[
+Note that you can also tell **select()** to *remove* columns using the minus (*-*) sign.
+]
+```{r}
+head(FearofCrime, 6)
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Selecting columns
+
+Here, I remove a few columns that don't contain any useful information.
+
+```{r}
+select(FearofCrime, -ResponseSet, -Name, -Status, -ExternalDataReference)
+```
+
+---
+class: inverse, center, middle
+# Creating new columns
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Creating new columns
+
+Here is a version of the Fear of Crime data where participants' overall scores on the various personality measures have been calculated. 
+
+```{r}
+crime
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Creating new columns
+
+```{r}
+crime_sub <- select(crime,
+                    age, SA, TA, sex)
+mutate(crime_sub, age_group = ifelse(age > 40,
+                                     "Over 40",
+                                     "40 or under"))
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Arranging rows
+
+Having calculated each person's *state anxiety* score, perhaps we'd now like to check who has the lowest and highest scores (note: this can be a good way to check for extreme values!).
+
+.pull-left[
+```{r}
+arrange(crime_sub, SA)
+```
+]
+.pull-right[
+```{r}
+arrange(crime_sub, desc(SA))
+```
+]
+---
+class: inverse, middle, center
+# Grouping and summarizing
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Summarising rows
+
+.pull-left[
+A common task when analyzing data is to create summaries of statistical characteristics.
+
+Here I calculate the *mean*, *standard deviation*, and *variance* of the State Anxiety variable. 
+
+Other possible summmary functions (other than **mean()**, **sd()**, or **var()**) include **max()**, **min()**, **IQR()**, or **median()**.
+]
+.pull-right[
+```{r}
+summarise(crime,
+          mean = mean(SA),
+          standard_dev = sd(SA),
+          variance = var(SA))
+```
+]
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Grouping observations
+
+**group_by()** is used to organise data frames into groups according to categorical variables. 
+
+```{r}
+grouped_crime <- group_by(crime, sex, victim_crime)
+grouped_crime
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Summarising groups
+
+Once data is *grouped*, the most common thing to do is to **summarise()** those groups.
+
+```{r}
+summarise(grouped_crime,
+          state_anxiety = mean(SA),
+          sd_SA = sd(SA),
+          var_SA = var(SA))
+```
+
+---
+class: inverse, center, middle
+# Removing unwanted rows
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Filtering rows
+
+The `prison_pop` dataset has 22409 rows, but we don't need (or want) them all!
+
+```{r}
+unique(prison_pop$View)
+```
+
+The data is actually *repeated* four times, but organised differently each time.
+
+```{r echo = FALSE}
+prison_pop %>%
+  group_by(View) %>%
+  summarise(total_pop = sum(Population, na.rm = TRUE),
+            num_entries = n())
+```
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Filtering rows
+If we just started investigating the data without accounting for this, it would be misleading.
+
+.pull-left[
+```{r warning = FALSE, fig.height = 4}
+ggplot(prison_pop, aes(x = Population)) +
+  geom_histogram(binwidth = 100)
+```
+]
+.pull-right[
+```{r warning = FALSE, fig.height = 4}
+ggplot(prison_pop, aes(x = Population)) +
+  geom_histogram(binwidth = 100) + facet_wrap(~View)
+```
+]
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Filtering rows
+
+We can use the **filter()** function to select only the rows we're interested in, using *logical conditions* and *relational operators*.
+
+```{r filter-pris}
+filter(prison_pop,
+       View == "a Establishment*Sex*Age Group")
+```
+
+---
+# Relational operators
+
+Relational operators compare two (or more) things and return a **logical** value (i.e. TRUE/FALSE)
+
+|Operator|Meaning| Example|
+|---|------------------| |
+|>  | Greater than    |5 > 4|
+|>= | Greater than or equal to| 4 >= 4|
+|<  | Less than | Population < 400|
+|<= | Less than or equal to | Population <= 400|
+|== | Exactly equal to | Sex == "Male"| 
+|!= | Not equal to | Establishment != "Ashfield"|
+|%in%| Is contained in| Establishment %in% c("Bedford", "Oakwood")|
+
+---
+# Logical operators
+
+Logical operators can be used to combine multiple relational operators or *negate* a relational operator.
+
+|Operator| Meaning| Example|
+|-|-|-|-|
+|&| AND| Population < 1000 & Sex == "Male"|
+|&#124;| OR| Population > 200 &vert; Population < 500|
+|!| NOT| !(Establishment %in% c("Bedford", "Oakwood")) |
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Filtering rows
+
+We can have multiple *conditions* for selection with **filter()**.
+
+Suppose we only wanted to include rows where Population is over 300 but under 600.
+
+```{r filter-pris-two}
+filter(prison_pop,
+       View == "a Establishment*Sex*Age Group",
+       Population > 300 & Population < 600)
+```
+
+---
+class: inverse, middle, center
+# Putting it all together
+
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Pipes
+
+Often you want to conduct several steps, one after the other. 
+
+You could do this using objects to store each intermediate step.
+```{r}
+temp_pris <- filter(prison_pop,
+                    View == "a Establishment*Sex*Age Group",
+                    Date == "2015-06")
+temp_pris <- group_by(temp_pris,
+                      Sex,
+                      `Age / Custody / Nationality / Offence Group`)
+temp_pris <- summarise(temp_pris,
+                       mean_pop = mean(Population, na.rm = TRUE), 
+                       median_pop = median(Population, na.rm = TRUE),
+                       total_pop = sum(Population, na.rm = TRUE),
+                       max_pop = max(Population, na.rm = TRUE))
+```
+---
+background-image: url(images/05/dplyr-logo.png)
+background-size: 6%
+background-position: 90% 5%
+
+# Pipes
+
+A simpler way is to use *pipes* (**%>%**)
+
+*pipes* can be read as meaning "AND THEN"
+
+```{r}
+prison_pop %>%
+  filter(View == "a Establishment*Sex*Age Group",
+         Date == "2015-06") %>%
+  group_by(Sex, `Age / Custody / Nationality / Offence Group`) %>%
+  summarise(mean_pop = mean(Population, na.rm = TRUE), 
+            median_pop = median(Population, na.rm = TRUE),
+            total_pop = sum(Population, na.rm = TRUE),
+            max_pop = max(Population, na.rm = TRUE))
+```
+
+
+---
+# Reading materials 
+
+## Revision 
+
+For revision of this week's concepts, see Chapter *Data transformation* in R for Data Science.
+
+For practice, use the "Work with Data" RStudio cloud primer.
+
+## Next week
+
+Discovering Statistics using R (Field et al.)
+  - Chapter 9, Comparing two means
+  - Chapter 5, Exploring assumptions (additional)
+
+
+
