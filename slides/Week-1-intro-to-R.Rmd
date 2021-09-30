@@ -1,7 +1,7 @@
 ---
-title: "Introduction"
+title: "Introduction to R"
 subtitle: "Research Methods and Skills"
-date: "13/10/2020"
+date: "12/10/2021"
 output:
   xaringan::moon_reader:
     css: ["default", "default-fonts",  "xaringan-themer.css", "css/my-theme.css"]
@@ -153,17 +153,13 @@ You've been asked to design, implement, and evaluate a new treatment regime acro
 ---
 # How it's going to work
 
-.large[Each week you'll be provided with a set of pre-recorded videos introducing several core topics.
+.large[
 
-You'll be provided with some statistical exercises to work on. More detail on that later!
+Each week you'll be provided with a set of pre-recorded videos introducing the core topics for that week.
 
-Timetabled sessions are: 
+Most weeks you will be provided with some exercises to work on.
 
-1) **Optional**
-
-2) **For Q & A and support**
-
-Come along to the timetabled sessions and work on the exercises, or come prepared with questions. 
+In timetabled sessions we will spend the first hour going over the week's exercises. In the second hour, you can spend the time working together on the exercises, and we'll be available to help out.
 
 If you get stuck **ask us**!]
 
@@ -236,7 +232,7 @@ background-image: url(images/01/rstudiocloud_page.png)
 background-size: 50%
 background-position: 50% 90%
 
-# Getting started
+# Getting started TODAY
 .large[
 1. Open up a web browser
 
@@ -640,7 +636,7 @@ https://rstudio-education.github.io/hopr/index.html
 ---
 # This week's goals
 
-1. Make sure you're signed up for [RStudio.cloud](https://rstudio.cloud)
+1. Download [R](https://r-project.org) and RStudio! You'll find links and instructions on Blackboard.
 
 2. Read through Chapter 1 of [R for Data Science](https://r4ds.had.co.nz/introduction.html)
 
