@@ -1,0 +1,90 @@
+---
+title: "Archived course from 2020/2021"
+description: ""
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Semester A, PSY9251M/PSY9219M
+
+## Lectures
+
+### 1. 13/10/2020, Introduction to R
+
+- [Slides](archive/slides/Week-1-intro-to-R.html)
+
+### 2. 20/10/2020, Introduction to R, part 2
+
+- [Slides](archive/slides/Week-2-Basic_R.html)
+
+### 3. 27/10/2020, The Structure of Data
+
+- [Slides](archive/slides/Week-3-More-on-Data.html)
+
+### 4. 03/11/2020, Data Visualization
+
+- [Slides](archive/slides/Week-4-Exploring-data-graphically.html)
+
+### 5. 10/11/2020, Importing, Transforming, and Summarising Data
+
+- [Slides](archive/slides/Week-5-Import-and-wrangling.html)
+
+### 6. 24/11/2020, The Basics of Statistical Testing
+
+- [Slides](archive/slides/Week-7-NHST-two-means.html)
+
+### 7. 01/12/2020, Correlation and Regression
+
+- [Slides](archive/slides/Week-8-Correlation-Regression.html)
+
+### 8. 08/12/2020, Multiple Regression and ANOVA
+
+- [Slides](archive/slides/Week-9-Multi-Regression-ANOVA.html)
+
+### 9. 15/12/2020, Repeated Measures and Factorial ANOVA
+
+- [Slides](slides/Week-10-Repeated-and-Factorial-ANOVA.html)
+
+
+# Semester B, PSY9250M/PSY9003
+
+## Lectures
+
+### 1. 16/03/2021, Getting back into R with messy data
+
+- [HTML Slides](archive/slides/Week-23-messy-data.html)
+- [PDF Slides](archive/slides/B-1-messy-data.pdf)
+
+### 2. 23/03/2021, Statistical power and effect sizes
+- [HTML Slides](archive/slides/2-Power-and-Effect-Sizes.html)
+- [PDF Slides](archive/slides/2-Power-and-Effect-Sizes.pdf)
+
+### 3. 13/04/2021, Multiple and logistic regression
+- [HTML Slides](archive/slides/3-generalized-linear-models.html)
+- [PDF Slides](archive/slides/3-generalized-linear-models.pdf)
+
+### 4. 20/04/2021, Multilevel analysis
+- [HTML Slides](archive/slides/4-multilevel-modelling.html)
+- [PDF Slides](archive/slides/4-multilevel-modelling.pdf)
+
+### 5. 27/04/2021, Moderation and Mediation
+- [HTML Slides](archive/slides/5-Moderation-Mediation.html)
+- [PDF Slides](archive/slides/5-Moderation-Mediation.pdf)
+
+### 6. 04/05/2021, Factor analysis
+- [HTML Slides](archive/slides/6-Factor-Analysis.html)
+- [PDF Slides](archive/slides/6-Factor-Analysis.pdf)
+
+### 7. 11/05/2021, Statistics done wrong
+- [HTML Slides](archive/slides/7-stats-done-wrong.html)
+- [PDF Slides](archive/slides/7-stats-done-wrong.pdf)
+
+### 8. 18/05/2021, R from start to finish
+- [HTML Slides](archive/slides/8-R-from-start-to-finish.html)
+- [PDF Slides](archive/slides/8-R-from-start-to-finish.pdf)

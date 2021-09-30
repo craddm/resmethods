@@ -18,39 +18,43 @@ navbar:
       - text: "1: Intro to R"
         href: slides/Week-1-intro-to-R.html
       - text: "2: Intro to R - part 2"
-        href: slides/Week-2-Basic_R.html
+        #href: slides/Week-2-Basic_R.html
       - text: "3: The Structure of Data"
-        href: slides/Week-3-More-on-Data.html
+        #href: slides/Week-3-More-on-Data.html
       - text: "4: Data Visualization"
-        href: slides/Week-4-Exploring-data-graphically.html
+        #href: slides/Week-4-Exploring-data-graphically.html
       - text: "5: Importing, Transforming, and Summarising Data"
-        href: slides/Week-5-Import-and-wrangling.html
+        #href: slides/Week-5-Import-and-wrangling.html
       - text: "6: The Basics of Statistical Testing"
-        href: slides/Week-7-NHST-two-means.html
+        #href: slides/Week-7-NHST-two-means.html
       - text: "7: Correlation and Regression"
-        href: slides/Week-8-Correlation-Regression.html
+        #href: slides/Week-8-Correlation-Regression.html
       - text: "8: Multiple Regression and ANOVA"
-        href: slides/Week-9-Multi-Regression-ANOVA.html
+        #href: slides/Week-9-Multi-Regression-ANOVA.html
       - text: "9: Repeated Measures and Factorial ANOVA"
-        href: slides/Week-10-Repeated-and-Factorial-ANOVA.html
+        #href: slides/Week-10-Repeated-and-Factorial-ANOVA.html
     - text: "Semester B"
       menu:
       - text: "1: Messy Data and a Return to R"
-        href: slides/Week-23-messy-data.html
+        #href: slides/Week-23-messy-data.html
       - text: "2: Statistical Power and Effect Sizes"
-        href: slides/2-Power-and-Effect-Sizes.html
+        #href: slides/2-Power-and-Effect-Sizes.html
       - text: "3: Multiple and Logistic Regression"
-        href: slides/3-generalized-linear-models.html
+        #href: slides/3-generalized-linear-models.html
       - text: "4: Multilevel Analysis - Linear Mixed Effects Models"
-        href: slides/4-multilevel-modelling.html
+        #href: slides/4-multilevel-modelling.html
       - text: "5: Moderation and Mediation"
-        href: slides/5-Moderation-Mediation.html
+        #href: slides/5-Moderation-Mediation.html
       - text: "6: Factor Analysis with PCA"
-        href: slides/6-Factor-Analysis.html
+        #href: slides/6-Factor-Analysis.html
       - text: "7: Statistics done wrong"
-        href: slides/7-stats-done-wrong.html
+        #href: slides/7-stats-done-wrong.html
       - text: "8: R from Start to Finish"
-        href: slides/8-R-from-start-to-finish.html
+        #href: slides/8-R-from-start-to-finish.html
+    - text: "Archive"
+      menu:
+        - text: "2020/2021"
+          href: archive_2020_2021.html
     - icon: fab fa-github
       href: https://github.com/craddm/resmethods
 output: distill::distill_article

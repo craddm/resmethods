@@ -11,13 +11,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 This is the homepage for the R-based sections of the University of Lincoln's MSc programmes in Developmental Psychology, Research Methods in Psychology, and Forensic Psychology.
 
-Module co-ordinator: [Matt Craddock](https://www.mattcraddock.com)
-
 ---
 
 ## Semester A - PSY9251M/PSY9219M
 
 ### Research Methods in Psychology/Research Methods and Skills
+
+Module co-ordinator: [Tochukwu Onwuegbusi](https://staff.lincoln.ac.uk/tonwuegbusi)
 
 **Staff:**
 
@@ -30,6 +30,7 @@ Module co-ordinator: [Matt Craddock](https://www.mattcraddock.com)
 
 ### Advanced Research Methods in Psychology/Advanced Research Methods and Skills
 
+Module co-ordinator: [Matt Craddock](https://www.mattcraddock.com)
 
 **Staff:**
 
@@ -41,9 +42,9 @@ Module co-ordinator: [Matt Craddock](https://www.mattcraddock.com)
 
 ## Getting set up for the course
 
-For students enrolled on this course, you should generally use [RStudio.cloud](https://rstudio.cloud). Weekly exercises will be distributed as projects to be copied on the cloud through the course workspace.
-
-To run any of the materials locally on your own machine, you will need the following:
+For both Semester A and Semester B modules, we expect you to download and install R and RStudio. You will need the following:
 
 - A recent version of R, [download from here](https://cloud.r-project.org).
 - A recent version of RStudio, [download from here](https://rstudio.com/products/rstudio/download/#download)
+
+Another possibility is [RStudio.cloud](https://rstudio.cloud), a web-based version of [RStudio](https://rstudio.com) accessible from anywhere using a web-browser such as [Chrome](https://www.google.com/intl/en_uk/chrome/). For many parts of the course, the 25 hours free monthly access will be sufficient. However, you may find that during assessment times this isn't adequate for your needs.

@@ -1,5 +1,5 @@
 ---
-title: "Semester A"
+title: "Semester A 2021/2022"
 description: ""
 output: 
   distill::distill_article:
@@ -13,38 +13,23 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Lectures
 
-### 1. 13/10/2020, Introduction to R
+### 1. 12/10/2021, Introduction to R
 
 - [Slides](slides/Week-1-intro-to-R.html)
 
-### 2. 20/10/2020, Introduction to R, part 2
+### 2. 19/10/2021, Introduction to R, part 2
 
-- [Slides](slides/Week-2-Basic_R.html)
+### 3. 02/11/2021, The Structure of Data
 
-### 3. 27/10/2020, The Structure of Data
+### 4. 09/11/2021, Data Visualization
 
-- [Slides](slides/Week-3-More-on-Data.html)
+### 5. 16/11/2021, Importing, Transforming, and Summarising Data
 
-### 4. 03/11/2020, Data Visualization
+### 6. 23/11/2021, The Basics of Statistical Testing
 
-- [Slides](slides/Week-4-Exploring-data-graphically.html)
+### 7. 30/11/2021, Correlation and Regression
 
-### 5. 10/11/2020, Importing, Transforming, and Summarising Data
+### 8. 07/12/2021, Multiple Regression and ANOVA
 
-- [Slides](slides/Week-5-Import-and-wrangling.html)
+### 9. 14/12/2021, Repeated Measures and Factorial ANOVA
 
-### 6. 24/11/2020, The Basics of Statistical Testing
-
-- [Slides](slides/Week-7-NHST-two-means.html)
-
-### 7. 01/12/2020, Correlation and Regression
-
-- [Slides](slides/Week-8-Correlation-Regression.html)
-
-### 8. 08/12/2020, Multiple Regression and ANOVA
-
-- [Slides](slides/Week-9-Multi-Regression-ANOVA.html)
-
-### 9. 15/12/2020, Repeated Measures and Factorial ANOVA
-
-- [Slides](slides/Week-10-Repeated-and-Factorial-ANOVA.html)
