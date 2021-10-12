@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to R, part 2</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <link href="libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding/datatables.js"></script>
+    <script src="libs/jquery/jquery-3.6.0.min.js"></script>
+    <link href="libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to R, part 2
+## Research Methods and Skills
+### 19/10/2021
+
+---
+
+
+
+
+
+
+# Interacting with R
+
+.left-pull[
+* The R Console
+    * REPL: Read Evaluate Print Loop
+    * Type stuff in, it tries to do it
+]
+.right-pull[
+![:scale 60%](images/01/default_project.png)
+]
+
+---
+# Basic use of R
+
+## Use of R like a calculator
+
+The R console allows you to use it like a calculator, as below:
+
+
+```r
+5 + 5
+```
+
+```
+## [1] 10
+```
+
+```r
+10 - 6 * 13
+```
+
+```
+## [1] -68
+```
+
+---
+# Basic use of R
+## Creating objects to store information
+
+You assign values to objects using *&lt;-*
+
+```r
+test_object &lt;- 5
+```
+
+*&lt;-* can be read as "is now", making the code above roughly mean
+
+
+```r
+The object "test_object" is now 5 # Do not run!
+```
+
+Objects "stand-in" for their values:
+
+
+```r
+test_object
+```
+
+```
+## [1] 5
+```
+
+---
+# Basic use of R
+## Creation of vectors
+Vectors are simply a 1-dimensional collection of values of the same type. 
+
+E.g. We can create a numeric vector using the **c()** function.
+
+
+```r
+c(5, 10, 3, -1, -5)
+```
+
+```
+## [1]  5 10  3 -1 -5
+```
+
+This is a one-dimensional vector of length *five*, since it has 5 values.
+
+---
+# Basic use of R
+## Using functions on objects
+
+**Functions** do things to objects. 
+
+Brackets after a word in these slides indicate that something is a function, e.g. **c()**, **mean()**
+
+```r
+mean(c(5, 8, 2, 4, 5))
+```
+
+```
+## [1] 4.8
+```
+
+```r
+test_object &lt;- c(5, 8, 2, 4, 5)
+mean(test_object)
+```
+
+```
+## [1] 4.8
+```
+
+---
+class: inverse, center, middle
+# R Scripts
+
+---
+# R Scripts
+
+*Scripts* are a way of writing out a sequence of commands that you want R to execute.
+
+A typical script looks something like this:
+
+```r
+# Load in required packages using library()
+library(tidyverse)
+
+# Define any custom functions here (we haven't covered this!)
+
+# Now load any data you want to work on. (again, we'll cover this later!)
+test_data &lt;- 
+  read_csv("data/a-random-RT-file.csv") %&gt;% # I'll explain what %&gt;% means later
+  rename(RT = `reaction times`)
+
+# The rest of the script then runs whatever analyses or plotting you want to do
+ggplot(test_data,
+       aes(x = RT,
+           fill = viewpoint)) + 
+  geom_density()
+```
+
+---
+# Why is this useful?
+
+.large[
+Somebody asks you how you performed a particular analysis. In particular, they want detailed instructions of how you created a plot, filtered out outliers or missing data, and performed a linear regression.
+
+Q1: *How would you do that if you used SPSS?*
+
+Q2: *How would you do that if you used R?*
+]
+
+---
+class: inverse, center, middle
+# Creating R Scripts
+
+---
+background-image: url(images/02/cloud_blank.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-create-script.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-script-window.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-examp-script.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-script-run.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-script-source.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-sourced-script.png)
+background-size: contain
+class: inverse
+
+---
+# R Markdown
+
+.large[
+**Literate programming** is a mixture of plain text and code.
+
+Whereas in scripts you need to use the **#** symbol to indicate comments, as here
+
+
+```r
+# This is a comment
+```
+
+...with R Markdown you can mix plain text and code using **chunks** to delineate sections of code. 
+
+This allows you to create elaborate documents following the structure *you* want!
+
+]
+
+---
+background-image: url(images/02/cloud-rmarkdown.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmarkdown-install.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmarkdown-new.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-example.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-chunk-lab.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-click-run.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-chunk-play.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-click-knit.png)
+background-size: contain
+class: inverse
+
+---
+background-image: url(images/02/cloud-rmd-html-file.png)
+background-size: contain
+class: inverse
+
+---
+# Some very important advice
+
+R Markdown documents are like *recipes*. 
+
+Every step needs to be written down.
+
+When you press the knit button, R forgets everything and follows the instructions line-by-line. 
+
+So be thorough, and write down everything in the order you want it to happen!
+
+(One exception: NEVER use install.packages() in a script)
+
+---
+class: inverse, center, middle
+#Basic data types
+
+---
+# Basic data types
+
+There are five basic data types in R:
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Type &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Examples &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; integer &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Whole numbers &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1, 2, 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; numeric &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Any real number, fractions &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.4, 2, -2.3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; character &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Text &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;quot;Hi there&amp;quot;, &amp;quot;8.5&amp;quot;, &amp;quot;ABC123&amp;quot; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; logical &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Assertion of truth/falsity &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; TRUE, FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; complex &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Real and imaginary numbers &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.34+5.3i &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+There are some additional types to be aware of, particularly *factors*, but we'll come back to them in a later session.
+
+---
+# Checking data types
+
+We can use the **class()** function to check what type a given object is.
+
+
+```r
+class(10)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
+class(10L) # using L after the number turns it into an *integer*
+```
+
+```
+## [1] "integer"
+```
+
+```r
+class(TRUE)
+```
+
+```
+## [1] "logical"
+```
+
+```r
+class("Wednesday")
+```
+
+```
+## [1] "character"
+```
+
+---
+class: inverse, middle, center
+# Basic containers
+
+---
+background-image: url(images/02/masonjars.jpg)
+background-size: contain
+
+---
+# Vectors
+
+A vector is a collection of values which all have the same basic **type**.
+
+A numeric vector is thus a collection of numeric values:
+
+
+```r
+some_numbers &lt;- c(5, 3, 6, 8)
+some_numbers
+```
+
+```
+## [1] 5 3 6 8
+```
+... and a character vector is a collection of character values
+
+
+```r
+char_example &lt;- c("Monday", "Tuesday", "Wednesday", "Thursday")
+char_example
+```
+
+```
+## [1] "Monday"    "Tuesday"   "Wednesday" "Thursday"
+```
+
+---
+# More about vectors
+
+The colon (**:**) operator can be used to produce a sequence of numbers:
+
+
+```r
+one_to_ten &lt;- 1:10
+one_to_ten
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+Vectors can also be given names:
+
+
+```r
+one_to_four &lt;- 1:4
+names(one_to_four) &lt;- char_example
+one_to_four
+```
+
+```
+##    Monday   Tuesday Wednesday  Thursday 
+##         1         2         3         4
+```
+
+---
+# Extracting values 
+
+Sometimes you only want a specific subset of a vector. For example, suppose that you only want the third value. For this, we need the **[]** (square brackets) operator.
+
+We put an *index* inbetween the **[]** operator.
+
+
+```r
+char_example[3]
+```
+
+```
+## [1] "Wednesday"
+```
+
+Note that you can also supply *multiple* values:
+
+```r
+char_example[2:3]
+```
+
+```
+## [1] "Tuesday"   "Wednesday"
+```
+
+```r
+char_example[c(2, 4)]
+```
+
+```
+## [1] "Tuesday"  "Thursday"
+```
+
+---
+# Extracting values 
+
+If your vector is *named*, you can also use the names as *indices*.
+
+
+```r
+one_to_four
+```
+
+```
+##    Monday   Tuesday Wednesday  Thursday 
+##         1         2         3         4
+```
+
+```r
+one_to_four["Wednesday"]
+```
+
+```
+## Wednesday 
+##         3
+```
+
+```r
+one_to_four[c("Monday", "Wednesday")]
+```
+
+```
+##    Monday Wednesday 
+##         1         3
+```
+
+---
+background-image: url(images/02/wine_rack.jpg)
+background-size: 60%
+# Matrices
+
+---
+# Matrices
+
+Matrices are 2-dimensional collections of values.
+
+All values must be of the same type.
+
+
+```r
+matrix(1:9, nrow = 3, ncol = 3)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+```
+
+This is quite a common format. For example, each row could represent an individual participant. Each column could represent a different numerical measure.
+
+---
+# Accessing matrices
+
+Since matrices are two-dimensional, you need to give two indices to make sure you get the value you want. Again, you can use the **[]** operator.
+
+
+```r
+*[row, col]
+```
+
+Here I extract the number from the 2nd row down, 3rd column across.
+
+
+```r
+test_matrix &lt;- matrix(1:9, nrow = 3, ncol = 3)
+test_matrix
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+```
+
+```r
+test_matrix[2, 3]
+```
+
+```
+## [1] 8
+```
+
+---
+background-image: url(images/02/masonjars.jpg)
+background-size: 60%
+
+# Lists
+
+---
+# Lists
+
+Lists are a collection of objects of varying length and type. 
+
+
+```r
+album_list &lt;-
+  list(The_Beatles = c(
+    "Sgt. Pepper",
+    "The White Album",
+    "Revolver",
+    "Abbey Road"),
+    Nirvana = c(
+      "Bleach",
+      "Nevermind",
+      "In Utero")
+    )
+```
+
+Each element is labelled, just like a mason jar on a shelf.
+
+Each element has different contents, just like our mason jars.
+
+---
+# Lists
+
+
+```r
+names(album_list)
+```
+
+```
+## [1] "The_Beatles" "Nirvana"
+```
+
+```r
+length(album_list)
+```
+
+```
+## [1] 2
+```
+
+
+```r
+album_list["The_Beatles"]
+```
+
+```
+## $The_Beatles
+## [1] "Sgt. Pepper"     "The White Album" "Revolver"        "Abbey Road"
+```
+
+---
+# Tabular data
+
+*Tabular* data is also collection of different types of data, arranged in a rectangular, tabular format. Most of the data you encounter in psychology is in this kind of format.
+
+In tabular data, each column contains only values of one *type*, and each row thus contains different types of information about one thing. 
+
+<div id="htmlwidget-c2e70484565b08f58374" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c2e70484565b08f58374">{"x":{"filter":"none","vertical":false,"data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+---
+background-image: url(images/05/import-foc.png)
+background-size: contain
+class: inverse
+
+---
+# Creating tabular data
+
+In R, this type of structure is called a *data frame*.
+.pull-left[
+
+```r
+days_of_the_week &lt;- 
+  data.frame(day_name = c("Sunday",
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday"),
+             day_number = 1:7
+             )
+```
+]
+.pull-right[
+
+```r
+days_of_the_week
+```
+
+```
+##    day_name day_number
+## 1    Sunday          1
+## 2    Monday          2
+## 3   Tuesday          3
+## 4 Wednesday          4
+## 5  Thursday          5
+## 6    Friday          6
+## 7  Saturday          7
+```
+]
+
+---
+# Extracting information from data frames
+
+You can use the **[]** operator to extract single elements, rows, or columns:
+
+
+```r
+days_of_the_week[1, 2]
+```
+
+```
+## [1] 1
+```
+
+
+```r
+days_of_the_week[5, ]
+```
+
+```
+##   day_name day_number
+## 5 Thursday          5
+```
+
+
+```r
+days_of_the_week[, 1]
+```
+
+```
+## [1] "Sunday"    "Monday"    "Tuesday"   "Wednesday" "Thursday"  "Friday"   
+## [7] "Saturday"
+```
+
+---
+# Extracting information from data frames
+
+A special operator you can use for data frame columns is the dollar sign, **$**
+
+Combine the data frame's name with the column name as below:
+
+
+```r
+days_of_the_week$day_name
+```
+
+```
+## [1] "Sunday"    "Monday"    "Tuesday"   "Wednesday" "Thursday"  "Friday"   
+## [7] "Saturday"
+```
+
+Question: what **class()** is this?
+
+
+
+---
+class: inverse, middle, center
+# Wrapping up
+
+---
+## This week's concepts
+
+.large[
+- R Markdown - Chapter 27 of R4DS - see also https://rmarkdown.rstudio.com
+
+- **vectors** and **lists** in Chapter 20 of R4DS
+]
+
+## Prep for next week
+
+.large[
+- Next week we'll talk again about data frames and consider how to *structure* data.
+
+- Look at Section 2 (Wrangle) of R4DS for information on **tibbles** (which are essentially data frames...).
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

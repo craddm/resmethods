@@ -47,4 +47,6 @@ For both Semester A and Semester B modules, we expect you to download and instal
 - A recent version of R, [download from here](https://cloud.r-project.org).
 - A recent version of RStudio, [download from here](https://rstudio.com/products/rstudio/download/#download)
 
+You'll find a fantastic video guide to installing R and RStudio by [Danielle Navarro](https://djnavarro.net) over on [YouTube](https://www.youtube.com/playlist?list=PLRPB0ZzEYegOZivdelOuEn-R-XUN-DOjd)
+
 Another possibility is [RStudio.cloud](https://rstudio.cloud), a web-based version of [RStudio](https://rstudio.com) accessible from anywhere using a web-browser such as [Chrome](https://www.google.com/intl/en_uk/chrome/). For many parts of the course, the 25 hours free monthly access will be sufficient. However, you may find that during assessment times this isn't adequate for your needs.

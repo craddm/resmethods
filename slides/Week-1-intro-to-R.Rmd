@@ -27,7 +27,7 @@ knitr::opts_chunk$set(fig.asp = .618,
 library(xaringanthemer)
 #style_solarized_light(base_font_size = "22px")
 style_mono_light(base_color = "#23395b",
-                 base_font_size = "22px")
+                 base_font_size = "21px")
 ```
 # Who are we?
 
