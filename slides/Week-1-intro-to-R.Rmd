@@ -113,7 +113,7 @@ You've been asked to design, implement, and evaluate a new treatment regime acro
 ]
 
 .pull-right[
-### Weeks 5, 7-10
+### Weeks 6-10
 - Hypothesis testing and estimation
 - *t*-tests and comparing two groups
 - Correlation and linear regression
