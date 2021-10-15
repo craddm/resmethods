@@ -537,7 +537,7 @@ help("mean")
 ---
 # Packages
 
-Packages are the key to R's versatility. Over 12000 are currently available from the **Comprehensive R Archive Network** - [CRAN](https::https://cran.r-project.org/). The **install.packages()** function can be used to install packages.
+Packages are the key to R's versatility. Over 12000 are currently available from the **Comprehensive R Archive Network** - [CRAN](https::https://cran.r-project.org/). The `install.packages()` function can be used to install packages.
 
 Let's install the "cowsay" package. **cowsay** is an extraordinarily useful package, as you'll see.
 
@@ -547,7 +547,7 @@ One way to install the package is using the console:
 install.packages("cowsay")
 ```
 
-Once it's installed, use the **library()** function to load the package!
+Once it's installed, use the `library()` function to load the package!
 
 ```{r eval = FALSE}
 library(cowsay)
@@ -603,9 +603,6 @@ say(what = "Feed me, human.", by = "cat")
 
 2. Change what the animals say by changing the **what** argument.
 
-3. Assign the output to an object using the **<-** operator.
-
-4. Print out the value that you assigned to the object.
 
 ---
 

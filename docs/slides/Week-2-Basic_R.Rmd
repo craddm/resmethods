@@ -58,12 +58,12 @@ The R console allows you to use it like a calculator, as below:
 # Basic use of R
 ## Creating objects to store information
 
-You assign values to objects using *<-*
+You assign values to objects using `<-`
 ```{r obj-assign}
 test_object <- 5
 ```
 
-*<-* can be read as "is now", making the code above roughly mean
+`<-` can be read as "is now", making the code above roughly mean
 
 ```{r eval = FALSE} 
 The object "test_object" is now 5 # Do not run!
@@ -80,7 +80,7 @@ test_object
 ## Creation of vectors
 Vectors are simply a 1-dimensional collection of values of the same type. 
 
-E.g. We can create a numeric vector using the **c()** function.
+E.g. We can create a numeric vector using the `c()` function.
 
 ```{r create-vec}
 c(5, 10, 3, -1, -5)
@@ -94,7 +94,7 @@ This is a one-dimensional vector of length *five*, since it has 5 values.
 
 **Functions** do things to objects. 
 
-Brackets after a word in these slides indicate that something is a function, e.g. **c()**, **mean()**
+Brackets after a word in these slides indicate that something is a function, e.g. `c()`, `mean()`
 ```{r get-mean}
 mean(c(5, 8, 2, 4, 5))
 test_object <- c(5, 8, 2, 4, 5)
@@ -142,7 +142,7 @@ Q2: *How would you do that if you used R?*
 
 ---
 class: inverse, center, middle
-# Creating R Scripts
+# Let's create a script!
 
 ---
 background-image: url(images/02/cloud_blank.png)
@@ -178,6 +178,10 @@ class: inverse
 background-image: url(images/02/cloud-sourced-script.png)
 background-size: contain
 class: inverse
+
+---
+class: inverse, center, middle
+# R Markdown
 
 ---
 # R Markdown
@@ -253,7 +257,11 @@ When you press the knit button, R forgets everything and follows the instruction
 
 So be thorough, and write down everything in the order you want it to happen!
 
-(One exception: NEVER use install.packages() in a script)
+(One exception: NEVER use `install.packages()` in a script)
+
+---
+class: inverse, center, middle
+# Let's write some RMarkdown!
 
 ---
 class: inverse, center, middle
@@ -373,12 +381,12 @@ All values must be of the same type.
 matrix(1:9, nrow = 3, ncol = 3)
 ```
 
-This is quite a common format. For example, each row could represent an individual participant. Each column could represent a different numerical measure.
+This is quite a common format. For example, each row could represent an individual participant, while each column could represent a different numerical measure.
 
 ---
 # Accessing matrices
 
-Since matrices are two-dimensional, you need to give two indices to make sure you get the value you want. Again, you can use the **[]** operator.
+Since matrices are two-dimensional, you need to give two indices to make sure you get the value you want. Again, you can use the `[]` operator.
 
 ```{r eval = FALSE}
 *[row, col]
@@ -436,7 +444,7 @@ album_list["The_Beatles"]
 ---
 # Tabular data
 
-*Tabular* data is also collection of different types of data, arranged in a rectangular, tabular format. Most of the data you encounter in psychology is in this kind of format.
+*Tabular* data is also a collection of different types of data, arranged in a rectangular, tabular format. Most of the data you encounter in psychology is in this kind of format.
 
 In tabular data, each column contains only values of one *type*, and each row thus contains different types of information about one thing. 
 
@@ -503,8 +511,6 @@ days_of_the_week$day_name
 ```
 
 Question: what **class()** is this?
-
-
 
 ---
 class: inverse, middle, center

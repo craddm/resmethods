@@ -78,13 +78,13 @@ The R console allows you to use it like a calculator, as below:
 # Basic use of R
 ## Creating objects to store information
 
-You assign values to objects using *&lt;-*
+You assign values to objects using `&lt;-`
 
 ```r
 test_object &lt;- 5
 ```
 
-*&lt;-* can be read as "is now", making the code above roughly mean
+`&lt;-` can be read as "is now", making the code above roughly mean
 
 
 ```r
@@ -107,7 +107,7 @@ test_object
 ## Creation of vectors
 Vectors are simply a 1-dimensional collection of values of the same type. 
 
-E.g. We can create a numeric vector using the **c()** function.
+E.g. We can create a numeric vector using the `c()` function.
 
 
 ```r
@@ -126,7 +126,7 @@ This is a one-dimensional vector of length *five*, since it has 5 values.
 
 **Functions** do things to objects. 
 
-Brackets after a word in these slides indicate that something is a function, e.g. **c()**, **mean()**
+Brackets after a word in these slides indicate that something is a function, e.g. `c()`, `mean()`
 
 ```r
 mean(c(5, 8, 2, 4, 5))
@@ -187,7 +187,7 @@ Q2: *How would you do that if you used R?*
 
 ---
 class: inverse, center, middle
-# Creating R Scripts
+# Let's create a script!
 
 ---
 background-image: url(images/02/cloud_blank.png)
@@ -223,6 +223,10 @@ class: inverse
 background-image: url(images/02/cloud-sourced-script.png)
 background-size: contain
 class: inverse
+
+---
+class: inverse, center, middle
+# R Markdown
 
 ---
 # R Markdown
@@ -299,7 +303,11 @@ When you press the knit button, R forgets everything and follows the instruction
 
 So be thorough, and write down everything in the order you want it to happen!
 
-(One exception: NEVER use install.packages() in a script)
+(One exception: NEVER use `install.packages()` in a script)
+
+---
+class: inverse, center, middle
+# Let's write some RMarkdown!
 
 ---
 class: inverse, center, middle
@@ -543,12 +551,12 @@ matrix(1:9, nrow = 3, ncol = 3)
 ## [3,]    3    6    9
 ```
 
-This is quite a common format. For example, each row could represent an individual participant. Each column could represent a different numerical measure.
+This is quite a common format. For example, each row could represent an individual participant, while each column could represent a different numerical measure.
 
 ---
 # Accessing matrices
 
-Since matrices are two-dimensional, you need to give two indices to make sure you get the value you want. Again, you can use the **[]** operator.
+Since matrices are two-dimensional, you need to give two indices to make sure you get the value you want. Again, you can use the `[]` operator.
 
 
 ```r
@@ -641,12 +649,12 @@ album_list["The_Beatles"]
 ---
 # Tabular data
 
-*Tabular* data is also collection of different types of data, arranged in a rectangular, tabular format. Most of the data you encounter in psychology is in this kind of format.
+*Tabular* data is also a collection of different types of data, arranged in a rectangular, tabular format. Most of the data you encounter in psychology is in this kind of format.
 
 In tabular data, each column contains only values of one *type*, and each row thus contains different types of information about one thing. 
 
-<div id="htmlwidget-c2e70484565b08f58374" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c2e70484565b08f58374">{"x":{"filter":"none","vertical":false,"data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f69c1874da838cafb253" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f69c1874da838cafb253">{"x":{"filter":"none","vertical":false,"data":[["Mazda RX4","Mazda RX4 Wag","Datsun 710","Hornet 4 Drive","Hornet Sportabout","Valiant","Duster 360","Merc 240D","Merc 230","Merc 280","Merc 280C","Merc 450SE","Merc 450SL","Merc 450SLC","Cadillac Fleetwood","Lincoln Continental","Chrysler Imperial","Fiat 128","Honda Civic","Toyota Corolla","Toyota Corona","Dodge Challenger","AMC Javelin","Camaro Z28","Pontiac Firebird","Fiat X1-9","Porsche 914-2","Lotus Europa","Ford Pantera L","Ferrari Dino","Maserati Bora","Volvo 142E"],[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>mpg<\/th>\n      <th>cyl<\/th>\n      <th>disp<\/th>\n      <th>hp<\/th>\n      <th>drat<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 background-image: url(images/05/import-foc.png)
@@ -742,8 +750,6 @@ days_of_the_week$day_name
 ```
 
 Question: what **class()** is this?
-
-
 
 ---
 class: inverse, middle, center

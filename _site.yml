@@ -18,7 +18,7 @@ navbar:
       - text: "1: Intro to R"
         href: slides/Week-1-intro-to-R.html
       - text: "2: Intro to R - part 2"
-        #href: slides/Week-2-Basic_R.html
+        href: slides/Week-2-Basic_R.html
       - text: "3: The Structure of Data"
         #href: slides/Week-3-More-on-Data.html
       - text: "4: Data Visualization"
