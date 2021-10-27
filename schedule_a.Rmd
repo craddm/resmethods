@@ -16,12 +16,16 @@ knitr::opts_chunk$set(echo = FALSE)
 ### 1. 12/10/2021, Introduction to R
 
 - [Slides](slides/Week-1-intro-to-R.html)
+- [PDF](slides/Week-1-intro-to-R.pdf)
 
 ### 2. 19/10/2021, Introduction to R, part 2
 
 - [Slides](slides/Week-2-Basic_R.html)
+- [PDF](slides/Week-2-Basic_R.pdf)
 
 ### 3. 02/11/2021, The Structure of Data
+- [Slides](slides/Week-4-More-on-Data.html)
+- [PDF](slides/Week-4-More-on-Data.pdf)
 
 ### 4. 09/11/2021, Data Visualization
 

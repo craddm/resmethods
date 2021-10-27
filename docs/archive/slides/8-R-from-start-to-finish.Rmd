@@ -87,7 +87,7 @@ background-size: contain
 ---
 # Keeping your analyses organised
 
-Make a new RStudio project for each separate "project" - one for your thesis, one for you assessment, and so on.
+Make a new RStudio project for each separate "project" - one for your thesis, one for your assessment, and so on.
 
 Follow sensible structure:
 

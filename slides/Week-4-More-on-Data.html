@@ -150,10 +150,10 @@ test_matrix
 ```
 
 ```
-##             [,1]       [,2]      [,3]
-## [1,] -0.01123402  1.6457427  0.626180
-## [2,]  0.43347532  1.9355374 -0.517857
-## [3,]  0.82906060 -0.1961189 -1.311593
+##             [,1]       [,2]       [,3]
+## [1,] -0.15484395 -0.3544565 -0.6398745
+## [2,] -0.09415141 -2.3832087 -0.3047790
+## [3,] -0.70862216  0.6682035  1.5090185
 ```
 ]
 .pull-right[
@@ -172,9 +172,9 @@ test_matrix[2:3, 1:2]
 ```
 
 ```
-##           [,1]       [,2]
-## [1,] 0.4334753  1.9355374
-## [2,] 0.8290606 -0.1961189
+##             [,1]       [,2]
+## [1,] -0.09415141 -2.3832087
+## [2,] -0.70862216  0.6682035
 ```
 ]
 
@@ -262,12 +262,12 @@ head(age_tibb)
 ## # A tibble: 6 x 3
 ##   Participant  cond1 age_group
 ##         &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;    
-## 1           1 -0.324 Old      
-## 2           2  0.211 Old      
-## 3           3 -1.51  Old      
-## 4           4 -0.705 Old      
-## 5           5  0.460 Old      
-## 6           6  1.09  Young
+## 1           1  0.878 Old      
+## 2           2 -0.463 Old      
+## 3           3  2.10  Old      
+## 4           4  0.956 Old      
+## 5           5  0.777 Old      
+## 6           6  2.16  Young
 ```
 
 ---
@@ -338,6 +338,7 @@ Fortunately, R has several functions and packages for importing data!
 ---
 # Fear of Crime Dataset
 
+.large[
 [Ellis &amp; Renouf (2018)](https://doi.org/10.1080/14789949.2017.1410562) - the relationship between fear of crime and various personality measures.
 
 Their data is openly available, stored as text in a *comma-separated-values* format (*.csv*).
@@ -351,6 +352,7 @@ FearofCrime &lt;- read_csv("data/FearofCrime.CSV")
 ```
 
 See also [Ellis &amp; Merdian, 2015](https://doi.org/10.3389/fpsyg.2015.01782), Frontiers in Psychology
+]
 
 ---
 # Fear of Crime Dataset
@@ -359,7 +361,7 @@ Ellis &amp; Renouf (2018) collected data online using Qualtrics.
 
 The file contains one column for each question that the participants answered, for a total of 169(!) columns.
 
-Each row is a single participant's answers, and their demographic information.
+Each row represent a single participant's responses, and their demographic information.
 
 
 ```r
@@ -428,6 +430,7 @@ Image from Xkcd = https://xkcd.com/1459/
 ---
 # RStudio Projects
 
+.large[
 On [RStudio.cloud](https://rstudio.cloud), each project you create is in fact a completely separate instance of R.
 
 By now, most of you should have [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/) installed.
@@ -435,6 +438,7 @@ By now, most of you should have [RStudio Desktop](https://www.rstudio.com/produc
 Once that's up and running, you can get to grips with [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) 
 
 Projects provide a nice way to organise your work into neat, individually tailored sets of directories.
+]
 
 ---
 background-image: url(images/noneproject.png)
@@ -516,6 +520,36 @@ The final dataset needs to be able to do several things.
 
 ---
 class: inverse, center, middle
+# Tidy data
+
+---
+background-image: url(images/03/tidy-1.png)
+background-position: 50% 72%
+background-size: 75%
+# The three principles of tidy data
+
+1.  Each variable must have its own column.
+
+2.  Each observation must have its own row.
+
+3.  Each value must have its own cell.
+
+---
+background-image: url(images/03/tidy-1.png)
+background-position: 50% 85%
+background-size: 70%
+# Why Tidy?
+
+.large[
+1. Many functions in R operate on so-called *long* format data, requiring dependent and independent variables to be in different columns of a data frame.
+
+2. Having a consistent way to store and structure your data makes it more *generic*. This makes it easier to use it with different functions.
+
+3. Being *generic* also makes it easier to understand a new dataset in this format.
+]
+
+---
+class: inverse, center, middle
 # The many ways to structure data
 
 ---
@@ -574,6 +608,15 @@ At first glance, there's no easy way to see how many variables there.
 ## 15           8 Different  511.  393.
 ## 16           8 Same       432.  371.
 ```
+]
+.pull-right[
+Now there's a mishmash of things:
+
+One variable (Viewpoint) is in one column.
+
+The Block variable is spread across two columns.
+
+The dependent variable (reaction time) is spread across two columns.
 ]
 
 ---
@@ -663,82 +706,9 @@ nrow(example_rt_df)
 ## [1] 10
 ```
 
----
-# Your target
-
-Your job is to try to recreate this *tibble*.
 
 
-```
-## # A tibble: 10 x 5
-##    Participant Block1_same Block2_same Block1_different Block2_different
-##          &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-##  1           1        508.        340.             522.             295.
-##  2           2        523.        268.             550.             470.
-##  3           3        543.        303.             667.             476.
-##  4           4        556.        408.             400.             322.
-##  5           5        506.        163.             539.             269.
-##  6           6        489.        287.             350.             363.
-##  7           7        398.        346.             624.             392.
-##  8           8        470.        494.             504.             374.
-##  9           9        517.        258.             396.             422.
-## 10          10        642.        348.             515.             437.
-```
 
----
-# A possible solution
-
-
-```r
-set.seed(200) # if you want these exact numbers, use this line
-example_rt_df &lt;- 
-  tibble(Participant = seq(1, 10),
-         Block1_same = rnorm(10, 500, 100),
-         Block2_same = rnorm(10, 350, 100),
-         Block1_different = rnorm(10, 500, 100),
-         Block2_different = rnorm(10, 400, 100))
-```
-
-```
-## # A tibble: 5 x 5
-##   Participant Block1_same Block2_same Block1_different Block2_different
-##         &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1           1        508.        340.             522.             295.
-## 2           2        523.        268.             550.             470.
-## 3           3        543.        303.             667.             476.
-## 4           4        556.        408.             400.             322.
-## 5           5        506.        163.             539.             269.
-```
-
----
-class: inverse, center, middle
-# Tidy data
-
----
-background-image: url(images/03/tidy-1.png)
-background-position: 50% 72%
-background-size: 75%
-# The three principles of tidy data
-
-1.  Each variable must have its own column.
-
-2.  Each observation must have its own row.
-
-3.  Each value must have its own cell.
-
----
-background-image: url(images/03/tidy-1.png)
-background-position: 50% 85%
-background-size: 70%
-# Why Tidy?
-
-.large[
-1. Many functions in R operate on so-called *long* format data, requiring dependent and independent variables to be in different columns of a data frame.
-
-2. Having a consistent way to store and structure your data makes it more *generic*. This makes it easier to use it with different functions.
-
-3. Being *generic* also makes it easier to understand a new dataset in this format.
-]
 
 ---
 # One column per condition
@@ -784,9 +754,9 @@ class: inverse, middle, center
 # Tidyr
 
 
-The **tidyr** package contains functions to help tidy up your data.
+The `tidyr` package contains functions to help tidy up your data.
 
-We'll look now at **pivot_longer()** and **pivot_wider()**.
+We'll look now at `pivot_longer()` and `pivot_wider()`.
 
 To start tidying our data, we need the RTs to be in a single column.
 
@@ -805,9 +775,9 @@ head(example_rt_df, n = 4)
 ## 4           4        556.        408.             400.             322.
 ```
 
-The function **pivot_longer()** can be used to combine columns into one.
+The function `pivot_longer()` can be used to combine columns into one.
 
-Look at the help using **?pivot_longer**
+Look at the help using `?pivot_longer`
 
 ---
 # Pivoting longer
@@ -823,13 +793,13 @@ pivot_longer(data,
 ```
 ]
 .pull-right[
-The first argument, *data*, is the name of the data frame you want to modify.
+The first argument, `data`, is the name of the data frame you want to modify.
 
-*cols* are the columns you want to combine together.
+`cols` are the columns you want to combine together.
 
-*names_to* is the name of the new column that will contain the values of a single categorical variable.
+`names_to` is the name of the new column that will contain the values of a single categorical variable.
 
-*values_to* is the name of the new column containing the values for each level of that variable.
+`values_to` is the name of the new column containing the values for each level of that variable.
 ]
 
 ---
@@ -1022,9 +992,9 @@ pivot_longer(example_rt_df,
 ]
 .pull-right[
 
-You should specify name(s) for the column(s) that you'll create using the "names_to" and "values_to" arguments. 
+You should specify name(s) for the column(s) that you'll create using the `names_to` and `values_to` arguments. 
 
-You'll need to add "names_sep" and the character that separates the two sides as well in order to match the target
+You'll need to add `names_sep` and the character that separates the two sides as well in order to match the target
 ]
 
 ---
@@ -1036,7 +1006,7 @@ class: inverse, center, middle
 
 Sometimes you want to go in the *opposite* direction. 
 
-**pivot_wider()** is the *opposite* of **pivot_longer()**. 
+`pivot_wider()` is the *opposite* of `pivot_longer()`. 
 
 
 ```r
@@ -1075,10 +1045,10 @@ Now that we've got the data in a tidy format, we can begin to use some of the mo
 
 We can produce a boxplot using **ggplot2** (more next week!)
 .pull-left[
-![](Week-3-More-on-Data_files/figure-html/quick-box-1.png)&lt;!-- --&gt;
+![](Week-4-More-on-Data_files/figure-html/quick-box-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](Week-3-More-on-Data_files/figure-html/quick-dens-1.png)&lt;!-- --&gt;
+![](Week-4-More-on-Data_files/figure-html/quick-dens-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1125,7 +1095,7 @@ We can run ANOVA with **afex**.
 
 We can create interaction plots using **emmeans**.
 .pull-left[
-![](Week-3-More-on-Data_files/figure-html/inter-plot-1.png)&lt;!-- --&gt;
+![](Week-4-More-on-Data_files/figure-html/inter-plot-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -1152,6 +1122,30 @@ Practice some of the skills for next week:
     - Visualize Data
 ]
 
+---
+# A possible solution for the extra exercise!
+
+
+```r
+set.seed(200) # if you want these exact numbers, use this line
+example_rt_df &lt;- 
+  tibble(Participant = seq(1, 10),
+         Block1_same = rnorm(10, 500, 100),
+         Block2_same = rnorm(10, 350, 100),
+         Block1_different = rnorm(10, 500, 100),
+         Block2_different = rnorm(10, 400, 100))
+```
+
+```
+## # A tibble: 5 x 5
+##   Participant Block1_same Block2_same Block1_different Block2_different
+##         &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1           1        508.        340.             522.             295.
+## 2           2        523.        268.             550.             470.
+## 3           3        543.        303.             667.             476.
+## 4           4        556.        408.             400.             322.
+## 5           5        506.        163.             539.             269.
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

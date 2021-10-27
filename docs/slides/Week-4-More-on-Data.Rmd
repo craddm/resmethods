@@ -578,37 +578,9 @@ example_rt_df
 nrow(example_rt_df)
 ```
 
----
-# Your target
 
-Your job is to try to recreate this *tibble*.
 
-```{r echo = FALSE}
-set.seed(200)
-example_rt_df <- 
-  tibble(Participant = seq(1, 10),
-             Block1_same = rnorm(10, 500, 100),
-             Block2_same = rnorm(10, 350, 100),
-             Block1_different = rnorm(10, 500, 100),
-             Block2_different = rnorm(10, 400, 100))
-example_rt_df
-```
 
----
-# A possible solution
-
-```{r examp-df}
-set.seed(200) # if you want these exact numbers, use this line
-example_rt_df <- 
-  tibble(Participant = seq(1, 10),
-         Block1_same = rnorm(10, 500, 100),
-         Block2_same = rnorm(10, 350, 100),
-         Block1_different = rnorm(10, 500, 100),
-         Block2_different = rnorm(10, 400, 100))
-```
-```{r echo = FALSE}
-head(example_rt_df, 5)
-```
 
 ---
 # One column per condition
@@ -913,3 +885,18 @@ Practice some of the skills for next week:
     - Visualize Data
 ]
 
+---
+# A possible solution for the extra exercise!
+
+```{r examp-df}
+set.seed(200) # if you want these exact numbers, use this line
+example_rt_df <- 
+  tibble(Participant = seq(1, 10),
+         Block1_same = rnorm(10, 500, 100),
+         Block2_same = rnorm(10, 350, 100),
+         Block1_different = rnorm(10, 500, 100),
+         Block2_different = rnorm(10, 400, 100))
+```
+```{r echo = FALSE}
+head(example_rt_df, 5)
+```
