@@ -150,10 +150,10 @@ test_matrix
 ```
 
 ```
-##            [,1]       [,2]       [,3]
-## [1,]  0.3526776 -0.1772119 -0.9662179
-## [2,]  1.9480308  0.6229466  1.3033751
-## [3,] -1.5188654 -0.0157542  0.3173238
+##           [,1]       [,2]       [,3]
+## [1,] 0.2353145  1.3929560  0.2605482
+## [2,] 1.0336660 -0.8899093 -0.9559970
+## [3,] 0.4376461  1.3994929  0.7738423
 ```
 ]
 .pull-right[
@@ -173,8 +173,8 @@ test_matrix[2:3, 1:2]
 
 ```
 ##           [,1]       [,2]
-## [1,]  1.948031  0.6229466
-## [2,] -1.518865 -0.0157542
+## [1,] 1.0336660 -0.8899093
+## [2,] 0.4376461  1.3994929
 ```
 ]
 
@@ -262,12 +262,12 @@ head(age_tibb)
 ## # A tibble: 6 x 3
 ##   Participant  cond1 age_group
 ##         &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;    
-## 1           1  0.941 Old      
-## 2           2 -0.921 Old      
-## 3           3  0.425 Old      
-## 4           4 -2.39  Old      
-## 5           5 -0.508 Old      
-## 6           6 -1.12  Young
+## 1           1  1.39  Old      
+## 2           2 -0.212 Old      
+## 3           3 -0.535 Old      
+## 4           4  0.653 Old      
+## 5           5  0.459 Old      
+## 6           6  1.30  Young
 ```
 
 ---
@@ -430,6 +430,7 @@ Image from Xkcd = https://xkcd.com/1459/
 ---
 # RStudio Projects
 
+.large[
 On [RStudio.cloud](https://rstudio.cloud), each project you create is in fact a completely separate instance of R.
 
 By now, most of you should have [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/) installed.
@@ -437,6 +438,7 @@ By now, most of you should have [RStudio Desktop](https://www.rstudio.com/produc
 Once that's up and running, you can get to grips with [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) 
 
 Projects provide a nice way to organise your work into neat, individually tailored sets of directories.
+]
 
 ---
 background-image: url(images/noneproject.png)

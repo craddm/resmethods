@@ -28,6 +28,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF](slides/Week-4-More-on-Data.pdf)
 
 ### 4. 09/11/2021, Data Visualization
+- [Slides](slides/Week-5-Exploring-data-Graphically.html)
+- [PDF](slides/Week-5-Exploring-data-Graphically.pdf)
 
 ### 5. 16/11/2021, Importing, Transforming, and Summarising Data
 

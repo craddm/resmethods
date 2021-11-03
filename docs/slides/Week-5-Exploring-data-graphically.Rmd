@@ -1,0 +1,944 @@
+---
+title: "Visualizing data"
+subtitle: "PSY9219M & PSY9251M"
+date: "9/11/2021"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+      beforeInit: "js/macros.js"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(datasauRus)
+library(readxl)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_extra_styles()
+xaringanExtra::use_panelset()
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6,
+                      message = FALSE)
+```
+```{r xaringantheme, include = FALSE, warning = FALSE}
+library(xaringanthemer)
+style_mono_light(base_color = "#23395b",
+                 base_font_size = "21px",
+                 link_color = "#C80039")
+```
+
+# Data frames and tibbles
+
+.pull-left[
+```{r examp_df, echo = FALSE}
+example_rt_df <- 
+  data.frame(Participant = rep(1:50,
+                               each = 10),
+             Viewpoint = c("Same", "Different"),
+             B1RT = rnorm(500, 500, 100),
+             B2RT = rnorm(500, 400, 100)) %>% 
+  group_by(Participant, Viewpoint) %>%
+  summarise(B1RT = mean(B1RT),
+            B2RT = mean(B2RT))
+head(example_rt_df, 16)
+```
+]
+.pull-right[
+.large[
+Data frames/tibbles are structured tables of data.
+
+Each column contains data of the same basic type (i.e. a column can be numeric or character, but not both).
+]
+]
+---
+background-image: url(images/03/tidy-1.png)
+background-position: 50% 70%
+background-size: 75%
+# Tidy data
+
+1. Each variable must have its own column.
+
+2. Each observation must have its own row.
+
+3. Each value must have its own cell.
+
+---
+# Reshaping your data
+.large[
+The **tidyr** package has functions for *reshaping* data in order to make it *tidy*.
+]
+.center[
+![:scale 30%](images/03/tidyr-longer-wider.gif)
+]
+
+---
+class: inverse, middle, center
+# Visualizing data 
+
+---
+# Why visualize data?
+
+.pull-left[
+.large[
+1. Graphs help you rapidly examine the structure of the data.
+
+2. Graphs help you communicate the important statistical features of data.
+
+3. It's often easier to spot unexpected issues using graphs than staring at a bunch of numbers.
+]
+]
+
+.pull-right[
+```{r dino-again, fig.height = 7, echo = FALSE}
+datasauRus::datasaurus_dozen %>%
+  filter(dataset == "dino") %>%
+  ggplot(aes(x = x,
+             y = y)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+]
+
+---
+# Getting a quick look at your data
+
+Plotting helps you quickly gain an understanding of the structure of your data.
+
+Here's some recent data about the UK's prison population.
+
+```{r echo = FALSE}
+pris_pop <- read_excel("data/prison-population-data-tool-31-december-2017.xlsx",
+                       sheet = "PT Data")
+key <- pris_pop$View[[1]]
+
+pris_pop
+```
+
+Retrieved from [data.gov.uk](https://data.gov.uk/dataset/f3f79bba-d74a-4c6a-85f3-f29881349a34/offender-management-statistics) - Contains public sector information licensed under the Open Government Licence v3.0.
+
+---
+# Getting a quick look at your data
+
+.pull-left[
+
+Let's look at the UK prison population as of December 2017, split by establishment, sex, and age group. 
+
+First we filter out all but the rows I'm interested in. Don't worry about understanding this code... (yet!)
+
+```{r init-pris, fig.height = 6, fig.show = "hide"}
+pris_pop %>%
+  filter(View == "a Establishment*Sex*Age Group",
+         Date == "2017-12") %>%
+  ggplot(aes(x = Population)) +
+  stat_bin(binwidth = 100) 
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("init-pris", "png")`)
+]
+
+---
+# Getting a quick understanding of your data
+
+.pull-left[
+
+This is a histogram showing the distribution of prison populations in bins of 100 inmates.
+
+Some obvious features:
+1. The data is heavily skewed - lots of small values, few large values.
+
+2. There may be a mixture of distributions - there's a big peak in the low numbers, then a dip, then a broader peak.
+
+These two features suggest that there may be some structure we're missing with this plot.
+]
+.pull-right[
+![](`r knitr::fig_chunk("init-pris", "png")`)
+]
+---
+# Getting a quick understanding of your data
+
+.pull-left[
+
+In the data, age is coded into "Juveniles and Young Adults (15-20)" and "Adults (21+)".
+
+Let's see if Age underlies some of the features of the first plot.
+
+```{r split-by-age, fig.show = "hide", fig.height = 6}
+pris_pop %>%
+  filter(View == "a Establishment*Sex*Age Group",
+         Date == "2017-12") %>%
+  ggplot(aes(x = Population,
+             fill = `Age / Custody / Nationality / Offence Group`)) +
+  stat_bin(binwidth = 100,
+           position = "dodge") + 
+  labs(fill = "Age")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("split-by-age", "png")`)
+]
+
+---
+# Getting a quick understanding of your data
+
+.pull-left[
+
+The "Juvenile" prison population underlies the lower peak. 
+
+Typically there are fewer than 200 juveniles in a given institution. 
+
+In addition, there are far fewer juveniles in prison than adults.
+
+Note that while many institutions hold both adults and juveniles, some hold only adults and some hold only juveniles.
+]
+.pull-right[
+![](`r knitr::fig_chunk("split-by-age", "png")`)
+]
+
+---
+# Getting a quick understanding of your data
+
+.pull-left[
+How do prison populations vary between men and women?
+
+Here we focus on adults, excluding juveniles from the plot.
+
+```{r split-by-sex, fig.height = 5, fig.show = "hide"}
+pris_pop %>%
+  rename(Age = `Age / Custody / Nationality / Offence Group`) %>%
+  filter(View == "a Establishment*Sex*Age Group",
+         Date == "2017-12",
+         Age == "Adults (21+)") %>%
+  ggplot(aes(x = Population,
+             fill = Sex)) +
+  stat_bin(binwidth = 100,
+           position = "dodge") 
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("split-by-sex", "png")`)
+]
+
+---
+# Getting a quick understanding of your data
+
+.pull-left[
+We can clearly see that there are far more men in prison than women.
+
+There are also far fewer institutions that hold women than institutions that hold men.
+
+Also there are generally more men in any given institution than there are women.
+]
+.pull-right[
+![](`r knitr::fig_chunk("split-by-sex", "png")`)
+]
+
+---
+# Communicating your results
+
+Plots are also useful for showing the statistical patterns in your data to go along with statistical tests.
+
+.pull-left[
+```{r echo = FALSE, fig.height= 6}
+ggplot(example_rt_df,
+       aes(x = B1RT, y = B2RT)) +
+  geom_point() 
+```
+]
+.pull-right[
+```{r echo = FALSE, fig.height= 6}
+ggplot(example_rt_df,
+       aes(x = B1RT, y = B2RT, colour = Viewpoint)) +
+    geom_point(aes(shape = Viewpoint),
+               size = 3,
+               alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  geom_rug(alpha = 0.5) +
+  labs(x = "Block 1 RT (ms)",
+       y = "Block 2 RT (ms)") +
+  ggtitle("Relationship between first and second block RTs") +
+  scale_colour_brewer(palette = "Dark2")
+```
+]
+
+---
+# Communicating patterns
+.pull-left[
+```{r echo = FALSE, message = FALSE, fig.height = 6, fig.width = 6}
+read_csv("https://raw.githubusercontent.com/dspiegel29/ArtofStatistics/master/00-2-shipman-times/00-2-shipman-times-x.csv") %>%
+  gather("doctors", "perc", -Hour) %>%
+  ggplot(aes(x = Hour, y = perc, colour = doctors)) +
+  geom_line() +
+  labs(x = "Time of death",
+       y = "Percentage of deaths (%)",
+       colour = "") + 
+  scale_x_continuous(expand = c(0, 0)) + 
+  theme_classic(base_size = 18)
+```
+]
+.pull-right[
+.large[
+
+Strikingly different to similar GPs, many of Harold Shipman's patients died at a particular time of day.
+
+A pattern like this passes the "inter-ocular trauma" test...
+
+Spiegelhalter (2019), *The Art of Statistics*
+]
+]
+---
+# Spotting problems in your data
+
+.pull-left[
+## Anscombe's Quartet
+Every one of these plots shows sets of data with the same means, standard deviations, and correlation coefficients.
+
+One is non-linear, one has an outlier, and one should have a categorical x-axis!
+
+```{r tidy-ans, fig.height = 6, echo = FALSE, fig.show = "hide"}
+anscombe_tidy <- 
+  datasets::anscombe %>%
+    mutate(observation = seq_len(n())) %>%
+    gather(key, value, -observation) %>%
+    separate(key, c("variable", "set"), 1, convert = TRUE) %>%
+    mutate(set = c("I", "II", "III", "IV")[set]) %>%
+    spread(variable, value)
+ggplot(anscombe_tidy,
+       aes(x = x, y = y)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE) + 
+  facet_wrap(.~set)
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("tidy-ans", "png")`)
+]
+
+
+---
+# Spotting problems in your data
+
+## The Datasaurus Dozen
+.pull-left[
+```{r data-doz, echo = FALSE, fig.show = "hide", fig.height = 6}
+datasauRus::datasaurus_dozen %>%
+  filter(dataset != "dino") %>%
+  ggplot(aes(x = x,
+             y = y)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~dataset, ncol = 3) +
+  theme_minimal()
+```
+![](`r knitr::fig_chunk("data-doz", "png")`)
+]
+
+.pull-right[
+```{r dino-doz, fig.height = 6, echo = FALSE}
+datasauRus::datasaurus_dozen %>%
+  filter(dataset == "dino") %>%
+  ggplot(aes(x = x,
+             y = y)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+]
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 15%
+background-position: 50% 85%
+class: inverse, middle, center
+# The Grammar of Graphics
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# ggplot2
+
+.pull-left[
+**ggplot2** is one of the **tidyverse** packages.
+
+GG stands for the *Grammar* of *Graphics*.
+
+The Grammar of Graphics is a principled approach to building plots from a few underlying structures:
+
+1. A dataset
+
+2. A coordinate system
+
+3. *Geoms* (geometric shapes such as bars or points)
+
+We begin with a blank canvas:
+
+```{r blank-gg, fig.height = 6, fig.show = "hide"}
+ggplot()
+```
+
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("blank-gg", "png")`)
+]
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# The mpg dataset
+
+```{r mpg-examp}
+mpg
+```
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Datasets and aesthetics
+.pull-left[
+The first step is to add dataset and define some *aesthetics*.
+
+Aesthetics are how we map elements of the data to parts of the plot.
+
+The first two arguments to `ggplot()` are `data` and `mapping`.
+
+We use the `aes()` function within this to map columns from the data to properties of the plot.
+
+Here we use the 'displ' and 'hwy' columns from the *mpg* dataset to set up our co-ordinate system.
+```{r mpg-coords, fig.height = 5, fig.show = "hide"}
+ggplot(data = mpg,
+       mapping = aes(x = displ,
+                     y = hwy))
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-coords", "png")`)
+]
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Geoms and layers
+
+.pull-left[
+
+**geoms** are the geometric shapes we want to use to represent our data.
+
+We add a new layer to our initial canvas using `+`, and then use one of the many `geom_*` functions to draw shapes on the new layer.
+
+For a scatterplot, add a new layer using `geom_point()`. 
+
+```{r scatter-mpg, fig.height = 7, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy)) +
+  geom_point()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("scatter-mpg", "png")`)
+]
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Adding a linear model
+
+.pull-left[
+A question we're pondering is what is the relationship between the variables on x- and y-axes?
+
+We can add a linear regression line using `geom_smooth()` and specifying "lm" (linear model) for the argument method.
+
+```{r scatter-smooth, fig.height = 7, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Engine displacement (litres)",
+       y = "Highway miles per gallon")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("scatter-smooth", "png")`)
+]
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Identifying groups
+
+.pull-left[
+Another variable we know about is the number of cylinders in the engines - the *cyl* column. 
+
+*cyl* only has four unique levels, so it's best treated as a categorical variable and converted to a factor using `factor()`. Here, we use colour to identify different levels of *cyl*.
+
+```{r scatter-cyls, fig.height = 7, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+  geom_point() + 
+  labs(x = "Engine displacement (litres)",
+       y = "Highway miles per gallon",
+       colour = "Cylinders")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("scatter-cyls", "png")`)
+]
+
+---
+background-image: url(images/04/ggplot2-logo.png)
+background-size: 8%
+background-position: 85% 5%
+# Identifying groups
+
+.pull-left[
+And we can also add linear regression lines for each grouping of cylinders, again using `geom_smooth()`.
+```{r scatter-cyls-smo, fig.height = 7, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(x = "Engine displacement (litres)",
+       y = "Highway miles per gallon",
+       colour = "Cylinders")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("scatter-cyls-smo", "png")`)
+]
+
+---
+class: inverse, center, middle
+# Plotting categorical and continuous data
+
+---
+# Plotting a single categorical variable
+
+.pull-left[
+Typically with a single categorical variable, we want a frequency count - i.e. we want to know how many times each category shows up.
+
+A bar graph is ideal! For example, there are several different *classes* of vehicle in in the *mpg* dataset. How many times does each one show up?
+
+```{r count-bar, fig.height = 7, fig.show = "hide"}
+ggplot(mpg,
+       aes(x = class)) +
+  geom_bar()
+```
+`geom_bar()` will count for us, so we don't need to supply a *y* aesthetic `aes()`.
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("count-bar", "png")`)
+]
+
+---
+# Plotting a single categorical variable
+
+.pull-left[
+As with plots we did earlier, the bars can be coloured in. 
+
+With `geom_point()` we change the `colour` aesthetic. 
+
+For `geom_bar()` we need to change the `fill` aesthetic.
+
+```{r mpg-fill, fig.show = "hide", fig.height = 6}
+ggplot(mpg, aes(x = class,
+                fill = class)) +
+  geom_bar()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-fill", "png")`)
+]
+
+---
+# Plotting a single continuous variable
+
+.pull-left[
+A lot of the time you'll be dealing with continuous, numerical variables.
+
+What you often want to do is check how they are distributed (we'll go into this later in the course!).
+
+Histograms split continuous variables up into discrete bins, and count how many of each value show up in each bin.
+
+Here we use `geom_histogram()`. By default, it splits data into 30 bins.
+
+```{r displ-hist, fig.height = 5, fig.show = "hide"}
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram()
+```
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("displ-hist", "png")`)
+]
+
+---
+# Plotting a single continuous variable
+
+.pull-left[
+Changing the number of bins can have quite dramatic results on the plots.
+
+There are no hard and fast rules how many bins you need.
+
+```{r displ-hist-code, out.height=2.5, fig.show = "hide", eval = FALSE}
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram(bins = 50)
+
+```
+```{r displ-hist-ex, out.height = 2.5, fig.show = "hide", eval = FALSE}
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram(bins = 10)
+```
+```{r displ-hist-moarbins, out.height= 3, fig.show = "hide", echo = FALSE}
+library(patchwork)
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram(bins = 50) -> moarbins
+
+```
+```{r displ-hist-lessbins, out.height = 3, fig.show = "hide", echo = FALSE}
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram(bins = 10) -> lessbins
+```
+]
+
+.pull-right[
+```{r echo = FALSE}
+moarbins / #![](`r knitr::fig_chunk("displ-hist-moarbins", "png")`)
+#![](`r knitr::fig_chunk("displ-hist-lessbins", "png")`)
+lessbins
+```
+]
+
+---
+# Plotting a single continuous variable
+
+.pull-left[
+Rather than choosing a number of bins, you can also set the `binwidth`, in the same units as the variable.
+
+For example, here it's set to make one bin every .5 units of the `displ` variable.
+
+```{r displ-hist-binwid, fig.height = 5, fig.show = "hide"}
+ggplot(mpg, aes(x = displ)) +
+  geom_histogram(binwidth = .5)
+```
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("displ-hist-binwid", "png")`)
+]
+
+---
+# Plotting a single continuous variable
+
+.pull-left[
+An alternative to using a histogram is to plot a **kernel density estimate (KDE)**.
+
+An advantage of the KDE (other than the fancy-sounding name) is that it provides smooth estimate over the range of the data and is much less dependent on an arbitrary parameter like "number of bins".
+
+We draw a KDE using `geom_density()`.
+
+```{r displ-dens, fig.height = 5, fig.show = "hide"}
+ggplot(mpg, aes(x = displ)) +
+  geom_density(fill = "grey")
+```
+]
+
+.pull-right[
+![](`r knitr::fig_chunk("displ-dens", "png")`)
+]
+
+---
+class: inverse, center, middle
+
+# Plotting multiple variables
+
+---
+# Plotting multiple categorical variables
+
+.pull-left[
+The fill doesn't have to use the same variable as the `x` variable. 
+
+For example, you may want to see how each count breaks down into groups of another categorical variable.
+
+```{r mpg-fill-cyl, fig.show = "hide", fig.height = 5}
+ggplot(mpg, aes(x = class,
+                fill = factor(cyl))) +
+  geom_bar()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-fill-cyl", "png")`)
+]
+
+---
+# Plotting multiple categorical variables
+
+.pull-left[
+Alternatively, you may want to produce different graphs for each level of the other categorical variable
+
+A nice way to do that is using **facets**, adding a `facet_wrap()` or `facet_grid()` layer to the *ggplot*.
+
+```{r mpg-facet-cyl, fig.show = "hide", fig.height = 7}
+ggplot(mpg, aes(x = class)) +
+  geom_bar() +
+  facet_wrap(~factor(cyl)) +
+  theme(axis.text.x = element_text(angle = 45))
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-facet-cyl", "png")`)
+]
+
+---
+# Continuous by categorical interactions
+```{r echo = FALSE}
+pris_pop <- 
+  pris_pop %>%
+  filter(View == "a Establishment*Sex*Age Group",
+         Date == "2017-12") %>%
+  rename(Age = `Age / Custody / Nationality / Offence Group`)
+```
+.pull-left[
+Often when working with continuous data, you have additional categorical variables.
+
+It's often easiest to put splits based on categorical variables side-by-side on the same plot.
+
+Here we use `geom_histogram(position = "dodge")` to put the bars side-by-side.
+
+```{r pris-by-age, fig.height = 5, fig.show = "hide"}
+ggplot(pris_pop, 
+       aes(x = Population,
+             fill = Age)) +
+  geom_histogram(binwidth = 100,
+                 position = "dodge") 
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("pris-by-age", "png")`)
+]
+
+---
+# Continuous by categorical interactions
+
+.pull-left[
+Another way to do this would be using kernel density estimates.
+
+`geom_density()` uses the *fill* aesthetic for this. 
+
+Since the densities overlap, we can manipulate the *transparency* of the geom using the *alpha* argument. 
+
+Note that this can be applied to most *geoms* and is often useful when there is overlap.
+
+```{r pris-by-age-dens, fig.height = 5, fig.show = "hide"}
+ggplot(pris_pop, 
+       aes(x = Population,
+             fill = Age)) +
+  geom_density(alpha = 0.5)
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("pris-by-age-dens", "png")`)
+]
+---
+# Plotting continuous by categorical interactions
+
+.pull-left[
+
+However, sometimes you'll find it helpful to produce separate "panels" for each level of a categorical variable.
+
+We can use the `facet_wrap()` or `facet_grid()` function to produce additional panels.
+
+```{r pris-by-age-facet, fig.height = 5, fig.show = "hide"}
+ggplot(pris_pop, 
+       aes(x = Population)) +
+  geom_histogram(binwidth = 100) +
+    facet_wrap(~Age)
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("pris-by-age-facet", "png")`)
+]
+
+---
+# Continuous by categorical interactions
+
+.pull-left[
+In the last few examples, we've plotted with the continuous variable on the x-axis. 
+
+We can also plot with a discrete variable on the x-axis.
+
+In this case we want R to summarise the continuous variable, providing us with the mean and standard error for each level of *cyl* from the *mtcars* dataset.
+
+We use `stat_summary()` to do this.
+
+```{r cyl-err, fig.show = "hide", fig.height = 5}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  stat_summary()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("cyl-err", "png")`)
+]
+
+---
+# Continuous by categorical interactions
+
+.pull-left[
+
+Some people like to plot bar charts, with the mean and error bars overlaid on top.
+
+We use `stat_summary()` twice, the first time specifying that we want bars using the *geom* argument, the second time just using the defaults.
+
+```{r cyl-bars, fig.height = 5, fig.show = "hide"}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  stat_summary(fun = mean,
+               geom = "bar") +
+  stat_summary(fun.data = mean_se)
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("cyl-bars", "png")`)
+]
+
+---
+# Continuous by categorical interactions
+
+.pull-left[
+
+But bar charts are not a very good way to show this kind of data!
+
+Most of the space occupied by the bars has no data in it, as we can see when we add individual points with `geom_point()`.
+
+Stick to using bars to show counts!
+
+```{r cyl-bars-indiv, fig.height = 5, fig.show = "hide"}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  stat_summary(fun = mean,
+               geom = "bar", fill = "white") +
+  stat_summary(fun.data = mean_se) +
+  geom_point()
+
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("cyl-bars-indiv", "png")`)
+]
+---
+# Continuous by categorical interactions
+
+.pull-left[
+
+Two better alternatives are **violin plots** or **boxplots**
+```{r cyl-box-code, fig.height = 2.5, fig.show = "hide", eval = FALSE}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  geom_boxplot() +
+  geom_point(alpha = 0.5)
+```
+```{r cyl-violin-code, fig.height = 2.5, fig.show = "hide", eval = FALSE}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  geom_violin() +
+  geom_point(alpha = 0.5)
+```
+```{r cyl-box-plot, fig.height = 3, fig.show = "hide", echo = FALSE}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  geom_boxplot() +
+  geom_point(alpha = 0.5) -> boxpcyl
+```
+```{r cyl-violin-plot, fig.height = 3, fig.show = "hide", echo = FALSE}
+ggplot(mtcars,
+       aes(x = factor(cyl),
+           y = mpg)) + 
+  geom_violin() +
+  geom_point(alpha = 0.5) -> viocyl
+```
+]
+.pull-right[
+```{r echo = FALSE}
+boxpcyl/viocyl
+```
+]
+
+---
+# Plotting two continuous variables
+
+.panelset.sideways[
+.panel[
+.panel-name[Scatterplots]
+The best type of plot for showing the relationship between two continuous variables is a **scatterplot**.
+
+```{r echo = FALSE}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE)
+```
+]
+.panel[
+.panel-name[Fancier Plot]
+![](`r knitr::fig_chunk("fancy-mpg", "png")`)
+]
+.panel[
+.panel-name[Code]
+```{r fancy-mpg, fig.show = "hide", fig.height = 6, fig.width= 7}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE) + 
+    labs(x = "Engine displacement (litres)",
+         y = "Highway miles per gallon",
+         colour = "Cylinders",
+         shape = "Cylinders",
+         title = expression(~bold("Figure 1")),
+         subtitle = expression(~italic("The relationship between MPG and Engine Displacement"))) + 
+    theme_classic() 
+
+```
+]
+]
+
+---
+# Suggested reading
+
+For practice of this week's concepts, see the RStudio.cloud [Visualize Data](https://rstudio.cloud/learn/primers/3) primer.
+
+For more general advice on plotting, see R4DS Chapters on [Graphics for Communication](https://r4ds.had.co.nz/graphics-for-communication.html) and [Data Visualization](https://r4ds.had.co.nz/data-visualisation.html), and Kieran Healy's [Data Visualization](https://socviz.co)
+
+To prepare for next week, read R4DS Chapter on [Data transformation](https://r4ds.had.co.nz/transform.html)

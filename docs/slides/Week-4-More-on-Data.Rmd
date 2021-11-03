@@ -29,7 +29,8 @@ FearofCrime <- read_csv("data/FearofCrime.CSV")
 ```{r xaringantheme, include = FALSE, warning = FALSE}
 library(xaringanthemer)
 style_mono_light(base_color = "#23395b",
-                 base_font_size = "21px")
+                 base_font_size = "21px",
+                 link_color = "#C80039")
 ```
 
 ```{r echo = FALSE, message = FALSE}
@@ -356,6 +357,7 @@ Image from Xkcd = https://xkcd.com/1459/
 ---
 # RStudio Projects
 
+.large[
 On [RStudio.cloud](https://rstudio.cloud), each project you create is in fact a completely separate instance of R.
 
 By now, most of you should have [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/) installed.
@@ -363,6 +365,7 @@ By now, most of you should have [RStudio Desktop](https://www.rstudio.com/produc
 Once that's up and running, you can get to grips with [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) 
 
 Projects provide a nice way to organise your work into neat, individually tailored sets of directories.
+]
 
 ---
 background-image: url(images/noneproject.png)

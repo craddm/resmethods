@@ -150,10 +150,10 @@ test_matrix
 ```
 
 ```
-##             [,1]       [,2]       [,3]
-## [1,] -0.15484395 -0.3544565 -0.6398745
-## [2,] -0.09415141 -2.3832087 -0.3047790
-## [3,] -0.70862216  0.6682035  1.5090185
+##           [,1]       [,2]       [,3]
+## [1,] 0.2353145  1.3929560  0.2605482
+## [2,] 1.0336660 -0.8899093 -0.9559970
+## [3,] 0.4376461  1.3994929  0.7738423
 ```
 ]
 .pull-right[
@@ -172,9 +172,9 @@ test_matrix[2:3, 1:2]
 ```
 
 ```
-##             [,1]       [,2]
-## [1,] -0.09415141 -2.3832087
-## [2,] -0.70862216  0.6682035
+##           [,1]       [,2]
+## [1,] 1.0336660 -0.8899093
+## [2,] 0.4376461  1.3994929
 ```
 ]
 
@@ -262,12 +262,12 @@ head(age_tibb)
 ## # A tibble: 6 x 3
 ##   Participant  cond1 age_group
 ##         &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt;    
-## 1           1  0.878 Old      
-## 2           2 -0.463 Old      
-## 3           3  2.10  Old      
-## 4           4  0.956 Old      
-## 5           5  0.777 Old      
-## 6           6  2.16  Young
+## 1           1  1.39  Old      
+## 2           2 -0.212 Old      
+## 3           3 -0.535 Old      
+## 4           4  0.653 Old      
+## 5           5  0.459 Old      
+## 6           6  1.30  Young
 ```
 
 ---
@@ -370,19 +370,19 @@ FearofCrime
 
 ```
 ## # A tibble: 301 x 169
-##    ResponseID        ResponseSet Name  ExternalDataRef~ Status StartDate EndDate
-##    &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt; &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  
-##  1 R_ai4tgG1GHNdVdqt Default Re~ Anon~ NA                    0 19/10/14~ 19/10/~
-##  2 R_d5OiATV0IJiBbMx Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  3 R_aaBVZUe9mlGiDpH Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  4 R_6nxInLKQv2bucQZ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  5 R_6SCYbhOP9BG5CgR Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  6 R_5pCxWA6qOQdnVyd Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  7 R_d1nji6V7FCppn0x Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  8 R_9v6ZgUhKflVX6yp Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  9 R_5Bg7VjBhOZja2gt Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-## 10 R_9Sv17lQGWXwo23z Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-## # ... with 291 more rows, and 162 more variables: Finished &lt;dbl&gt;, ...
+##    ResponseID  ResponseSet Name  ExternalDataRef~ Status StartDate EndDate Finished
+##    &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt; &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;
+##  1 R_ai4tgG1G~ Default Re~ Anon~ NA                    0 19/10/14~ 19/10/~        1
+##  2 R_d5OiATV0~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  3 R_aaBVZUe9~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  4 R_6nxInLKQ~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  5 R_6SCYbhOP~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  6 R_5pCxWA6q~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  7 R_d1nji6V7~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  8 R_9v6ZgUhK~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  9 R_5Bg7VjBh~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+## 10 R_9Sv17lQG~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+## # ... with 291 more rows, and 161 more variables: ...
 ```
 
 ---
@@ -1056,10 +1056,6 @@ We can produce a boxplot using **ggplot2** (more next week!)
 
 We can produce some summary statistics using **dplyr** (more soon!)
 
-
-```
-## `summarise()` has grouped output by 'Block'. You can override using the `.groups` argument.
-```
 
 ```
 ## # A tibble: 4 x 4
