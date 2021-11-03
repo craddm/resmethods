@@ -24,7 +24,7 @@ xaringanExtra::use_tile_view()
 xaringanExtra::use_extra_styles()
 xaringanExtra::use_panelset()
 knitr::opts_chunk$set(fig.asp = .618,
-                      fig.width = 6,
+                      fig.width = 6.5,
                       message = FALSE)
 ```
 ```{r xaringantheme, include = FALSE, warning = FALSE}

@@ -39,22 +39,22 @@ class: center, middle, inverse, title-slide
 ## # Groups:   Participant [8]
 ##    Participant Viewpoint  B1RT  B2RT
 ##          &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
-##  1           1 Different  486.  367.
-##  2           1 Same       592.  445.
-##  3           2 Different  498.  427.
-##  4           2 Same       505.  373.
-##  5           3 Different  568.  377.
-##  6           3 Same       441.  450.
-##  7           4 Different  472.  409.
-##  8           4 Same       504.  380.
-##  9           5 Different  504.  435.
-## 10           5 Same       451.  404.
-## 11           6 Different  497.  432.
-## 12           6 Same       464.  392.
-## 13           7 Different  504.  419.
-## 14           7 Same       445.  385.
-## 15           8 Different  557.  389.
-## 16           8 Same       500.  358.
+##  1           1 Different  504.  431.
+##  2           1 Same       468.  458.
+##  3           2 Different  549.  345.
+##  4           2 Same       451.  376.
+##  5           3 Different  530.  357.
+##  6           3 Same       530.  449.
+##  7           4 Different  508.  398.
+##  8           4 Same       399.  376.
+##  9           5 Different  482.  390.
+## 10           5 Same       511.  369.
+## 11           6 Different  508.  347.
+## 12           6 Same       567.  378.
+## 13           7 Different  543.  406.
+## 14           7 Same       514.  335.
+## 15           8 Different  492.  396.
+## 16           8 Same       591.  423.
 ```
 ]
 .pull-right[
@@ -103,7 +103,7 @@ class: inverse, middle, center
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/dino-again-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/dino-again-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -116,18 +116,18 @@ Here's some recent data about the UK's prison population.
 
 ```
 ## # A tibble: 22,409 x 6
-##    View           Date   Establishment Sex    `Age / Custody / National~ Population
-##    &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;                           &lt;dbl&gt;
-##  1 a Establishme~ 2015-~ Altcourse     Male   Adults (21+)                      922
-##  2 a Establishme~ 2015-~ Altcourse     Male   Juveniles and Young Adult~        169
-##  3 a Establishme~ 2015-~ Ashfield      Male   Adults (21+)                      389
-##  4 a Establishme~ 2015-~ Askham Grange Female Adults (21+)                       NA
-##  5 a Establishme~ 2015-~ Askham Grange Female Juveniles and Young Adult~         NA
-##  6 a Establishme~ 2015-~ Aylesbury     Male   Adults (21+)                      113
-##  7 a Establishme~ 2015-~ Aylesbury     Male   Juveniles and Young Adult~        268
-##  8 a Establishme~ 2015-~ Bedford       Male   Adults (21+)                      459
-##  9 a Establishme~ 2015-~ Bedford       Male   Juveniles and Young Adult~         30
-## 10 a Establishme~ 2015-~ Belmarsh      Male   Adults (21+)                      794
+##    View          Date   Establishment Sex   `Age / Custody / Nationa~ Population
+##    &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;
+##  1 a Establishm~ 2015-~ Altcourse     Male  Adults (21+)                     922
+##  2 a Establishm~ 2015-~ Altcourse     Male  Juveniles and Young Adul~        169
+##  3 a Establishm~ 2015-~ Ashfield      Male  Adults (21+)                     389
+##  4 a Establishm~ 2015-~ Askham Grange Fema~ Adults (21+)                      NA
+##  5 a Establishm~ 2015-~ Askham Grange Fema~ Juveniles and Young Adul~         NA
+##  6 a Establishm~ 2015-~ Aylesbury     Male  Adults (21+)                     113
+##  7 a Establishm~ 2015-~ Aylesbury     Male  Juveniles and Young Adul~        268
+##  8 a Establishm~ 2015-~ Bedford       Male  Adults (21+)                     459
+##  9 a Establishm~ 2015-~ Bedford       Male  Juveniles and Young Adul~         30
+## 10 a Establishm~ 2015-~ Belmarsh      Male  Adults (21+)                     794
 ## # ... with 22,399 more rows
 ```
 
@@ -152,7 +152,7 @@ pris_pop %&gt;%
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/init-pris-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/init-pris-1.png)
 ]
 
 ---
@@ -170,7 +170,7 @@ Some obvious features:
 These two features suggest that there may be some structure we're missing with this plot.
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/init-pris-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/init-pris-1.png)
 ]
 ---
 # Getting a quick understanding of your data
@@ -194,7 +194,7 @@ pris_pop %&gt;%
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/split-by-age-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/split-by-age-1.png)
 ]
 
 ---
@@ -211,7 +211,7 @@ In addition, there are far fewer juveniles in prison than adults.
 Note that while many institutions hold both adults and juveniles, some hold only adults and some hold only juveniles.
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/split-by-age-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/split-by-age-1.png)
 ]
 
 ---
@@ -236,7 +236,7 @@ pris_pop %&gt;%
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/split-by-sex-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/split-by-sex-1.png)
 ]
 
 ---
@@ -250,7 +250,7 @@ There are also far fewer institutions that hold women than institutions that hol
 Also there are generally more men in any given institution than there are women.
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/split-by-sex-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/split-by-sex-1.png)
 ]
 
 ---
@@ -259,16 +259,16 @@ Also there are generally more men in any given institution than there are women.
 Plots are also useful for showing the statistical patterns in your data to go along with statistical tests.
 
 .pull-left[
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
 # Communicating patterns
 .pull-left[
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 .large[
@@ -292,7 +292,7 @@ One is non-linear, one has an outlier, and one should have a categorical x-axis!
 
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/tidy-ans-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/tidy-ans-1.png)
 ]
 
 
@@ -302,11 +302,11 @@ One is non-linear, one has an outlier, and one should have a categorical x-axis!
 ## The Datasaurus Dozen
 .pull-left[
 
-![](Week-5-Exploring-data-Graphically_files/figure-html/data-doz-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/data-doz-1.png)
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/dino-doz-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/dino-doz-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -345,7 +345,7 @@ ggplot()
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/blank-gg-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/blank-gg-1.png)
 ]
 
 ---
@@ -361,18 +361,18 @@ mpg
 
 ```
 ## # A tibble: 234 x 11
-##    manufacturer model      displ  year   cyl trans    drv     cty   hwy fl    class
-##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-##  1 audi         a4           1.8  1999     4 auto(l5) f        18    29 p     comp~
-##  2 audi         a4           1.8  1999     4 manual(~ f        21    29 p     comp~
-##  3 audi         a4           2    2008     4 manual(~ f        20    31 p     comp~
-##  4 audi         a4           2    2008     4 auto(av) f        21    30 p     comp~
-##  5 audi         a4           2.8  1999     6 auto(l5) f        16    26 p     comp~
-##  6 audi         a4           2.8  1999     6 manual(~ f        18    26 p     comp~
-##  7 audi         a4           3.1  2008     6 auto(av) f        18    27 p     comp~
-##  8 audi         a4 quattro   1.8  1999     4 manual(~ 4        18    26 p     comp~
-##  9 audi         a4 quattro   1.8  1999     4 auto(l5) 4        16    25 p     comp~
-## 10 audi         a4 quattro   2    2008     4 manual(~ 4        20    28 p     comp~
+##    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
+##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 audi         a4           1.8  1999     4 auto~ f        18    29 p     comp~
+##  2 audi         a4           1.8  1999     4 manu~ f        21    29 p     comp~
+##  3 audi         a4           2    2008     4 manu~ f        20    31 p     comp~
+##  4 audi         a4           2    2008     4 auto~ f        21    30 p     comp~
+##  5 audi         a4           2.8  1999     6 auto~ f        16    26 p     comp~
+##  6 audi         a4           2.8  1999     6 manu~ f        18    26 p     comp~
+##  7 audi         a4           3.1  2008     6 auto~ f        18    27 p     comp~
+##  8 audi         a4 quattro   1.8  1999     4 manu~ 4        18    26 p     comp~
+##  9 audi         a4 quattro   1.8  1999     4 auto~ 4        16    25 p     comp~
+## 10 audi         a4 quattro   2    2008     4 manu~ 4        20    28 p     comp~
 ## # ... with 224 more rows
 ```
 
@@ -399,7 +399,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/mpg-coords-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/mpg-coords-1.png)
 ]
 ---
 background-image: url(images/04/ggplot2-logo.png)
@@ -424,7 +424,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/scatter-mpg-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/scatter-mpg-1.png)
 ]
 
 ---
@@ -449,7 +449,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/scatter-smooth-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/scatter-smooth-1.png)
 ]
 ---
 background-image: url(images/04/ggplot2-logo.png)
@@ -475,7 +475,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/scatter-cyls-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/scatter-cyls-1.png)
 ]
 
 ---
@@ -500,7 +500,7 @@ ggplot(data = mpg,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/scatter-cyls-smo-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/scatter-cyls-smo-1.png)
 ]
 
 ---
@@ -525,7 +525,7 @@ ggplot(mpg,
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/count-bar-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/count-bar-1.png)
 ]
 
 ---
@@ -546,7 +546,7 @@ ggplot(mpg, aes(x = class,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/mpg-fill-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/mpg-fill-1.png)
 ]
 
 ---
@@ -569,7 +569,7 @@ ggplot(mpg, aes(x = displ)) +
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/displ-hist-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/displ-hist-1.png)
 ]
 
 ---
@@ -595,7 +595,7 @@ ggplot(mpg, aes(x = displ)) +
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -614,7 +614,7 @@ ggplot(mpg, aes(x = displ)) +
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/displ-hist-binwid-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/displ-hist-binwid-1.png)
 ]
 
 ---
@@ -635,7 +635,7 @@ ggplot(mpg, aes(x = displ)) +
 ]
 
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/displ-dens-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/displ-dens-1.png)
 ]
 
 ---
@@ -659,7 +659,7 @@ ggplot(mpg, aes(x = class,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/mpg-fill-cyl-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/mpg-fill-cyl-1.png)
 ]
 
 ---
@@ -679,7 +679,7 @@ ggplot(mpg, aes(x = class)) +
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/mpg-facet-cyl-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/mpg-facet-cyl-1.png)
 ]
 
 ---
@@ -702,7 +702,7 @@ ggplot(pris_pop,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/pris-by-age-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/pris-by-age-1.png)
 ]
 
 ---
@@ -726,7 +726,7 @@ ggplot(pris_pop,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/pris-by-age-dens-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/pris-by-age-dens-1.png)
 ]
 ---
 # Plotting continuous by categorical interactions
@@ -746,7 +746,7 @@ ggplot(pris_pop,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/pris-by-age-facet-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/pris-by-age-facet-1.png)
 ]
 
 ---
@@ -770,7 +770,7 @@ ggplot(mtcars,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/cyl-err-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/cyl-err-1.png)
 ]
 
 ---
@@ -793,7 +793,7 @@ ggplot(mtcars,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/cyl-bars-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/cyl-bars-1.png)
 ]
 
 ---
@@ -819,7 +819,7 @@ ggplot(mtcars,
 ```
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/cyl-bars-indiv-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/cyl-bars-indiv-1.png)
 ]
 ---
 # Continuous by categorical interactions
@@ -847,7 +847,7 @@ ggplot(mtcars,
 
 ]
 .pull-right[
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -858,11 +858,11 @@ ggplot(mtcars,
 .panel-name[Scatterplots]
 The best type of plot for showing the relationship between two continuous variables is a **scatterplot**.
 
-![](Week-5-Exploring-data-Graphically_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](Week-5-Exploring-data-graphically_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 .panel[
 .panel-name[Fancier Plot]
-![](Week-5-Exploring-data-Graphically_files/figure-html/fancy-mpg-1.png)
+![](Week-5-Exploring-data-graphically_files/figure-html/fancy-mpg-1.png)
 ]
 .panel[
 .panel-name[Code]
