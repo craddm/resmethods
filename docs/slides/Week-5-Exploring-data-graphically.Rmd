@@ -569,6 +569,48 @@ ggplot(mpg, aes(x = class,
 ]
 
 ---
+# Plotting multiple categorical variables
+
+.pull-left[
+The fill doesn't have to use the same variable as the `x` variable. 
+
+For example, you may want to see how each count breaks down into groups of another categorical variable.
+
+```{r mpg-fill-cyl, fig.show = "hide", fig.height = 5}
+ggplot(mpg, aes(x = class,
+                fill = factor(cyl))) +
+  geom_bar()
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-fill-cyl", "png")`)
+]
+
+---
+# Plotting multiple categorical variables
+
+.pull-left[
+Alternatively, you may want to produce different graphs for each level of the other categorical variable
+
+A nice way to do that is using **facets**, adding a `facet_wrap()` or `facet_grid()` layer to the *ggplot*.
+
+```{r mpg-facet-cyl, fig.show = "hide", fig.height = 7}
+ggplot(mpg, aes(x = class)) +
+  geom_bar() +
+  facet_wrap(~factor(cyl)) +
+  theme(axis.text.x = element_text(angle = 45))
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("mpg-facet-cyl", "png")`)
+]
+
+---
+class: inverse, center, middle
+
+# Plotting continuous variables
+
+---
 # Plotting a single continuous variable
 
 .pull-left[
@@ -666,46 +708,29 @@ ggplot(mpg, aes(x = displ)) +
 ]
 
 ---
-class: inverse, center, middle
+# Plotting two continuous variables
 
-# Plotting multiple variables
-
----
-# Plotting multiple categorical variables
+The best type of plot for showing the relationship between two continuous variables is a **scatterplot**.
 
 .pull-left[
-The fill doesn't have to use the same variable as the `x` variable. 
-
-For example, you may want to see how each count breaks down into groups of another categorical variable.
-
-```{r mpg-fill-cyl, fig.show = "hide", fig.height = 5}
-ggplot(mpg, aes(x = class,
-                fill = factor(cyl))) +
-  geom_bar()
+```{r base-scatter, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE)
 ```
 ]
 .pull-right[
-![](`r knitr::fig_chunk("mpg-fill-cyl", "png")`)
+![](`r knitr::fig_chunk("base-scatter", "png")`)
 ]
 
 ---
-# Plotting multiple categorical variables
-
-.pull-left[
-Alternatively, you may want to produce different graphs for each level of the other categorical variable
-
-A nice way to do that is using **facets**, adding a `facet_wrap()` or `facet_grid()` layer to the *ggplot*.
-
-```{r mpg-facet-cyl, fig.show = "hide", fig.height = 7}
-ggplot(mpg, aes(x = class)) +
-  geom_bar() +
-  facet_wrap(~factor(cyl)) +
-  theme(axis.text.x = element_text(angle = 45))
-```
-]
-.pull-right[
-![](`r knitr::fig_chunk("mpg-facet-cyl", "png")`)
-]
+class: inverse, middle, center
+# Continuous by categorical interactions
 
 ---
 # Continuous by categorical interactions
@@ -737,7 +762,6 @@ ggplot(pris_pop,
 
 ---
 # Continuous by categorical interactions
-
 .pull-left[
 Another way to do this would be using kernel density estimates.
 
@@ -757,8 +781,9 @@ ggplot(pris_pop,
 .pull-right[
 ![](`r knitr::fig_chunk("pris-by-age-dens", "png")`)
 ]
+
 ---
-# Plotting continuous by categorical interactions
+# Continuous by categorical interactions
 
 .pull-left[
 
@@ -889,13 +914,15 @@ boxpcyl/viocyl
 ]
 
 ---
-# Plotting two continuous variables
+class: inverse, middle, center
+# Jazzing up the plots
+
+---
+# Better labelling
 
 .panelset.sideways[
 .panel[
-.panel-name[Scatterplots]
-The best type of plot for showing the relationship between two continuous variables is a **scatterplot**.
-
+.panel-name[Basic plot]
 ```{r echo = FALSE}
 ggplot(data = mpg, 
        mapping = aes(x = displ,
@@ -908,12 +935,8 @@ ggplot(data = mpg,
 ```
 ]
 .panel[
-.panel-name[Fancier Plot]
-![](`r knitr::fig_chunk("fancy-mpg", "png")`)
-]
-.panel[
-.panel-name[Code]
-```{r fancy-mpg, fig.show = "hide", fig.height = 6, fig.width= 7}
+.panel-name[Better labels]
+```{r fancy-labels, fig.show = "hide", fig.height = 6, fig.width= 7}
 ggplot(data = mpg, 
        mapping = aes(x = displ,
                      y = hwy,
@@ -927,10 +950,165 @@ ggplot(data = mpg,
          colour = "Cylinders",
          shape = "Cylinders",
          title = expression(~bold("Figure 1")),
-         subtitle = expression(~italic("The relationship between MPG and Engine Displacement"))) + 
-    theme_classic() 
-
+         subtitle = expression(~italic("The relationship between MPG and Engine Displacement"))) 
 ```
+]
+.panel[
+.panel-name[Fancier Plot]
+```{r fancy-mpg, echo = FALSE, fig.height = 6, fig.width= 7}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE) + 
+    labs(x = "Engine displacement (litres)",
+         y = "Highway miles per gallon",
+         colour = "Cylinders",
+         shape = "Cylinders",
+         title = expression(~bold("Figure 1")),
+         subtitle = expression(~italic("The relationship between MPG and Engine Displacement"))) 
+```
+]
+]
+
+---
+# Nicer overall **theme**
+
+.panelset.sideways[
+.panel[
+.panel-name[Themes]
+**Themes** are the way `ggplot()` sets the overall look of the plots.
+
+These can control things like:
+- The colour of the background (e.g. grey or white)
+- The presence of the gridlines in the background
+- The choice and size of fonts for text
+
+There are several default themes built in!
+
+]
+.panel[
+.panel-name[Basic plot]
+```{r echo = FALSE}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE)
+```
+]
+.panel[
+.panel-name[theme_bw()]
+```{r bw-theme, fig.show = "hide", fig.height = 6, fig.width= 7}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE) + 
+    theme_bw() 
+```
+]
+.panel[
+.panel-name[BW plot]
+![](`r knitr::fig_chunk("bw-theme", "png")`)
+]
+.panel[
+.panel-name[theme_classic()]
+```{r classic-theme, fig.show = "hide", fig.height = 6, fig.width= 7}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE) + 
+    theme_classic()
+```
+]
+.panel[
+.panel-name[Classic plot]
+![](`r knitr::fig_chunk("classic-theme", "png")`)
+]
+]
+
+---
+# Changing the colours 
+
+.panelset.sideways[
+.panel[
+.panel-name[Basic plot]
+```{r echo = FALSE}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+    geom_point(size = 3,
+               alpha = 0.5,
+               aes(shape = factor(cyl))) + 
+    geom_smooth(method = "lm", se = FALSE)
+```
+]
+.panel[
+.panel-name[Colour brewer]
+```{r col-plot, fig.show = "hide"}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+  geom_point(size = 3,
+             alpha = 0.5,
+             aes(shape = factor(cyl))) + 
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_colour_brewer(palette = "Dark2") +
+  theme_classic()
+```
+]
+.panel[
+.panel-name[New plot]
+![](`r knitr::fig_chunk("col-plot", "png")`)
+]
+]
+
+---
+# One final plot
+
+.panelset[
+.panel[
+.panel-name[Code]
+```{r final-plot, fig.show = "hide", fig.width = 7}
+ggplot(data = mpg, 
+       mapping = aes(x = displ,
+                     y = hwy,
+                     colour = factor(cyl))) +
+  geom_point(size = 3,
+             alpha = 0.5,
+             aes(shape = factor(cyl))) + 
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Engine displacement (litres)",
+         y = "Highway miles per gallon",
+         colour = "Cylinders",
+         shape = "Cylinders",
+         title = expression(~bold("Figure 1")),
+         subtitle = expression(~italic("The relationship between MPG and Engine Displacement"))) +
+  scale_colour_brewer(palette = "Dark2") +
+  theme_classic()
+```
+]
+.panel[
+.panel-name[The plot]
+.center[
+![](`r knitr::fig_chunk("final-plot", "png")`)
+]
 ]
 ]
 
