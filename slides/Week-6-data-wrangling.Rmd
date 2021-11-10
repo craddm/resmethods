@@ -15,7 +15,6 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-xaringanExtra::use_webcam()
 xaringanExtra::use_tile_view()
 xaringanExtra::use_tachyons()
 xaringanExtra::use_extra_styles()
@@ -58,6 +57,33 @@ ggplot(data = mpg,
 ---
 class: middle, center, inverse
 # Importing your data
+
+---
+# Fear of Crime Dataset
+
+[Ellis & Renouf (2018)](https://doi.org/10.1080/14789949.2017.1410562) - the relationship between fear of crime and various personality measures.
+
+Their data is openly available, stored as text in a *comma-separated-values* format (*.csv*).
+
+Once again, we can use the import button or some code (with `read_csv()`) to load this data in and automatically format it into a *tibble*.
+
+```{r foc-dataset, eval = FALSE}
+library(readr)
+FearofCrime <- read_csv("data/FearofCrime.CSV")
+```
+
+---
+# Fear of Crime Dataset
+
+Ellis & Renouf (2018) collected data online using Qualtrics.
+
+The file contains one column for each question that the participants answered, for a total of 169(!) columns.
+
+Each row is a single participant's answers, and their demographic information.
+
+```{r}
+FearofCrime
+```
 
 ---
 # Prison population 
@@ -222,21 +248,8 @@ background-size: 6%
 background-position: 90% 5%
 
 # Selecting columns
-.large[
+
 Note that you can also tell `select()` to *remove* columns using the minus (*-*) sign.
-]
-```{r}
-head(FearofCrime, 6)
-```
-
----
-background-image: url(images/05/dplyr-logo.png)
-background-size: 6%
-background-position: 90% 5%
-
-# Selecting columns
-
-Here, I remove a few columns that don't contain any useful information.
 
 ```{r}
 select(FearofCrime, -ResponseSet, -Name, -Status, -ExternalDataReference)
