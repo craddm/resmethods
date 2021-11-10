@@ -1,6 +1,6 @@
 ---
-title: "Importing, transforming, and summarising your data"
-date: "10/11/2020"
+title: "Manipulating and summarising data"
+date: "16/11/2021"
 output:
   xaringan::moon_reader:
     css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
@@ -60,95 +60,6 @@ class: middle, center, inverse
 # Importing your data
 
 ---
-# Different types of file
-
-Data comes in many different shapes, sizes, and formats.
-
-The most common file formats you'll deal with are either Excel files or text files, but you may also find dealing with SPSS files useful.
-
-Fortunately, R has several functions and packages for importing data!
-
-|File formats| File extension| Functions| Package|
-|-|-|-|-|
-|SPSS  | .sav| **read_sav()**| library(haven)|
-|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
-|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
-
-
----
-# Importing data into R
-
-
-.pull-left[
-## Comma-separated values
-![:scale 90%](images/05/foc_csv.png)
-]
-.pull-right[
-## Excel spreadsheets
-![:scale 90%](images/05/excel_style.png)
-]
-
-
----
-# Fear of Crime Dataset
-
-[Ellis & Renouf (2018)](https://doi.org/10.1080/14789949.2017.1410562) - the relationship between fear of crime and various personality measures.
-
-Their data is openly available, stored as text in a *comma-separated-values* format (*.csv*).
-
-Once again, we can use the import button or some code (with **read_csv()**) to load this data in and automatically format it into a *tibble*.
-
-```{r foc-dataset, eval = FALSE}
-library(readr)
-FearofCrime <- read_csv("data/FearofCrime.CSV")
-```
-
-See also [Ellis & Merdian, 2015](https://doi.org/10.3389/fpsyg.2015.01782), Frontiers in Psychology
-
----
-# Fear of Crime Dataset
-
-Ellis & Renouf (2018) collected data online using Qualtrics.
-
-The file contains one column for each question that the participants answered, for a total of 169(!) columns.
-
-Each row is a single participant's answers, and their demographic information.
-
-```{r}
-FearofCrime
-```
-
----
-background-image: url(images/05/import-data-button.png)
-background-size: contain
-class: inverse
-
----
-background-image: url(images/05/import-text-dialog.png)
-background-size: contain
-class: inverse
-
----
-background-image: url(images/05/import-text-browse.png)
-background-size: contain
-class: inverse
-
----
-background-image: url(images/05/import-text-url.png)
-background-size: contain
-class: inverse
-
----
-background-image: url(images/05/import-text-code-prev.png)
-background-size: contain
-class: inverse
-
----
-background-image: url(images/05/import-foc.png)
-background-size: contain
-class: inverse
-
----
 # Prison population 
 
 Last week, we looked at some data regarding the UK's prison population.
@@ -161,7 +72,7 @@ prison_pop <- read_excel("data/prison-population-data-tool-31-december-2017.xlsx
                          sheet = "PT Data")
 ```
 
-We use the **read_excel()** function to read Excel files.
+We use the `read_excel()` function to read Excel files.
 
 Note how the file name and location come first, and then I specify a specific *sheet*.
 
@@ -185,7 +96,7 @@ class: inverse
 ---
 # Prison population
 
-Once the data is imported, we have a *tibble*.
+Once the data is imported, we have a `tibble`.
 
 We can immediately see there are 6 columns with 22409 rows.
 
@@ -213,7 +124,7 @@ With datasets like those we've loaded, there are often organisational issues.
 
 For example, there could be many columns or rows we don't need, or the data would make more sense if it were sorted.
 
-This is where **dplyr** comes in!
+This is where `dplyr` comes in!
 
 |Function |Effect|
 |------------|----|
@@ -312,7 +223,7 @@ background-position: 90% 5%
 
 # Selecting columns
 .large[
-Note that you can also tell **select()** to *remove* columns using the minus (*-*) sign.
+Note that you can also tell `select()` to *remove* columns using the minus (*-*) sign.
 ]
 ```{r}
 head(FearofCrime, 6)
@@ -398,7 +309,7 @@ A common task when analyzing data is to create summaries of statistical characte
 
 Here I calculate the *mean*, *standard deviation*, and *variance* of the State Anxiety variable. 
 
-Other possible summmary functions (other than **mean()**, **sd()**, or **var()**) include **max()**, **min()**, **IQR()**, or **median()**.
+Other possible summmary functions (other than `mean()`, `sd()`, or `var()`) include `max()`, `min()`, `IQR()`, or `median()`.
 ]
 .pull-right[
 ```{r}
@@ -416,7 +327,7 @@ background-position: 90% 5%
 
 # Grouping observations
 
-**group_by()** is used to organise data frames into groups according to categorical variables. 
+`group_by()` is used to organise data frames into groups according to categorical variables. 
 
 ```{r}
 grouped_crime <- group_by(crime, sex, victim_crime)
@@ -430,7 +341,7 @@ background-position: 90% 5%
 
 # Summarising groups
 
-Once data is *grouped*, the most common thing to do is to **summarise()** those groups.
+Once data is *grouped*, the most common thing to do is to `summarise()` those groups.
 
 ```{r}
 summarise(grouped_crime,
@@ -493,7 +404,7 @@ background-position: 90% 5%
 
 # Filtering rows
 
-We can use the **filter()** function to select only the rows we're interested in, using *logical conditions* and *relational operators*.
+We can use the `filter()` function to select only the rows we're interested in, using *logical conditions* and *relational operators*.
 
 ```{r filter-pris}
 filter(prison_pop,
@@ -533,7 +444,7 @@ background-position: 90% 5%
 
 # Filtering rows
 
-We can have multiple *conditions* for selection with **filter()**.
+We can have multiple *conditions* for selection with `filter()`.
 
 Suppose we only wanted to include rows where Population is over 300 but under 600.
 
@@ -577,7 +488,7 @@ background-position: 90% 5%
 
 # Pipes
 
-A simpler way is to use *pipes* (**%>%**)
+A simpler way is to use *pipes* (`%>%`)
 
 *pipes* can be read as meaning "AND THEN"
 

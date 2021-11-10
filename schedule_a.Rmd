@@ -31,7 +31,9 @@ knitr::opts_chunk$set(echo = FALSE)
 - [Slides](slides/Week-5-Exploring-data-Graphically.html)
 - [PDF](slides/Week-5-Exploring-data-Graphically.pdf)
 
-### 5. 16/11/2021, Importing, Transforming, and Summarising Data
+### 5. 16/11/2021, Transforming and Summarising Data
+- [Slides](slides/Week-6-data-wrangling.html)
+- [PDF](slides/Week-6-data-wrangling.pdf)
 
 ### 6. 23/11/2021, The Basics of Statistical Testing
 
