@@ -1,5 +1,5 @@
 ---
-title: "Manipulating and summarising data"
+title: "Transforming and summarising data"
 date: "16/11/2021"
 output:
   xaringan::moon_reader:

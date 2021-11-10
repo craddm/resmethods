@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Manipulating and summarising data</title>
+    <title>Transforming and summarising data</title>
     <meta charset="utf-8" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
@@ -17,7 +17,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Manipulating and summarising data
+# Transforming and summarising data
 ### 16/11/2021
 
 ---
@@ -85,19 +85,19 @@ FearofCrime
 
 ```
 ## # A tibble: 301 x 169
-##    ResponseID        ResponseSet Name  ExternalDataRef~ Status StartDate EndDate
-##    &lt;chr&gt;             &lt;chr&gt;       &lt;chr&gt; &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  
-##  1 R_ai4tgG1GHNdVdqt Default Re~ Anon~ NA                    0 19/10/14~ 19/10/~
-##  2 R_d5OiATV0IJiBbMx Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  3 R_aaBVZUe9mlGiDpH Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  4 R_6nxInLKQv2bucQZ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  5 R_6SCYbhOP9BG5CgR Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  6 R_5pCxWA6qOQdnVyd Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  7 R_d1nji6V7FCppn0x Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  8 R_9v6ZgUhKflVX6yp Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-##  9 R_5Bg7VjBhOZja2gt Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-## 10 R_9Sv17lQGWXwo23z Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~
-## # ... with 291 more rows, and 162 more variables: Finished &lt;dbl&gt;, ...
+##    ResponseID  ResponseSet Name  ExternalDataRef~ Status StartDate EndDate Finished
+##    &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt; &lt;lgl&gt;             &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;
+##  1 R_ai4tgG1G~ Default Re~ Anon~ NA                    0 19/10/14~ 19/10/~        1
+##  2 R_d5OiATV0~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  3 R_aaBVZUe9~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  4 R_6nxInLKQ~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  5 R_6SCYbhOP~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  6 R_5pCxWA6q~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  7 R_d1nji6V7~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  8 R_9v6ZgUhK~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+##  9 R_5Bg7VjBh~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+## 10 R_9Sv17lQG~ Default Re~ Anon~ NA                    0 20/10/14~ 20/10/~        1
+## # ... with 291 more rows, and 161 more variables: ...
 ```
 
 ---
@@ -149,18 +149,18 @@ prison_pop
 
 ```
 ## # A tibble: 22,409 x 6
-##    View          Date   Establishment Sex   `Age / Custody / Nationa~ Population
-##    &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;
-##  1 a Establishm~ 2015-~ Altcourse     Male  Adults (21+)                     922
-##  2 a Establishm~ 2015-~ Altcourse     Male  Juveniles and Young Adul~        169
-##  3 a Establishm~ 2015-~ Ashfield      Male  Adults (21+)                     389
-##  4 a Establishm~ 2015-~ Askham Grange Fema~ Adults (21+)                      NA
-##  5 a Establishm~ 2015-~ Askham Grange Fema~ Juveniles and Young Adul~         NA
-##  6 a Establishm~ 2015-~ Aylesbury     Male  Adults (21+)                     113
-##  7 a Establishm~ 2015-~ Aylesbury     Male  Juveniles and Young Adul~        268
-##  8 a Establishm~ 2015-~ Bedford       Male  Adults (21+)                     459
-##  9 a Establishm~ 2015-~ Bedford       Male  Juveniles and Young Adul~         30
-## 10 a Establishm~ 2015-~ Belmarsh      Male  Adults (21+)                     794
+##    View           Date   Establishment Sex    `Age / Custody / National~ Population
+##    &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;                           &lt;dbl&gt;
+##  1 a Establishme~ 2015-~ Altcourse     Male   Adults (21+)                      922
+##  2 a Establishme~ 2015-~ Altcourse     Male   Juveniles and Young Adult~        169
+##  3 a Establishme~ 2015-~ Ashfield      Male   Adults (21+)                      389
+##  4 a Establishme~ 2015-~ Askham Grange Female Adults (21+)                       NA
+##  5 a Establishme~ 2015-~ Askham Grange Female Juveniles and Young Adult~         NA
+##  6 a Establishme~ 2015-~ Aylesbury     Male   Adults (21+)                      113
+##  7 a Establishme~ 2015-~ Aylesbury     Male   Juveniles and Young Adult~        268
+##  8 a Establishme~ 2015-~ Bedford       Male   Adults (21+)                      459
+##  9 a Establishme~ 2015-~ Bedford       Male   Juveniles and Young Adult~         30
+## 10 a Establishme~ 2015-~ Belmarsh      Male   Adults (21+)                      794
 ## # ... with 22,399 more rows
 ```
 
@@ -354,25 +354,25 @@ select(FearofCrime, -ResponseSet, -Name, -Status, -ExternalDataReference)
 
 ```
 ## # A tibble: 301 x 165
-##    ResponseID  StartDate EndDate Finished `Consent Form / T~   sex   age hexaco1
-##    &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-##  1 R_ai4tgG1G~ 19/10/14~ 19/10/~        1                  1     2    26       4
-##  2 R_d5OiATV0~ 20/10/14~ 20/10/~        1                  1     2    66       2
-##  3 R_aaBVZUe9~ 20/10/14~ 20/10/~        1                  1     1    41       1
-##  4 R_6nxInLKQ~ 20/10/14~ 20/10/~        1                  1     1    46       1
-##  5 R_6SCYbhOP~ 20/10/14~ 20/10/~        1                  1     2    53       2
-##  6 R_5pCxWA6q~ 20/10/14~ 20/10/~        1                  1     1    33       2
-##  7 R_d1nji6V7~ 20/10/14~ 20/10/~        1                  1     2    41       1
-##  8 R_9v6ZgUhK~ 20/10/14~ 20/10/~        1                  1     1    39       2
-##  9 R_5Bg7VjBh~ 20/10/14~ 20/10/~        1                  1     2    38       1
-## 10 R_9Sv17lQG~ 20/10/14~ 20/10/~        1                  1     2    19       4
+##    ResponseID  StartDate  EndDate Finished `Consent Form / Thi~   sex   age hexaco1
+##    &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1 R_ai4tgG1G~ 19/10/14 ~ 19/10/~        1                    1     2    26       4
+##  2 R_d5OiATV0~ 20/10/14 ~ 20/10/~        1                    1     2    66       2
+##  3 R_aaBVZUe9~ 20/10/14 ~ 20/10/~        1                    1     1    41       1
+##  4 R_6nxInLKQ~ 20/10/14 ~ 20/10/~        1                    1     1    46       1
+##  5 R_6SCYbhOP~ 20/10/14 ~ 20/10/~        1                    1     2    53       2
+##  6 R_5pCxWA6q~ 20/10/14 ~ 20/10/~        1                    1     1    33       2
+##  7 R_d1nji6V7~ 20/10/14 ~ 20/10/~        1                    1     2    41       1
+##  8 R_9v6ZgUhK~ 20/10/14 ~ 20/10/~        1                    1     1    39       2
+##  9 R_5Bg7VjBh~ 20/10/14 ~ 20/10/~        1                    1     2    38       1
+## 10 R_9Sv17lQG~ 20/10/14 ~ 20/10/~        1                    1     2    19       4
 ## # ... with 291 more rows, and 157 more variables: hexaco2 &lt;dbl&gt;, hexaco3 &lt;dbl&gt;,
 ## #   hexaco4 &lt;dbl&gt;, hexaco5 &lt;dbl&gt;, hexaco6 &lt;dbl&gt;, hexaco7 &lt;dbl&gt;, hexaco8 &lt;dbl&gt;,
-## #   hexaco9 &lt;dbl&gt;, hexaco10 &lt;dbl&gt;, hexaco11 &lt;dbl&gt;, hexaco12 &lt;dbl&gt;,
-## #   hexaco13 &lt;dbl&gt;, hexaco14 &lt;dbl&gt;, hexaco15 &lt;dbl&gt;, hexaco16 &lt;dbl&gt;,
-## #   hexaco17 &lt;dbl&gt;, hexaco18 &lt;dbl&gt;, hexaco19 &lt;dbl&gt;, hexaco20 &lt;dbl&gt;,
-## #   hexaco21 &lt;dbl&gt;, hexaco22 &lt;dbl&gt;, hexaco23 &lt;dbl&gt;, hexaco24 &lt;dbl&gt;,
-## #   hexaco25 &lt;dbl&gt;, hexaco26 &lt;dbl&gt;, hexaco27 &lt;dbl&gt;, hexaco28 &lt;dbl&gt;, ...
+## #   hexaco9 &lt;dbl&gt;, hexaco10 &lt;dbl&gt;, hexaco11 &lt;dbl&gt;, hexaco12 &lt;dbl&gt;, hexaco13 &lt;dbl&gt;,
+## #   hexaco14 &lt;dbl&gt;, hexaco15 &lt;dbl&gt;, hexaco16 &lt;dbl&gt;, hexaco17 &lt;dbl&gt;,
+## #   hexaco18 &lt;dbl&gt;, hexaco19 &lt;dbl&gt;, hexaco20 &lt;dbl&gt;, hexaco21 &lt;dbl&gt;,
+## #   hexaco22 &lt;dbl&gt;, hexaco23 &lt;dbl&gt;, hexaco24 &lt;dbl&gt;, hexaco25 &lt;dbl&gt;,
+## #   hexaco26 &lt;dbl&gt;, hexaco27 &lt;dbl&gt;, hexaco28 &lt;dbl&gt;, hexaco29 &lt;dbl&gt;, ...
 ```
 
 ---
@@ -395,20 +395,20 @@ crime
 
 ```
 ## # A tibble: 301 x 15
-##    Participant      sex     age victim_crime     H     E     X     A     C     O
-##    &lt;chr&gt;            &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 R_01TjXgC191rVS~ male     55 yes            3.7   3     3.4   3.9   3.2   3.6
-##  2 R_0dN5YeULcyms2~ fema~    20 no             2.5   3.1   2.5   2.4   2.2   3.1
-##  3 R_0DPiPYWhncWS1~ male     57 yes            2.6   3.1   3.3   3.1   4.3   2.8
-##  4 R_0f7bSsH6Up0ye~ male     19 no             3.5   1.8   3.3   3.4   2.1   2.7
-##  5 R_0rov2RoSkPEOv~ fema~    20 no             3.3   3.4   3.9   3.2   2.8   3.9
-##  6 R_0wioqGERxElVT~ fema~    20 no             2.6   2.6   3     2.6   2.9   3.4
-##  7 R_0wRO8lNe0kusH~ male     34 yes            3.2   2.5   3.2   2.8   4     3.2
-##  8 R_116nEdFsGDrKK~ fema~    19 no             2.9   4     3.9   4.2   3.7   1.9
-##  9 R_11ZmBd5VEkW45~ fema~    19 yes            3.4   3.4   3.3   3.4   3.2   3.2
-## 10 R_12i26Qzosmrr1~ male     20 no             2.4   2.1   1.8   2.2   3.4   2.9
-## # ... with 291 more rows, and 5 more variables: SA &lt;dbl&gt;, TA &lt;dbl&gt;, OHQ &lt;dbl&gt;,
-## #   FoC &lt;dbl&gt;, Foc2 &lt;dbl&gt;
+##    Participant   sex     age victim_crime     H     E     X     A     C     O    SA
+##    &lt;chr&gt;         &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 R_01TjXgC191~ male     55 yes            3.7   3     3.4   3.9   3.2   3.6  1.15
+##  2 R_0dN5YeULcy~ fema~    20 no             2.5   3.1   2.5   2.4   2.2   3.1  2.05
+##  3 R_0DPiPYWhnc~ male     57 yes            2.6   3.1   3.3   3.1   4.3   2.8  2   
+##  4 R_0f7bSsH6Up~ male     19 no             3.5   1.8   3.3   3.4   2.1   2.7  1.55
+##  5 R_0rov2RoSkP~ fema~    20 no             3.3   3.4   3.9   3.2   2.8   3.9  1.3 
+##  6 R_0wioqGERxE~ fema~    20 no             2.6   2.6   3     2.6   2.9   3.4  2.55
+##  7 R_0wRO8lNe0k~ male     34 yes            3.2   2.5   3.2   2.8   4     3.2  1.85
+##  8 R_116nEdFsGD~ fema~    19 no             2.9   4     3.9   4.2   3.7   1.9  1.1 
+##  9 R_11ZmBd5VEk~ fema~    19 yes            3.4   3.4   3.3   3.4   3.2   3.2  2.2 
+## 10 R_12i26Qzosm~ male     20 no             2.4   2.1   1.8   2.2   3.4   2.9  2.15
+## # ... with 291 more rows, and 4 more variables: TA &lt;dbl&gt;, OHQ &lt;dbl&gt;, FoC &lt;dbl&gt;,
+## #   Foc2 &lt;dbl&gt;
 ```
 
 ---
@@ -552,20 +552,20 @@ grouped_crime
 ```
 ## # A tibble: 301 x 15
 ## # Groups:   sex, victim_crime [4]
-##    Participant      sex     age victim_crime     H     E     X     A     C     O
-##    &lt;chr&gt;            &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 R_01TjXgC191rVS~ male     55 yes            3.7   3     3.4   3.9   3.2   3.6
-##  2 R_0dN5YeULcyms2~ fema~    20 no             2.5   3.1   2.5   2.4   2.2   3.1
-##  3 R_0DPiPYWhncWS1~ male     57 yes            2.6   3.1   3.3   3.1   4.3   2.8
-##  4 R_0f7bSsH6Up0ye~ male     19 no             3.5   1.8   3.3   3.4   2.1   2.7
-##  5 R_0rov2RoSkPEOv~ fema~    20 no             3.3   3.4   3.9   3.2   2.8   3.9
-##  6 R_0wioqGERxElVT~ fema~    20 no             2.6   2.6   3     2.6   2.9   3.4
-##  7 R_0wRO8lNe0kusH~ male     34 yes            3.2   2.5   3.2   2.8   4     3.2
-##  8 R_116nEdFsGDrKK~ fema~    19 no             2.9   4     3.9   4.2   3.7   1.9
-##  9 R_11ZmBd5VEkW45~ fema~    19 yes            3.4   3.4   3.3   3.4   3.2   3.2
-## 10 R_12i26Qzosmrr1~ male     20 no             2.4   2.1   1.8   2.2   3.4   2.9
-## # ... with 291 more rows, and 5 more variables: SA &lt;dbl&gt;, TA &lt;dbl&gt;, OHQ &lt;dbl&gt;,
-## #   FoC &lt;dbl&gt;, Foc2 &lt;dbl&gt;
+##    Participant   sex     age victim_crime     H     E     X     A     C     O    SA
+##    &lt;chr&gt;         &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 R_01TjXgC191~ male     55 yes            3.7   3     3.4   3.9   3.2   3.6  1.15
+##  2 R_0dN5YeULcy~ fema~    20 no             2.5   3.1   2.5   2.4   2.2   3.1  2.05
+##  3 R_0DPiPYWhnc~ male     57 yes            2.6   3.1   3.3   3.1   4.3   2.8  2   
+##  4 R_0f7bSsH6Up~ male     19 no             3.5   1.8   3.3   3.4   2.1   2.7  1.55
+##  5 R_0rov2RoSkP~ fema~    20 no             3.3   3.4   3.9   3.2   2.8   3.9  1.3 
+##  6 R_0wioqGERxE~ fema~    20 no             2.6   2.6   3     2.6   2.9   3.4  2.55
+##  7 R_0wRO8lNe0k~ male     34 yes            3.2   2.5   3.2   2.8   4     3.2  1.85
+##  8 R_116nEdFsGD~ fema~    19 no             2.9   4     3.9   4.2   3.7   1.9  1.1 
+##  9 R_11ZmBd5VEk~ fema~    19 yes            3.4   3.4   3.3   3.4   3.2   3.2  2.2 
+## 10 R_12i26Qzosm~ male     20 no             2.4   2.1   1.8   2.2   3.4   2.9  2.15
+## # ... with 291 more rows, and 4 more variables: TA &lt;dbl&gt;, OHQ &lt;dbl&gt;, FoC &lt;dbl&gt;,
+## #   Foc2 &lt;dbl&gt;
 ```
 
 ---
@@ -583,10 +583,6 @@ summarise(grouped_crime,
           state_anxiety = mean(SA),
           sd_SA = sd(SA),
           var_SA = var(SA))
-```
-
-```
-## `summarise()` has grouped output by 'sex'. You can override using the `.groups` argument.
 ```
 
 ```
@@ -680,18 +676,18 @@ filter(prison_pop,
 
 ```
 ## # A tibble: 2,042 x 6
-##    View          Date   Establishment Sex   `Age / Custody / Nationa~ Population
-##    &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;
-##  1 a Establishm~ 2015-~ Altcourse     Male  Adults (21+)                     922
-##  2 a Establishm~ 2015-~ Altcourse     Male  Juveniles and Young Adul~        169
-##  3 a Establishm~ 2015-~ Ashfield      Male  Adults (21+)                     389
-##  4 a Establishm~ 2015-~ Askham Grange Fema~ Adults (21+)                      NA
-##  5 a Establishm~ 2015-~ Askham Grange Fema~ Juveniles and Young Adul~         NA
-##  6 a Establishm~ 2015-~ Aylesbury     Male  Adults (21+)                     113
-##  7 a Establishm~ 2015-~ Aylesbury     Male  Juveniles and Young Adul~        268
-##  8 a Establishm~ 2015-~ Bedford       Male  Adults (21+)                     459
-##  9 a Establishm~ 2015-~ Bedford       Male  Juveniles and Young Adul~         30
-## 10 a Establishm~ 2015-~ Belmarsh      Male  Adults (21+)                     794
+##    View           Date   Establishment Sex    `Age / Custody / National~ Population
+##    &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;                           &lt;dbl&gt;
+##  1 a Establishme~ 2015-~ Altcourse     Male   Adults (21+)                      922
+##  2 a Establishme~ 2015-~ Altcourse     Male   Juveniles and Young Adult~        169
+##  3 a Establishme~ 2015-~ Ashfield      Male   Adults (21+)                      389
+##  4 a Establishme~ 2015-~ Askham Grange Female Adults (21+)                       NA
+##  5 a Establishme~ 2015-~ Askham Grange Female Juveniles and Young Adult~         NA
+##  6 a Establishme~ 2015-~ Aylesbury     Male   Adults (21+)                      113
+##  7 a Establishme~ 2015-~ Aylesbury     Male   Juveniles and Young Adult~        268
+##  8 a Establishme~ 2015-~ Bedford       Male   Adults (21+)                      459
+##  9 a Establishme~ 2015-~ Bedford       Male   Juveniles and Young Adult~         30
+## 10 a Establishme~ 2015-~ Belmarsh      Male   Adults (21+)                      794
 ## # ... with 2,032 more rows
 ```
 
@@ -741,18 +737,18 @@ filter(prison_pop,
 
 ```
 ## # A tibble: 487 x 6
-##    View          Date   Establishment Sex   `Age / Custody / Nationa~ Population
-##    &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                          &lt;dbl&gt;
-##  1 a Establishm~ 2015-~ Ashfield      Male  Adults (21+)                     389
-##  2 a Establishm~ 2015-~ Bedford       Male  Adults (21+)                     459
-##  3 a Establishm~ 2015-~ Brinsford     Male  Juveniles and Young Adul~        349
-##  4 a Establishm~ 2015-~ Bristol       Male  Adults (21+)                     553
-##  5 a Establishm~ 2015-~ Bronzefield   Fema~ Adults (21+)                     459
-##  6 a Establishm~ 2015-~ Buckley Hall  Male  Adults (21+)                     440
-##  7 a Establishm~ 2015-~ Coldingley    Male  Adults (21+)                     515
-##  8 a Establishm~ 2015-~ Deerbolt      Male  Juveniles and Young Adul~        311
-##  9 a Establishm~ 2015-~ Eastwood Park Fema~ Adults (21+)                     331
-## 10 a Establishm~ 2015-~ Erlestoke     Male  Adults (21+)                     514
+##    View           Date   Establishment Sex    `Age / Custody / National~ Population
+##    &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;                           &lt;dbl&gt;
+##  1 a Establishme~ 2015-~ Ashfield      Male   Adults (21+)                      389
+##  2 a Establishme~ 2015-~ Bedford       Male   Adults (21+)                      459
+##  3 a Establishme~ 2015-~ Brinsford     Male   Juveniles and Young Adult~        349
+##  4 a Establishme~ 2015-~ Bristol       Male   Adults (21+)                      553
+##  5 a Establishme~ 2015-~ Bronzefield   Female Adults (21+)                      459
+##  6 a Establishme~ 2015-~ Buckley Hall  Male   Adults (21+)                      440
+##  7 a Establishme~ 2015-~ Coldingley    Male   Adults (21+)                      515
+##  8 a Establishme~ 2015-~ Deerbolt      Male   Juveniles and Young Adult~        311
+##  9 a Establishme~ 2015-~ Eastwood Park Female Adults (21+)                      331
+## 10 a Establishme~ 2015-~ Erlestoke     Male   Adults (21+)                      514
 ## # ... with 477 more rows
 ```
 
@@ -784,10 +780,6 @@ temp_pris &lt;- summarise(temp_pris,
                        total_pop = sum(Population, na.rm = TRUE),
                        max_pop = max(Population, na.rm = TRUE))
 ```
-
-```
-## `summarise()` has grouped output by 'Sex'. You can override using the `.groups` argument.
-```
 ---
 background-image: url(images/05/dplyr-logo.png)
 background-size: 6%
@@ -812,18 +804,14 @@ prison_pop %&gt;%
 ```
 
 ```
-## `summarise()` has grouped output by 'Sex'. You can override using the `.groups` argument.
-```
-
-```
 ## # A tibble: 4 x 6
 ## # Groups:   Sex [2]
-##   Sex    `Age / Custody / Nationality / O~ mean_pop median_pop total_pop max_pop
-##   &lt;chr&gt;  &lt;chr&gt;                                &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 Female Adults (21+)                         356          333      3560     480
-## 2 Female Juveniles and Young Adults (15-2~     18.6         19       167      35
-## 3 Male   Adults (21+)                         717.         677     76730    1587
-## 4 Male   Juveniles and Young Adults (15-2~    101.          54      5559     490
+##   Sex    `Age / Custody / Nationality / Offe~ mean_pop median_pop total_pop max_pop
+##   &lt;chr&gt;  &lt;chr&gt;                                   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Female Adults (21+)                            356          333      3560     480
+## 2 Female Juveniles and Young Adults (15-20)       18.6         19       167      35
+## 3 Male   Adults (21+)                            717.         677     76730    1587
+## 4 Male   Juveniles and Young Adults (15-20)      101.          54      5559     490
 ```
 
 
