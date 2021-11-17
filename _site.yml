@@ -26,7 +26,7 @@ navbar:
       - text: "5: Transforming and Summarising Data"
         href: slides/Week-6-data-wrangling.html
       - text: "6: The Basics of Statistical Testing"
-        #href: slides/Week-7-NHST-two-means.html
+        href: slides/Week-7-NHST-two-means.html
       - text: "7: Correlation and Regression"
         #href: slides/Week-8-Correlation-Regression.html
       - text: "8: Multiple Regression and ANOVA"

@@ -36,6 +36,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF](slides/Week-6-data-wrangling.pdf)
 
 ### 6. 23/11/2021, The Basics of Statistical Testing
+- [Slides](slides/Week-7-NHST-two-means.html)
+- [PDF](slides/Week-6-NHST-two-means.pdf)
 
 ### 7. 30/11/2021, Correlation and Regression
 
