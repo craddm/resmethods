@@ -257,6 +257,11 @@ t.test(FoC ~ victim_crime,
        data = crime,
        paired = FALSE)
 ```
+```{r inital-t-save, echo = FALSE}
+t.test(FoC ~ victim_crime,
+       data = crime,
+       paired = FALSE) -> t_test_output
+```
 ]
 
 ---
@@ -266,7 +271,7 @@ t.test(FoC ~ victim_crime,
 .large[
 The output shows the key statistics in one-line:
 
-"**t = 0.46069, df = 299, p-value = 0.6454**"
+"**t = `r round(t_test_output$statistic, 3)`, df = `r round(t_test_output$parameter, 3)`, p-value = `r round(t_test_output$p.value, 3)`**"
 
 A p-value is the probability of obtaining this difference between means if the null hypothesis is true.
 
