@@ -1,0 +1,776 @@
+---
+title: "Correlation and regression"
+date: "30/11/2021"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts", "xaringan-themer.css", "css/my-theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+      beforeInit: "js/macros.js"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+xaringanExtra::use_webcam()
+xaringanExtra::use_tile_view()
+xaringanExtra::use_extra_styles()
+knitr::opts_chunk$set(fig.asp = .618,
+                      fig.width = 6)
+library(tidyverse)
+library(sjPlot)
+library(copula)
+library(stargazer)
+library(xaringanthemer)
+style_mono_light(base_color = "#23395b",
+                 base_font_size = "21px",
+                 link_color = "#C80039")
+crime <- read_csv("data/crime.csv")
+```
+
+# Null Hypothesis Significance Testing (NHST)
+
+.large[
+Think back to our previous questions:
+
+1.  Do men and women differ in terms of their fear of crime?
+
+2.  Are people who have been a victim of crime more fearful of crime?
+
+The basis of NHST is to phrase these questions as: 
+
+If there is only one population, how likely is it that our two samples have values this different from each other?
+]
+
+---
+# Performing *t*-tests in R
+
+.pull-left[
+The tilde (~) symbol in R usually means "modelled by" 
+
+`FoC ~ victim_crime` means `FoC modelled by victim_crime`.
+
+`data = crime` tells R to look in the `crime` data frame for the data.
+
+`paired = FALSE` tells R that this is an *independent samples* test. 
+
+]
+.pull-right[
+```{r inital-t}
+t.test(FoC ~ victim_crime,
+       data = crime,
+       paired = FALSE)
+```
+]
+
+---
+class: inverse, middle, center
+# Correlation and statistical relationships
+
+---
+# Correlation 
+
+.large[
+
+Correlation measures the strength and direction of an association between two continuous variables.
+]
+.center[
+```{r corr-dir-again, fig.width = 7.6, fig.height = 3, echo = FALSE}
+pos_corr <- matrix(0.9, 2, 2)
+diag(pos_corr) <- 1
+neg_corr <- matrix(-.9, 2, 2)
+diag(neg_corr) <- 1
+no_corr <- matrix(0, 2, 2)
+diag(no_corr) <- 1
+corr_examps <- data.frame(rbind(MASS::mvrnorm(200, rep(0, 2), Sigma = pos_corr),
+                          MASS::mvrnorm(200, rep(0, 2), Sigma = neg_corr),
+                          MASS::mvrnorm(200, rep(0, 2), Sigma = no_corr)),
+                          direction = rep(c("positive", "negative", "none"),
+                                          each = 200))
+names(corr_examps) <- c("X", "Y", "direction")
+ggplot(corr_examps, aes(x = X, y = Y)) + 
+  geom_point() +
+  facet_wrap(~direction) +
+  theme_classic() +
+  theme(text = element_text(size = 16))
+```
+]
+
+---
+# Correlation
+
+How related are the variables in the Fear of Crime dataset?
+
+```{r}
+head(crime)
+```
+
+---
+# Correlation
+
+.pull-left[
+
+Let's look at the relationship between Emotionality (*E*) and Fear of Crime (*FoC*).
+
+```{r basic-scatter, fig.height = 5, fig.show = "hide"}
+ggplot(crime,
+       aes(x = E,
+           y = FoC)) + 
+  geom_jitter() + 
+  theme_classic(base_size = 20) +
+  labs(x = "Emotionality",
+       y = "Fear of Crime") 
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("basic-scatter", ".png")`)
+]
+
+
+---
+# Correlation and covariance
+
+.pull-left[
+.large[
+How do we quantify the relationship between these variables? 
+
+We need to look at how much they *vary together*.
+
+The plot shows the Emotionality values of the first ten participants.
+
+The line across the middle is the mean of those values - **`r mean(crime$E[1:10])`**.
+]
+]
+.pull-right[
+```{r emo-plot, fig.height = 5, echo = FALSE}
+tmp_dat <- data.frame(participant = factor(1:10),
+                      E = crime$E[1:10])
+ggplot(tmp_dat,
+       aes(x = participant, y = E)) + 
+  geom_point() + 
+  geom_hline(aes(yintercept = mean(E))) + 
+  geom_segment(aes(xend = participant,
+                   yend = mean(E)),
+               linetype = "dashed") +
+  geom_label(aes(label = E),
+             nudge_y = 0.15,
+             size = 8) +
+  theme_classic(base_size = 22)
+```
+
+]
+
+---
+# The mean and the variance 
+
+.pull-left[
+As you can see, the values don't lie directly on the mean, but are spread around it.
+
+To quantify how much the values vary from the mean, we can calculate the *variance*.
+
+Here's the scary looking formula for the variance:
+
+$$  \sigma^2 = \frac{\sum(x - \bar{x})^2}{N - 1} $$
+
+And here's the not-so-scary R function:
+
+```{r eval = FALSE}
+var(x)
+```
+
+]
+.pull-right[
+```{r fig.height = 5, echo = FALSE}
+tmp_dat <- data.frame(participant = factor(1:10),
+                      E = crime$E[1:10])
+ggplot(tmp_dat,
+       aes(x = participant, y = E)) + 
+  geom_point() + 
+  geom_hline(aes(yintercept = mean(E))) + 
+  geom_segment(aes(xend = participant,
+                   yend = mean(E)),
+               linetype = "dashed") +
+  geom_label(aes(label = E),
+             nudge_y = 0.15,
+             size = 8) +
+  theme_classic(base_size = 22)
+```
+
+]
+
+---
+# Correlation and covariance
+
+.pull-left[
+.large[
+Now let's look at the same plot for Fear of Crime (FoC).
+
+Again, these points and labels are individual ratings of Fear of Crime.
+
+The line across the middle shows the mean, which is **`r mean(crime$FoC[1:10])`**.
+]
+]
+
+.pull-right[
+```{r foc-plot, fig.height = 5, echo = FALSE}
+tmp_dat <- data.frame(participant = factor(1:10),
+                      FoC = crime$FoC[1:10])
+ggplot(tmp_dat,
+       aes(x = participant, y = FoC)) + 
+  geom_point() + 
+  geom_hline(aes(yintercept = mean(FoC))) + 
+  geom_segment(aes(xend = participant,
+                   yend = mean(FoC)),
+               linetype = "dashed") +
+  geom_label(aes(label = FoC),
+             nudge_y = 0.15,
+             size = 8) +
+  theme_classic(base_size = 22)
+```
+
+]
+
+
+---
+# Correlation and covariance
+.pull-left[
+
+Now let's look at these previous two plots as differences from their respective means.
+
+What we want to now is to what extent the values *vary together*. I.e. as one goes up, does the other? 
+
+This is *covariance*.
+
+Here's the scary formula:
+
+$$ cov(x, y) = \frac{\sum((x - \bar{x})(y - \bar{y}))}{N - 1} $$
+
+Here's the not-so-scary R function:
+
+```{r eval = FALSE}
+cov(x, y)
+```
+
+]
+.pull-right[
+```{r fig.height = 6, fig.width = 8, echo = FALSE}
+tmp_dat <- data.frame(participant = rep(factor(1:10), 2),
+                      y = c(crime$FoC[1:10] - mean(crime$FoC[1:10]),
+                            crime$E[1:10] - mean(crime$E[1:10])),
+                      var = rep(c("Fear of crime",
+                                  "Emotionality"),
+                                each = 10))
+ggplot(tmp_dat,
+       aes(x = participant, y = y)) + 
+  geom_point() + 
+  geom_hline(aes(yintercept = mean(y))) + 
+  geom_segment(aes(xend = participant,
+                   yend = mean(y)),
+               linetype = "dashed") +
+  geom_label(aes(label = y),
+             nudge_x = -0.4,
+             size = 5) +
+  theme_classic(base_size = 22) + 
+  facet_grid(var~.) #+
+  #theme(text = element_text(size = 16))
+```
+]
+
+---
+# Correlation and covariance
+
+.pull-left[
+Covariance gives us a measure of how much two variables vary together. 
+
+But the numbers it gives us can be hard to interpret when the variables are on very different scales.
+
+So we rescale the covariance using the standard deviations of each variable.
+
+$$ corr(x, y) = r = \frac{cov(x, y)}{\sigma^x\sigma^y} $$
+
+This gives us the *correlation coefficient*, or *r*.
+
+```{r}
+cor(crime$E, crime$FoC)
+```
+
+]
+.pull-right[
+```{r fig.height=5, echo = FALSE}
+ggplot(crime,
+       aes(x = E,
+           y = FoC)) + 
+  geom_jitter() + 
+  theme_classic(base_size = 20) +
+  labs(x = "Emotionality",
+       y = "Fear of Crime") +
+  stat_smooth(method = "lm", se = FALSE)
+```
+]
+
+---
+# Pearson's product-moment correlation
+
+The **cor.test()** function can be used to test the *significance* of a correlation.
+
+```{r cor-test-first, highlight.output=c(5, 8, 11)}
+cor.test(crime$E, crime$FoC,
+         method = "pearson")
+```
+
+---
+# Curved or non-linear relationships
+
+If your data look like this:
+
+.pull-left[
+```{r fig.height = 5, echo = FALSE}
+X <- rnorm(100)
+Y <- X^2 + rnorm(100, 0, 0.25)
+qplot(X, Y) +
+  theme_classic(base_size = 22) +
+  annotate("text", x = 0,
+           y = 3,
+           size = 16,
+           label = paste("r = ", round(cor(X, Y), 2)))
+```
+]
+.pull-right[
+```{r fig.height= 5, echo = FALSE}
+X <- rnorm(100)
+Y <- X^2 + rnorm(100, 0, 0.25)
+qplot(X, -Y) +
+  theme_classic(base_size = 22) +
+  annotate("text", size = 16, x = 0,
+           y = -3,
+           label = paste("r = ",
+                         round(cor(X, Y), 2)))
+```
+]
+...forget about correlation.
+
+---
+# Curved or non-linear relationships
+.pull-left[
+...but if your data look like this:
+```{r echo = FALSE, fig.height = 5}
+X <- rnorm(100)
+Y <- (X ^3 + rnorm(100, 0, .4))  /2
+qplot(X, Y) + theme_classic(base_size = 22)
+```
+...there is some hope!
+]
+.pull-right[
+Spearman's rank correlation is used to measure *monotonicity*, and is the non-parametric equivalent to Pearson's correlation.
+
+If the data is not already ranks then it is converted to ranks; then the ranks are correlated across variables.
+
+```{r warning=FALSE, highlight.output = c(5, 9)}
+cor.test(X, Y,
+         method = "spearman")
+```
+
+]
+
+---
+background-image: url(images/07/chart.png)
+background-size: 80%
+background-position: 50% 70%
+# Correlation is not causation
+
+[https://www.spuriouscorrelations.com](https://www.spuriouscorrelations.com)
+
+---
+# Reporting a correlation
+
+.large[
+Reporting a correlation is pretty straightforward. Only the correlation coefficient and p-value are typically required. e.g. 
+
+"There was a significant positive correlation between emotionality and fear of crime, *r* = .37, *p* < .001."
+
+However, it's best to also specify which type of correlation you used (e.g. Pearson's or Spearman's); and a scatterplot showing the relationship should almost always be shown. Typically, the degrees of freedom or number of observations should also be given, e.g. *r*(299) = .37, *p* < .001, or r = .37, *p* < .001, *N* = 301.
+
+Note that *r* is considered a measure of *effect size*. An *r* of .1 is considered a small effect, while an *r* of .8 is considered a large effect.
+]
+
+---
+class: inverse, middle, center
+# Linear regression
+
+---
+# Correlation, regression and prediction
+
+.pull-left[
+Correlation quantifies the *strength* and *direction* of an association between two continuous variables.
+
+But what if we want to *predict* the values of one variable from those of another?
+
+For example, as Emotionality increases, *how much* does Fear of Crime change?
+
+```{r basic-lm, fig.show = "hide", fig.height=5}
+ggplot(crime, 
+       aes(x = E, y = FoC)) +
+  geom_jitter() +
+  stat_smooth(method = "lm", se = FALSE) +
+  theme_classic(base_size = 22) +
+  labs(x = "Emotionality",
+       y = "Fear of crime")
+```
+]
+.pull-right[
+![](`r knitr::fig_chunk("basic-lm", ".png")`)
+]
+
+---
+# Linear regression
+
+.pull-left[
+![](`r knitr::fig_chunk("basic-lm", ".png")`)
+]
+.pull-right[
+.large[
+The line added to this scatterplot is the *line of best fit*.
+
+It's the straight line that gets closest to going through all of the points on the plot.
+
+But how do we work out where the line should be? 
+]
+]
+
+---
+# The line of best fit 
+
+The line represents the predicted value of **y** at each value of **x**.
+
+The prediction is made using the following formula:
+
+$y = a + bX$
+
+*a* is the *intercept* - the point where the line would cross the y-axis when the value of the x-axis is 0.
+
+*b* is the *slope* - the steepness and direction of the line.
+
+The *line of best fit* can be found by adjusting the *intercept* and *slope* to minimise the *sum of squared residuals*.
+
+[Line of best fit demo](https://shinyapps.org/showapp.php?app=https://tellmi.psy.lmu.de/felix/lmfit&by=Felix%20Sch%C3%B6nbrodt&title=Find-a-fit!&shorttitle=Find-a-fit!)
+
+---
+# Fear of crime predicted by emotionality
+
+.pull-left[
+Let's try using the **lm()** function to predict Fear of Crime (*FoC*) from Emotionality (*E*).
+
+```{r first-lm, highlight.output = c(5, 6, 7)}
+foc_by_E <- lm(FoC ~ E, data = crime)
+foc_by_E
+```
+
+These are the *intercept* and *slope* of the regression line on the right.
+]
+.pull-right[
+```{r echo = FALSE, fig.height=5}
+ggplot(crime, aes(x = E, y = FoC)) +
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE) + 
+  theme_classic(base_size = 20)
+```
+]
+
+---
+# Is this a good model of Fear of crime?
+
+```{r highlight.output = c(10, 11, 12, 16, 17, 18)}
+summary(foc_by_E)
+```
+
+---
+# Fear of crime predicted by emotionality
+
+Let's focus on the coefficients.
+
+```{r}
+summary(foc_by_E)$coefficients
+```
+
+Estimate is the *coefficient* of each predictor; Std. Error is an estimate of the accuracy of that coefficient.
+
+The significance of each predictor is tested using a t-test; *t value* is the t statistic, and the *Pr(>|t|)* column is the p-value.
+
+Thus, *Emotionality* is a significant predictor of *Fear of Crime*. 
+
+Since its coefficient is positive, Fear of Crime increases as Emotionality increases. 
+
+---
+# Fear of crime predicted by emotionality
+.pull-left[
+Again, the regression line is described by the formula $y = a + bX$. So we can fill that out with our model coefficients as follows:
+
+Fear of crime = `r round(foc_by_E$coefficients[1], digits = 2)` + `r round(foc_by_E$coefficients[2], digits = 2)` * $X$
+
+$X$ is the value of the *predictor*.
+
+The *intercept* is now the value of $y$ when the value of the predictor is *zero*.
+
+The coefficient for the predictor is the amount that $y$ increases for each 1 unit increase in the predictor.
+]
+
+.pull-right[
+```{r echo = FALSE, fig.height=5}
+ggplot(crime, aes(x = E, y = FoC)) +
+  geom_jitter() +
+  geom_smooth(method = "lm", se = FALSE) + 
+  theme_classic()
+```
+]
+
+---
+class: inverse, center, middle
+# Assessing model significance
+
+---
+# Is this a good model?
+```{r highlight.output = c(16, 17, 18)}
+summary(foc_by_E)
+```
+
+
+---
+# The mean as a model
+.pull-left[
+First, let's create a linear model that simply finds the *mean* using the **lm()** function.
+```{r mean-mod, highlight.output = c(5,6,7)}
+intercept_only <- lm(FoC ~ 1, data = crime)
+intercept_only
+```
+
+Here the Intercept is equal to the *mean* of FoC.
+
+```{r}
+mean(crime$FoC)
+```
+]
+.pull-right[
+In the formula $y = a + bX$, *a* is the *Intercept*.
+
+So our prediction for the value of *y* is $y = 2.44$.
+```{r echo = FALSE, fig.height = 5}
+ggplot(crime, aes(x = E, y = FoC)) + 
+  geom_jitter() +
+  geom_hline(aes(yintercept = mean(FoC)), colour = "blue") +
+  theme_classic(base_size = 20)
+```
+]
+
+---
+#The mean as a model
+
+```{r highlight.output=c(10, 11, 15)}
+summary(intercept_only)
+```
+
+---
+#Model comparison
+
+We can compare models using the **anova()** function.
+```{r}
+anova(intercept_only, foc_by_E)
+```
+
+```{r}
+summary(foc_by_E)$fstatistic
+```
+
+---
+# At least it's better than the mean!
+```{r highlight.output = 18}
+summary(foc_by_E)
+```
+
+---
+class: inverse, center, middle
+# Assessing model fit
+
+---
+# How much does Y does X explain?
+
+```{r highlight.output = 17}
+summary(foc_by_E)
+```
+
+---
+# Model fit
+
+.pull-left[
+.large[
+R-squared ( $R^2$ ) is a measure of model fit. Specifically, it's the proportion of *explained* variance in the data.
+
+We previously looked at the *variance* around the *mean*.
+
+After linear regression, we look at how much reality differs from the model predictions - the *residual error*.
+]
+]
+.pull-right[
+```{r echo = FALSE, fig.height=5}
+ggplot(crime[1:30, ], aes(x = E,
+                          y = (FoC - predict(foc_by_E)[1:30]))) + 
+  geom_point(alpha = 0.5)+
+  geom_hline(aes(yintercept = 0)) +
+  geom_segment(aes(xend = E, yend = 0), linetype = "dashed") + 
+  theme_classic(base_size = 22) + 
+  labs(y = "Difference from prediction",
+       x = "Emotionality")
+```
+]
+
+---
+# Model fit
+
+.pull-left[
+.large[
+To work out how well our model fits, we first need to know how much *total variation* there is in the data.
+
+For that, we sum the squared differences of the values of the dependent variable $y$ from the mean of the dependent variable $\bar{y}$ - the *total sum of squares*, $SS_t$:
+
+$SS_t = \sum(y - \bar{y})^2$
+]
+]
+.pull-right[
+```{r diff-from-mean, echo = FALSE, fig.height=5}
+ggplot(crime[1:30, ], aes(x = E,
+                          y = (FoC - mean(FoC)) ^2)) + 
+  geom_point(alpha = 0.5)+
+  geom_hline(aes(yintercept = 0)) +
+  geom_segment(aes(xend = E, yend = 0), linetype = "dashed") + 
+  theme_classic(base_size = 18) + 
+  labs(y = "Squared difference from mean",
+       x = "Emotionality")
+```
+]
+
+---
+# Squared differences
+
+.pull-left[
+.large[
+Why square the differences?
+
+1.  Negative values become positive. 
+
+2.  Values that are further away from the mean often get even further away.
+
+This prevents "errors" from cancelling out, and effectively penalises values that are far away from the mean.
+]
+]
+.pull-right[
+![](`r knitr::fig_chunk("diff-from-mean", ".png")`)
+]
+
+
+---
+# Model fit
+
+.pull-left[
+.large[
+We then calculate the sum of the squared differences of the values of the dependent variable ( $y$ ) from the model predictions - the sum of the squared residuals, $SS_r$:
+
+$SS_r = \sum(y - \hat{y})^2$
+]
+]
+.pull-right[
+```{r diff-from-pred, echo = FALSE, fig.height = 5}
+ggplot(crime[1:30, ],
+       aes(x = E, y = (FoC - predict(foc_by_E)[1:30]) ^2)) + 
+  geom_point(alpha = 0.5)+
+  geom_hline(aes(yintercept = 0)) +
+  geom_segment(aes(xend = E, yend = 0), linetype = "dashed") + 
+  theme_classic(base_size = 18) + 
+  labs(y = "Difference from prediction",
+       x = "Emotionality")
+```
+]
+
+---
+# Model fit
+
+.large[
+Finally, we calculate *model sum of squares* - $SS_m$ - as the difference between the *total sum of squares* and the *residual sum of squares*. This tells us, roughly, how much better our model is than just using the *mean*:
+
+$SS_m = SS_t - SS_r$
+
+R-squared ( $R^2$ ) can then be calculated by dividing the model sum of squares by the total sum of squares:
+
+$R^2 = \frac{SS_m}{SS_t}$
+
+This yields the *percentage of variance explained by the model*. 
+
+This is a long-winded way of saying: Higher $R^2$ means more explained variance, and thus, a better fitting model.
+]
+
+---
+# Model fit
+
+.large[
+Thankfully, R does all these calculations for us!
+
+```{r}
+summary(foc_by_E)$r.squared
+```
+
+Our simple regression model of the effect of Emotionality on Fear of Crime explained ~ 14% of the variance.
+
+What's left?
+
+1. Other variables? 
+
+2. Measurement error?
+]
+
+---
+class: center, middle, inverse
+# Reporting simple regression
+
+---
+# Example of reporting a simple regression model
+
+.large[
+"Simple linear regression was used to investigate the relationship between emotionality and fear of crime. A significant regression equation was found that explained 14% of the variance, $R^2$ = .14, *F*(1, 299) = 47.39, *p* < .001. Fear of crime increased significantly with increases in Emotionality, $b$ = 0.55, *t*(299) = 6.884, *p* < .001."
+]
+
+---
+# Nicely formatted tables using sjPlot
+
+```{r warning = FALSE, message = FALSE}
+library(sjPlot)
+tab_model(foc_by_E,
+          show.std = TRUE,
+          title = "Table 1: Linear regression model",
+          pred.labels = c("Intercept", "Emotionality"),
+          dv.labels = "Fear of Crime")
+```
+
+---
+# Next week
+
+Next week we'll continue with **regression**, looking at multiple predictors.
+
+We'll also begin with **one-way ANOVA** for comparison of multiple means. 
+
+## Reading
+
+Chapter 10 - Comparing Several Means - ANOVA (GLM 1)
+
+---
+# Additional support
+
+Maths & Stats Help (AKA MASH) are a service offered by the University, based over in the library.
+
+They offer support to both undergraduate and postgraduate students. You'll find their website at 
+
+[https://guides.library.lincoln.ac.uk/mash](https://guides.library.lincoln.ac.uk/mash)
+
+Note that while their website is mostly about other software, they do support R!
+
+Or join the MS Teams group, use the discussion board, or drop me an email!
