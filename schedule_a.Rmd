@@ -40,6 +40,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF](slides/Week-7-NHST-two-means.pdf)
 
 ### 7. 30/11/2021, Correlation and Regression
+- [Slides](slides/Week-8-Correlation-Regression.html)
+- [PDF](slides/Week-8-Correlation-Regression.pdf)
 
 ### 8. 07/12/2021, Multiple Regression and ANOVA
 
