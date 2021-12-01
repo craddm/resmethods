@@ -30,7 +30,7 @@ navbar:
       - text: "7: Correlation and Regression"
         href: slides/Week-8-Correlation-Regression.html
       - text: "8: Multiple Regression and ANOVA"
-        #href: slides/Week-9-Multi-Regression-ANOVA.html
+        href: slides/Week-9-Multi-Regression-ANOVA.html
       - text: "9: Repeated Measures and Factorial ANOVA"
         #href: slides/Week-10-Repeated-and-Factorial-ANOVA.html
     - text: "Semester B"
