@@ -48,4 +48,5 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF](slides/Week-9-Multi-Regression-ANOVA.pdf)
 
 ### 9. 14/12/2021, Repeated Measures and Factorial ANOVA
-
+- [Slides](slides/Week-10-Repeated-and-Factorial-ANOVA.html)
+- [PDF](slides/Week-10-Repeated-and-Factorial-ANOVA.pdf)

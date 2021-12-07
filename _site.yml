@@ -32,7 +32,7 @@ navbar:
       - text: "8: Multiple Regression and ANOVA"
         href: slides/Week-9-Multi-Regression-ANOVA.html
       - text: "9: Repeated Measures and Factorial ANOVA"
-        #href: slides/Week-10-Repeated-and-Factorial-ANOVA.html
+        href: slides/Week-10-Repeated-and-Factorial-ANOVA.html
     - text: "Semester B"
       menu:
       - text: "1: Messy Data and a Return to R"
@@ -56,5 +56,5 @@ navbar:
         - text: "2020/2021"
           href: archive_2020_2021.html
     - icon: fab fa-github
-      href: https://github.com/craddm/resmethods
+      href: https://github.com/psyresmeth/resmethods
 output: distill::distill_article
