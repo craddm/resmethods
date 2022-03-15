@@ -15,6 +15,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### 1. 22/03/2022, Getting back into R with messy data
 
+- [Slides](slides/B-1-messy-data.html)
+- [PDF](slides/B-1-messy-data.pdf)
+
 ### 2. 29/03/2022, Statistical power and effect sizes
 
 ### 3. 19/04/2022, Multiple and logistic regression

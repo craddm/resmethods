@@ -70,28 +70,28 @@ Tidy data figure from https://r4ds.had.co.nz/tidy-data.html, distributed under a
 ## # A tibble: 16 x 4
 ##    Participant Viewpoint Block     RT
 ##          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
-##  1           1 Different First   574.
-##  2           1 Different Second  467.
-##  3           1 Same      First   491.
-##  4           1 Same      Second  288.
-##  5           2 Different First   501.
-##  6           2 Different Second  441.
-##  7           2 Same      First   457.
-##  8           2 Same      Second  372.
-##  9           3 Different First   513.
-## 10           3 Different Second  395.
-## 11           3 Same      First   445.
-## 12           3 Same      Second  448.
-## 13           4 Different First   605.
-## 14           4 Different Second  391.
-## 15           4 Same      First   481.
-## 16           4 Same      Second  361.
+##  1           1 Different First   516.
+##  2           1 Different Second  409.
+##  3           1 Same      First   419.
+##  4           1 Same      Second  414.
+##  5           2 Different First   494.
+##  6           2 Different Second  385.
+##  7           2 Same      First   516.
+##  8           2 Same      Second  385.
+##  9           3 Different First   507.
+## 10           3 Different Second  371.
+## 11           3 Same      First   475.
+## 12           3 Same      Second  374.
+## 13           4 Different First   470.
+## 14           4 Different Second  394.
+## 15           4 Same      First   434.
+## 16           4 Same      Second  414.
 ```
 ]
 .pull-right[
 Tables of data are what you're most commonly dealing with in R.
 
-This one confirms to the **tidy data** principles:
+This one conforms to the **tidy data** principles:
 
 One row per observation, one column per variable
 
@@ -111,9 +111,9 @@ Fortunately, R has several functions and packages for importing data!
 
 |File formats| File extension| Functions| Package|
 |-|-|-|-|
-|SPSS  | .sav| **read_sav()**| library(haven)|
-|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
-|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
+|SPSS  | .sav| `read_sav()`| library(haven)|
+|Excel | .xls, .xlsx|`read_excel()`|library(readxl)|
+|Text  | .csv, .txt, .* |`read_csv()`, `read_delim()`|library(readr)|
 
 
 ---
@@ -122,7 +122,7 @@ background-size: 6%
 background-position: 90% 5%
 # Data wrangling
 
-**dplyr** is a really useful package for manipulation of data tables.
+`dplyr` is a really useful package for manipulation of data tables.
 
 |Function |Effect|
 |------------|----|
@@ -142,7 +142,7 @@ background-position: 85% 5%
 .pull-left[
 Plottting data is really important for all aspects of data analysis.
 
-The **ggplot2** package provides a framework for doing this:
+The `ggplot2` package provides a framework for doing this:
 
 ```r
 ggplot(example_rt_df,
@@ -170,19 +170,19 @@ t.test(RT~Block, data = example_rt_df)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  RT by Block
-## t = 14.945, df = 197.13, p-value &lt; 2.2e-16
+## t = 15.939, df = 197.45, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means between group First and group Second is not equal to 0
 ## 95 percent confidence interval:
-##   81.49733 106.27406
+##   86.71124 111.19806
 ## sample estimates:
 ##  mean in group First mean in group Second 
-##             499.0944             405.2087
+##             501.7161             402.7615
 ```
 
 ---
 # Running statistics
 
-The factorial ANOVA... (the aov_ez() function from the *afex* package)
+The factorial ANOVA... (the `aov_ez()` function from the `afex` package)
 
 
 ```r
@@ -196,10 +196,10 @@ aov_ez(dv = "RT",
 ## Anova Table (Type 3 tests)
 ## 
 ## Response: RT
-##            Effect    df     MSE          F   ges p.value
-## 1           Block 1, 49 2031.13 216.99 ***  .531   &lt;.001
-## 2       Viewpoint 1, 49 2344.20       0.01 &lt;.001    .932
-## 3 Block:Viewpoint 1, 49 2181.87       0.70  .004    .406
+##            Effect    df     MSE          F  ges p.value
+## 1           Block 1, 49 1627.81 300.77 *** .565   &lt;.001
+## 2       Viewpoint 1, 49 1241.33     3.50 + .011    .067
+## 3 Block:Viewpoint 1, 49 2513.64       0.21 .001    .651
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '+' 0.1 ' ' 1
 ```
@@ -218,7 +218,7 @@ In an ideal world all our data would be beautifully normal:
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -249,16 +249,16 @@ Data can be *missing*...
 
 ```
 ##           X1        X2
-## 1         NA  9.436950
-## 2         NA  9.122166
-## 3         NA  9.913774
-## 4         NA 10.506073
-## 5         NA  9.276310
-## 6  10.583116        NA
-## 7  10.693587        NA
-## 8   9.583031 11.509069
-## 9   9.351268 11.512750
-## 10  9.188378  8.666477
+## 1         NA  8.589878
+## 2         NA  8.666062
+## 3         NA  7.476062
+## 4         NA  8.254748
+## 5         NA  9.341976
+## 6  10.528092        NA
+## 7  10.586026        NA
+## 8  10.300834  9.752974
+## 9  10.035375 10.365672
+## 10  8.896707  8.153483
 ```
 Complete cases = 193
 ]
@@ -268,14 +268,13 @@ Complete cases = 193
 
 Data can be *skewed*...
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 # The real data
 
-
 .pull-left[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 There can be any combination of these things...
@@ -300,7 +299,7 @@ The resulting coefficient (approx *r* = .49) is *way-off* the true coefficient f
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -308,7 +307,7 @@ The resulting coefficient (approx *r* = .49) is *way-off* the true coefficient f
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -328,7 +327,7 @@ The correlation coefficient becomes even *more* biased than it was previously.
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -358,14 +357,17 @@ class: center, inverse, middle
 ---
 # Identifying outliers
 
-Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
-
+.pull-left[
 
 ```
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
+]
 
 ---
 # Identifying outliers
@@ -376,10 +378,10 @@ Plotting the residuals of your linear model will also help you identify troubles
 plot(lm(X1 ~ X2, data = temp_df_out))
 ```
 .pull-left[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -387,11 +389,24 @@ plot(lm(X1 ~ X2, data = temp_df_out))
 
 Plotting the residuals of your linear model will also help you identify troublesome observations.
 .pull-left[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 ]
+
+---
+# Identifying outliers
+
+The `performance` library has a `check_outliers()` function that helps too!
+
+
+```r
+library(performance)
+plot(check_outliers(lm(X1 ~ X2, data = temp_df_out)))
+```
+
+![](B-1-messy-data_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 ---
 # Identifying outliers
@@ -404,12 +419,12 @@ Sometimes this is driven by common sense: e.g. a value of 120 for a participant'
 Sometimes this is *data-driven*: e.g. values more than `\(\pm\)` 3 standard deviations away from the mean are *unusual*.
 ]
 .pull-right[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 ]
 
 
 ---
-# Scaling by the mean and standard deviation
+# Scaling and standardizing
 
 .panelset[
 .panel[.panel-name[The data]
@@ -419,7 +434,7 @@ example &lt;- c(rnorm(15), 35)
 hist(example)
 ```
 
-![](B-1-messy-data_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 ]
 .panel[.panel-name[Manually scale]
 
@@ -428,9 +443,8 @@ example
 ```
 
 ```
-##  [1]  0.8531566  0.1802001  0.5705578 -0.6548308  1.8944609  0.2267844
-##  [7] -2.5708843 -0.3114595 -0.5727926  1.0073913  0.6077755 -0.4319844
-## [13]  1.1979846  0.2141544 -0.2857614 35.0000000
+##  [1]  0.54240596  1.73336700  0.52365537  1.16488774  0.52106485  0.44979269  0.11852738 -0.72022367
+##  [9] -0.14502293 -1.91319909 -1.80588221  2.08138700 -0.05824803 -0.97010176  0.08841495 35.00000000
 ```
 
 ```r
@@ -438,9 +452,8 @@ example
 ```
 
 ```
-##  [1] -0.16576389 -0.24245080 -0.19796750 -0.33760694 -0.04710181 -0.23714228
-##  [7] -0.55595126 -0.29847799 -0.32825827 -0.14818804 -0.19372635 -0.31221243
-## [13] -0.12646893 -0.23858154 -0.29554956  3.72544758
+##  [1] -0.19857188 -0.06310656 -0.20070465 -0.12776797 -0.20099931 -0.20910613 -0.24678575 -0.34218911
+##  [9] -0.27676316 -0.47788355 -0.46567684 -0.02352119 -0.26689299 -0.37061137 -0.25021088  3.72079134
 ```
 ]
 .panel[.panel-name[`scale()`]
@@ -452,16 +465,14 @@ t(scale(example))
 ```
 
 ```
-##            [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
-## [1,] -0.1657639 -0.2424508 -0.1979675 -0.3376069 -0.04710181 -0.2371423
-##            [,7]      [,8]       [,9]     [,10]      [,11]      [,12]      [,13]
-## [1,] -0.5559513 -0.298478 -0.3282583 -0.148188 -0.1937263 -0.3122124 -0.1264689
-##           [,14]      [,15]    [,16]
-## [1,] -0.2385815 -0.2955496 3.725448
+##            [,1]        [,2]       [,3]      [,4]       [,5]       [,6]       [,7]       [,8]
+## [1,] -0.1985719 -0.06310656 -0.2007047 -0.127768 -0.2009993 -0.2091061 -0.2467858 -0.3421891
+##            [,9]      [,10]      [,11]       [,12]     [,13]      [,14]      [,15]    [,16]
+## [1,] -0.2767632 -0.4778835 -0.4656768 -0.02352119 -0.266893 -0.3706114 -0.2502109 3.720791
 ## attr(,"scaled:center")
-## [1] 2.307797
+## [1] 2.288177
 ## attr(,"scaled:scale")
-## [1] 8.775376
+## [1] 8.791631
 ```
 ]
 ]
@@ -469,7 +480,7 @@ t(scale(example))
 ---
 # Removing values above a threshold
 
-The **filter()** function from dplyr can be used to remove outliers easily!
+The `filter()` function from dplyr can be used to remove outliers easily!
 .panelset[
 .panel[.panel-name[With outliers]
 .pull-left[
@@ -523,14 +534,14 @@ Skewed data is data that *leans* in a particular direction.
 
 These are often described by the direction of the "long-tail" - so a left-tailed distribution means a distribution with a long tail on the left, rather than most values on the left.
 .center[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 ]
 
 ---
 # Skewed data
 
 .pull-left[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 This data is *right-tailed*. This is sometimes also called *positively skewed*. For this type of data, the mean (blue line) is usually higher than the median (red, dashed line).
@@ -542,7 +553,7 @@ This type of skew is relatively common with data that is *bounded* at zero. e.g.
 # Left-tailed skew
 
 .pull-left[
-![](B-1-messy-data_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 Data skewed the opposite way - many high scores but few low scores - has a long *left* tail. This is also called *negative skew*. The mean (blue solid line) is usually less than the median (red dashed line).
@@ -566,10 +577,10 @@ Square | x^2
 
 .panelset[
 .panel[.panel-name[Right-tailed]
-![](B-1-messy-data_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 ]
 .panel[.panel-name[Left-tailed]
-![](B-1-messy-data_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](B-1-messy-data_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 ]
 ]
 
@@ -683,7 +694,7 @@ List-wise deletion: Cases with missing data are completely **removed** from **al
 
 Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
 
-By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+By default, functions such as `mean()` return NA if any value in the input is NA/missing.
 ]
 .pull-right[
 
@@ -700,7 +711,7 @@ mean(temp_df_missing$X1, na.rm = TRUE)
 ```
 
 ```
-## [1] 9.994734
+## [1] 10.00553
 ```
 
 ```r

@@ -24,7 +24,9 @@ xaringanExtra::use_panelset()
 knitr::opts_chunk$set(fig.asp = .618,
                       fig.width = 6)
 library(xaringanthemer)
-style_solarized_light(base_font_size = "22px")
+style_mono_light(base_color = "#23395b",
+                 base_font_size = "21px",
+                 link_color = "#C80039")
 library(tidyverse)
 library(ggstatsplot)
 library(patchwork)
@@ -85,7 +87,7 @@ head(example_rt_df, 16)
 .pull-right[
 Tables of data are what you're most commonly dealing with in R.
 
-This one confirms to the **tidy data** principles:
+This one conforms to the **tidy data** principles:
 
 One row per observation, one column per variable
 
@@ -105,9 +107,9 @@ Fortunately, R has several functions and packages for importing data!
 
 |File formats| File extension| Functions| Package|
 |-|-|-|-|
-|SPSS  | .sav| **read_sav()**| library(haven)|
-|Excel | .xls, .xlsx|**read_excel()**|library(readxl)|
-|Text  | .csv, .txt, .* |**read_csv()**, **read_delim()**|library(readr)|
+|SPSS  | .sav| `read_sav()`| library(haven)|
+|Excel | .xls, .xlsx|`read_excel()`|library(readxl)|
+|Text  | .csv, .txt, .* |`read_csv()`, `read_delim()`|library(readr)|
 
 
 ---
@@ -116,7 +118,7 @@ background-size: 6%
 background-position: 90% 5%
 # Data wrangling
 
-**dplyr** is a really useful package for manipulation of data tables.
+`dplyr` is a really useful package for manipulation of data tables.
 
 |Function |Effect|
 |------------|----|
@@ -136,7 +138,7 @@ background-position: 85% 5%
 .pull-left[
 Plottting data is really important for all aspects of data analysis.
 
-The **ggplot2** package provides a framework for doing this:
+The `ggplot2` package provides a framework for doing this:
 ```{r dens-plot, fig.show = "hide", fig.height=5}
 ggplot(example_rt_df,
        aes(x = RT, fill = Block)) +
@@ -160,7 +162,7 @@ t.test(RT~Block, data = example_rt_df)
 ---
 # Running statistics
 
-The factorial ANOVA... (the aov_ez() function from the *afex* package)
+The factorial ANOVA... (the `aov_ez()` function from the `afex` package)
 
 ```{r}
 aov_ez(dv = "RT",
@@ -290,7 +292,6 @@ temp_df_skew %>%
 ---
 # The real data
 
-
 .pull-left[
 ```{r echo = FALSE, fig.height = 5, fig.width = 8, warning = FALSE}
 temp_df_all <- data.frame(`Left-tailed` = -rgamma(100, 2, 1),
@@ -394,11 +395,14 @@ class: center, inverse, middle
 ---
 # Identifying outliers
 
-Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
-
+.pull-left[
 ```{r echo = FALSE, fig.height = 6}
 scatter1_out
 ```
+]
+.pull-right[
+Plotting your data can be an excellent way to spot outliers: here they're *very* obvious!
+]
 
 ---
 # Identifying outliers
@@ -436,6 +440,16 @@ plot(lm(X1 ~ X2, data = temp_df_out), which = 4)
 ---
 # Identifying outliers
 
+The `performance` library has a `check_outliers()` function that helps too!
+
+```{r}
+library(performance)
+plot(check_outliers(lm(X1 ~ X2, data = temp_df_out)))
+```
+
+---
+# Identifying outliers
+
 .pull-left[
 Sometimes a *threshold* is used to determine whether an observation is an outlier.
 
@@ -458,7 +472,7 @@ tibble(iq = 40:160,
 
 
 ---
-# Scaling by the mean and standard deviation
+# Scaling and standardizing
 
 .panelset[
 .panel[.panel-name[The data]
@@ -485,7 +499,7 @@ t(scale(example))
 ---
 # Removing values above a threshold
 
-The **filter()** function from dplyr can be used to remove outliers easily!
+The `filter()` function from dplyr can be used to remove outliers easily!
 .panelset[
 .panel[.panel-name[With outliers]
 .pull-left[
@@ -739,7 +753,7 @@ List-wise deletion: Cases with missing data are completely **removed** from **al
 
 Pair-wise deletion: Cases with missing data are only **removed** from **comparisons where one or more variables are missing**.
 
-By default, functions such as **mean()** return NA if any value in the input is NA/missing.
+By default, functions such as `mean()` return NA if any value in the input is NA/missing.
 ]
 .pull-right[
 ```{r}
