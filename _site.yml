@@ -36,7 +36,7 @@ navbar:
     - text: "Semester B"
       menu:
       - text: "1: Messy Data and a Return to R"
-        #href: slides/Week-23-messy-data.html
+        href: slides/B-1-messy-data.html
       - text: "2: Statistical Power and Effect Sizes"
         #href: slides/2-Power-and-Effect-Sizes.html
       - text: "3: Multiple and Logistic Regression"
