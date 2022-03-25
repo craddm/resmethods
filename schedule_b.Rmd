@@ -20,6 +20,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### 2. 29/03/2022, Statistical power and effect sizes
 
+- [Slides](slides/2-Power-and-Effect-Sizes.html)
+- [PDF](slides/2-Power-and-Effect-Sizes.pdf)
+
 ### 3. 19/04/2022, Multiple and logistic regression
 
 ### 4. 26/04/2022, Multilevel analysis
