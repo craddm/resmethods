@@ -26,7 +26,7 @@ knitr::opts_chunk$set(fig.asp = .618,
                       fig.width = 7,
                       fig.retina = 3)
 library(xaringanthemer)
-style_solarized_light(base_font_size = "20px")
+style_mono_light(base_font_size = "21px")
 library(tidyverse)
 library(lme4)
 library(ggforce)
@@ -44,14 +44,14 @@ data(sleepstudy)
 
 There are *many* situations in psychology where we have *nested* data.
 
-Intervention studies are typically longitudinal - the same participants are tested multiple times on the same outcome measure.
-
 Typical cognitive experiments show participants many repeats of similar trials.
 
 ![](images/experiment_outlook.png)
 
 ---
 # Multilevel data
+
+Intervention studies are typically longitudinal - the same people are tested multiple times on the same outcome measure.
 
 ```{r schools, echo = FALSE, fig.height = 6}
 a_graph <- 
@@ -182,9 +182,11 @@ ggplot(test_resd,
 ```
 ]
 .pull-right[
+.large[
 Data from nested designs like those we have just seen often have *clusters* of correlated observations.
 
 Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
 ]
 
 ---
@@ -213,9 +215,11 @@ ggplot(test_resd,
 ```
 ]
 .pull-right[
+.large[
 Data from nested designs like those we have just seen often have *clusters* of correlated observations.
 
 Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
 ]
 
 ---
@@ -286,10 +290,11 @@ ggplot(sleepstudy,
 ```
 ]
 .pull-right[
+.large[
 But the data clearly has more structure than that!
 
 Here each dot is coloured to show which participant contributed which data points.
-
+]
 ]
 ]
 .panel[.panel-name[Split panels]
@@ -308,9 +313,11 @@ ggplot(sleepstudy,
 ```
 ]
 .pull-right[
+.large[
 If we split the plot up to show each subject separately, we get more sense of the variability.
 
 For example, Subject 308 shows a very strong effect of sleep deprivation on reaction time, while Subject 309 shows very little effect of sleep deprivation.
+]
 ]
 ]
 .panel[.panel-name[All the things]
@@ -329,11 +336,13 @@ ggplot(sleepstudy,
 ```
 ]
 .pull-right[
+.large[
 Our simple linear model ignores the fact that many of our observations are repeated measurements from each participant.
 
 It assumes the effect is the same for everyone.
 
 There are 18 participants in this study. Some of them are generally faster or slower than others; some of them show more effect of sleep deprivation than others.
+]
 ]
 ]
 ]
@@ -386,11 +395,13 @@ ggplot(corr_dat,
 ```
 ]
 .pull-right[
+.large[
 But wait!
 
 What is this?
 
 There are five different groups of people?
+]
 ]
 
 ???
@@ -486,14 +497,6 @@ They are *random* because the *sampling units* are randomly drawn from a wider *
 
 
 ---
-# A basic linear model
-
-```{r}
-basic_lm <- lm(Reaction ~ 1 + Days, data = sleepstudy)
-summary(basic_lm)
-```
-
----
 class: inverse, middle, center
 # Random intercepts
 
@@ -556,7 +559,7 @@ ggplot(sleepstudy,
 ```
 ]
 .pull-right[
-If we look at the plots individually for each subject, we can see a little the individual intercepts a little more clearly. 
+If we look at the plots individually for each subject, we can see the individual intercepts a little more clearly. 
 
 Some people are faster on average than the overall mean, while others are slower.
 
@@ -579,7 +582,8 @@ int_only <-
        data = sleepstudy) # Random intercept
 ```
 
-This model is a *random-intercept* model - it captures how mean reaction times vary across subjects.
+This model is a *random-intercept* model - it captures how mean reaction times vary across subjects by finding their individual mean reaction times.
+
 
 ---
 
@@ -619,7 +623,7 @@ fixef(int_only)
 ```
 ]
 .pull-right[
-The *random* effects tell us how much variability there is *between-participants*. In this case, we only estimated participant-specific intercepts.
+The *random* effects tell us how much variability there is *between-participants*. 
 
 ```{r}
 summary(int_only)$varcor
@@ -632,25 +636,25 @@ summary(int_only)$varcor
 .panelset[
 .panel[.panel-name[Standard model]
 .pull-left[
-```{r fig.height=5, message = FALSE}
-library(sjPlot)
-plot_model(basic_lm, type = "diag")[[1]]
+```{r fig.height=5, message = FALSE, warning = FALSE}
+library(performance)
+plot(check_normality(basic_lm), type = "qq")
 ```
 ]
 .pull-right[
-These residuals don't look great - the dots seems to show a slight curve, and our predictions at each end are also poor.
+These residuals don't look great - our predictions at each end are quite poor, suggesting the model is systematically failing at modelling high or low reaction times.
 
 This suggests there's some structure not being captured by the model.
 ]
 ]
 .panel[.panel-name[Mixed model]
 .pull-left[
-```{r fig.height=5, message = FALSE}
-plot_model(int_only, type = "diag")[[1]]
+```{r fig.height=5, message = FALSE, warning = FALSE}
+plot(check_normality(int_only), type = "qq")
 ```
 ]
 .pull-right[
-This model - the *random intercept* model - is doing a *much much* better joib than our basic linear model.
+This model - the *random intercept* model - seems to be doing a better job than our basic linear model.
 
 The points now lie almost entirely along the line.
 
@@ -666,21 +670,23 @@ This indicates a better correspondence between the model predictions and the act
 .panel[.panel-name[Standard model]
 .pull-left[
 ```{r fig.height=5, message = FALSE}
-plot_model(basic_lm, type = "diag")[[3]]
+plot(check_heteroscedasticity(basic_lm))
 ```
 ]
 .pull-right[
+This looks a little odd. There is clear grouping, in that it looks a lot like each persons data is grouped together. 
 
+There is a clear shift in the green line - as you go further to the right, the amount of variability is increases.
 ]
 ]
 .panel[.panel-name[Mixed model]
 .pull-left[
 ```{r fig.height=5, message = FALSE}
-plot_model(int_only, type = "diag")[[4]]
+plot(check_heteroscedasticity(int_only))
 ```
 ]
 .pull-right[
-But this plot shows evidence of heteroskedasticity - non-constant variance. 
+This is better, but still shows some issues.
 
 The dots seem to *curve* somewhat.
 
@@ -763,7 +769,7 @@ anova(int_only, random_slope)
 
 .pull-left[
 ```{r fig.height = 5, message = FALSE}
-plot_model(random_slope, type = "diag")[[4]]
+plot(check_heteroscedasticity(random_slope))
 ```
 ]
 .pull-right[
@@ -773,6 +779,12 @@ These residuals are the best of all so far.
 A few points look suspiciously like outliers, but overall, there's little to suggest any particular problems with this model!
 ]
 ]
+---
+
+
+```{r fig.height = 7, fig.width = 10}
+check_model(random_slope)
+```
 
 ---
 class: middle, center, inverse

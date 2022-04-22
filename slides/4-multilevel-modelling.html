@@ -32,14 +32,14 @@ class: center, middle, inverse, title-slide
 
 There are *many* situations in psychology where we have *nested* data.
 
-Intervention studies are typically longitudinal - the same participants are tested multiple times on the same outcome measure.
-
 Typical cognitive experiments show participants many repeats of similar trials.
 
 ![](images/experiment_outlook.png)
 
 ---
 # Multilevel data
+
+Intervention studies are typically longitudinal - the same people are tested multiple times on the same outcome measure.
 
 
 ![](images/schools.png)
@@ -68,9 +68,11 @@ The measurements each week are the main unit of observation, but they are nested
 &lt;img src="4-multilevel-modelling_files/figure-html/non-clust-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 Data from nested designs like those we have just seen often have *clusters* of correlated observations.
 
 Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
 ]
 
 ---
@@ -80,9 +82,11 @@ Different people have different reaction speeds, or baseline attitudes; differen
 &lt;img src="4-multilevel-modelling_files/figure-html/corr-subj-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 Data from nested designs like those we have just seen often have *clusters* of correlated observations.
 
 Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
 ]
 
 ---
@@ -161,10 +165,11 @@ basic_lm
 &lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-4-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 But the data clearly has more structure than that!
 
 Here each dot is coloured to show which participant contributed which data points.
-
+]
 ]
 ]
 .panel[.panel-name[Split panels]
@@ -172,9 +177,11 @@ Here each dot is coloured to show which participant contributed which data point
 &lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 If we split the plot up to show each subject separately, we get more sense of the variability.
 
 For example, Subject 308 shows a very strong effect of sleep deprivation on reaction time, while Subject 309 shows very little effect of sleep deprivation.
+]
 ]
 ]
 .panel[.panel-name[All the things]
@@ -182,11 +189,13 @@ For example, Subject 308 shows a very strong effect of sleep deprivation on reac
 &lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-6-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 Our simple linear model ignores the fact that many of our observations are repeated measurements from each participant.
 
 It assumes the effect is the same for everyone.
 
 There are 18 participants in this study. Some of them are generally faster or slower than others; some of them show more effect of sleep deprivation than others.
+]
 ]
 ]
 ]
@@ -220,11 +229,13 @@ Source Software, 5(51), 2306. doi:10.21105/joss.02306
 &lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-8-1.png" width="504" /&gt;
 ]
 .pull-right[
+.large[
 But wait!
 
 What is this?
 
 There are five different groups of people?
+]
 ]
 
 ???
@@ -309,36 +320,6 @@ They are *random* because the *sampling units* are randomly drawn from a wider *
 
 
 ---
-# A basic linear model
-
-
-```r
-basic_lm &lt;- lm(Reaction ~ 1 + Days, data = sleepstudy)
-summary(basic_lm)
-```
-
-```
-## 
-## Call:
-## lm(formula = Reaction ~ 1 + Days, data = sleepstudy)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -110.848  -27.483    1.546   26.142  139.953 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  251.405      6.610  38.033  &lt; 2e-16 ***
-## Days          10.467      1.238   8.454 9.89e-15 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 47.71 on 178 degrees of freedom
-## Multiple R-squared:  0.2865,	Adjusted R-squared:  0.2825 
-## F-statistic: 71.46 on 1 and 178 DF,  p-value: 9.894e-15
-```
-
----
 class: inverse, middle, center
 # Random intercepts
 
@@ -348,7 +329,7 @@ class: inverse, middle, center
 .panelset[
 .panel[.panel-name[Individual intercepts]
 .pull-left[
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-12-1.png" width="432" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-11-1.png" width="432" /&gt;
 ]
 .pull-right[
 The black line on this plot shows the overall **mean** reaction time. This is the *intercept* of the basic model.
@@ -361,7 +342,7 @@ Each coloured line on this plot shows an individual participant's **mean** react
 &lt;img src="4-multilevel-modelling_files/figure-html/indiv-ints-1.png" width="504" /&gt;
 ]
 .pull-right[
-If we look at the plots individually for each subject, we can see a little the individual intercepts a little more clearly. 
+If we look at the plots individually for each subject, we can see the individual intercepts a little more clearly. 
 
 Some people are faster on average than the overall mean, while others are slower.
 
@@ -385,7 +366,8 @@ int_only &lt;-
        data = sleepstudy) # Random intercept
 ```
 
-This model is a *random-intercept* model - it captures how mean reaction times vary across subjects.
+This model is a *random-intercept* model - it captures how mean reaction times vary across subjects by finding their individual mean reaction times.
+
 
 ---
 
@@ -536,7 +518,7 @@ fixef(int_only)
 ```
 ]
 .pull-right[
-The *random* effects tell us how much variability there is *between-participants*. In this case, we only estimated participant-specific intercepts.
+The *random* effects tell us how much variability there is *between-participants*. 
 
 
 ```r
@@ -558,14 +540,14 @@ summary(int_only)$varcor
 .pull-left[
 
 ```r
-library(sjPlot)
-plot_model(basic_lm, type = "diag")[[1]]
+library(performance)
+plot(check_normality(basic_lm), type = "qq")
 ```
 
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-20-1.png" width="504" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-19-1.png" width="504" /&gt;
 ]
 .pull-right[
-These residuals don't look great - the dots seems to show a slight curve, and our predictions at each end are also poor.
+These residuals don't look great - our predictions at each end are quite poor, suggesting the model is systematically failing at modelling high or low reaction times.
 
 This suggests there's some structure not being captured by the model.
 ]
@@ -574,13 +556,13 @@ This suggests there's some structure not being captured by the model.
 .pull-left[
 
 ```r
-plot_model(int_only, type = "diag")[[1]]
+plot(check_normality(int_only), type = "qq")
 ```
 
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-21-1.png" width="504" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-20-1.png" width="504" /&gt;
 ]
 .pull-right[
-This model - the *random intercept* model - is doing a *much much* better joib than our basic linear model.
+This model - the *random intercept* model - seems to be doing a better job than our basic linear model.
 
 The points now lie almost entirely along the line.
 
@@ -597,26 +579,28 @@ This indicates a better correspondence between the model predictions and the act
 .pull-left[
 
 ```r
-plot_model(basic_lm, type = "diag")[[3]]
+plot(check_heteroscedasticity(basic_lm))
 ```
 
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-22-1.png" width="504" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-21-1.png" width="504" /&gt;
 ]
 .pull-right[
+This looks a little odd. There is clear grouping, in that it looks a lot like each persons data is grouped together. 
 
+There is a clear shift in the green line - as you go further to the right, the amount of variability is increases.
 ]
 ]
 .panel[.panel-name[Mixed model]
 .pull-left[
 
 ```r
-plot_model(int_only, type = "diag")[[4]]
+plot(check_heteroscedasticity(int_only))
 ```
 
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-23-1.png" width="504" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-22-1.png" width="504" /&gt;
 ]
 .pull-right[
-But this plot shows evidence of heteroskedasticity - non-constant variance. 
+This is better, but still shows some issues.
 
 The dots seem to *curve* somewhat.
 
@@ -810,10 +794,10 @@ anova(int_only, random_slope)
 .pull-left[
 
 ```r
-plot_model(random_slope, type = "diag")[[4]]
+plot(check_heteroscedasticity(random_slope))
 ```
 
-&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-28-1.png" width="504" /&gt;
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-27-1.png" width="504" /&gt;
 ]
 .pull-right[
 .large[
@@ -822,6 +806,15 @@ These residuals are the best of all so far.
 A few points look suspiciously like outliers, but overall, there's little to suggest any particular problems with this model!
 ]
 ]
+---
+
+
+
+```r
+check_model(random_slope)
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-28-1.png" width="720" /&gt;
 
 ---
 class: middle, center, inverse
@@ -852,7 +845,7 @@ head(politeness)
 ```
 
 ```
-## # A tibble: 6 × 5
+## # A tibble: 6 x 5
 ##   subject gender scenario attitude frequency
 ##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
 ## 1 F1      F             1 pol           213.
