@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Multilevel modelling</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Multilevel modelling
+### 2022/04/26
+
+---
+
+
+
+
+# Multilevel data
+
+There are *many* situations in psychology where we have *nested* data.
+
+Intervention studies are typically longitudinal - the same participants are tested multiple times on the same outcome measure.
+
+Typical cognitive experiments show participants many repeats of similar trials.
+
+![](images/experiment_outlook.png)
+
+---
+# Multilevel data
+
+
+![](images/schools.png)
+
+In this example, each pupil is a unit of observation. 
+
+But these pupils are not fully independent from each other - pupils who attend one school tend to be more similar to each other than they are to pupils who attend other schools.
+
+Thus, *pupils* (Level 1) are nested in *schools* (Level 2).
+
+---
+# Multilevel data
+
+
+
+![](images/longitudinal.png)
+
+Other data may be *longitudinal*. For example, you may measure outcomes such as, for example, performance or attitudes on repeated occasions to see how they vary over time.
+
+The measurements each week are the main unit of observation, but they are nested within subjects.
+
+---
+# Clustered data
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/non-clust-1.png" width="504" /&gt;
+]
+.pull-right[
+Data from nested designs like those we have just seen often have *clusters* of correlated observations.
+
+Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
+
+---
+# Clustered data
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/corr-subj-1.png" width="504" /&gt;
+]
+.pull-right[
+Data from nested designs like those we have just seen often have *clusters* of correlated observations.
+
+Different people have different reaction speeds, or baseline attitudes; different schools have different teachers and different general environments.
+]
+
+---
+class: center, middle, inverse
+# The problem with nesting
+
+---
+# sleepstudy
+
+.pull-left[
+
+```r
+head(sleepstudy, 12)
+```
+
+```
+##    Reaction Days Subject
+## 1  249.5600    0     308
+## 2  258.7047    1     308
+## 3  250.8006    2     308
+## 4  321.4398    3     308
+## 5  356.8519    4     308
+## 6  414.6901    5     308
+## 7  382.2038    6     308
+## 8  290.1486    7     308
+## 9  430.5853    8     308
+## 10 466.3535    9     308
+## 11 222.7339    0     309
+## 12 205.2658    1     309
+```
+]
+.pull-right[
+The *sleepstudy* dataset contains data from a sleep deprivation experiment. 
+
+Over the course of ten days, subjects were only allowed to sleep for 3 hours each night. 
+
+Each day their reaction times on a variety of cognitive tasks were recorded.
+
+This is a *nested*, multilevel design.
+
+Each observation - average RT on a given day - is nested within a *subject*.
+]
+
+---
+# sleepstudy
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-2-1.png" width="504" /&gt;
+]
+.pull-right[
+We could simply fit a linear model to the whole dataset.
+
+
+```r
+basic_lm &lt;- lm(Reaction ~ Days,
+               data = sleepstudy)
+basic_lm
+```
+
+```
+## 
+## Call:
+## lm(formula = Reaction ~ Days, data = sleepstudy)
+## 
+## Coefficients:
+## (Intercept)         Days  
+##      251.41        10.47
+```
+]
+
+---
+
+.panelset[
+.panel[.panel-name[Joint graph]
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-4-1.png" width="504" /&gt;
+]
+.pull-right[
+But the data clearly has more structure than that!
+
+Here each dot is coloured to show which participant contributed which data points.
+
+]
+]
+.panel[.panel-name[Split panels]
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+]
+.pull-right[
+If we split the plot up to show each subject separately, we get more sense of the variability.
+
+For example, Subject 308 shows a very strong effect of sleep deprivation on reaction time, while Subject 309 shows very little effect of sleep deprivation.
+]
+]
+.panel[.panel-name[All the things]
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-6-1.png" width="504" /&gt;
+]
+.pull-right[
+Our simple linear model ignores the fact that many of our observations are repeated measurements from each participant.
+
+It assumes the effect is the same for everyone.
+
+There are 18 participants in this study. Some of them are generally faster or slower than others; some of them show more effect of sleep deprivation than others.
+]
+]
+]
+
+---
+# Simpson's paradox
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-7-1.png" width="504" /&gt;
+]
+.pull-right[
+This data has a correlation coefficient of 
+
+**-0.5**
+
+As V1 increases, V2 decreases!
+]
+
+???
+
+This example is based on https://easystats.github.io/correlation/articles/multilevel.html
+
+Makowski, D., Ben-Shachar, M. S., Patil, I., &amp; Lüdecke, D. (2019).
+Methods and Algorithms for Correlation Analysis in R. Journal of Open
+Source Software, 5(51), 2306. doi:10.21105/joss.02306
+
+---
+# Simpson's paradox
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-8-1.png" width="504" /&gt;
+]
+.pull-right[
+But wait!
+
+What is this?
+
+There are five different groups of people?
+]
+
+???
+
+This example is based on https://easystats.github.io/correlation/articles/multilevel.html
+
+Makowski, D., Ben-Shachar, M. S., Patil, I., &amp; Lüdecke, D. (2019).
+Methods and Algorithms for Correlation Analysis in R. Journal of Open
+Source Software, 5(51), 2306. doi:10.21105/joss.02306
+
+---
+# Simpson's paradox
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-9-1.png" width="504" /&gt;
+]
+.pull-right[
+Within each group, the correlation is the other way round - as V1 increase, V2 also increases!
+
+This is known as **Simpson's paradox**, or the *ecological fallacy*.
+
+The effect if grouping is ignored is the *reverse* of the effect in each individual group.
+]
+
+???
+
+This example is based on https://easystats.github.io/correlation/articles/multilevel.html
+
+Makowski, D., Ben-Shachar, M. S., Patil, I., &amp; Lüdecke, D. (2019).
+Methods and Algorithms for Correlation Analysis in R. Journal of Open
+Source Software, 5(51), 2306. doi:10.21105/joss.02306
+
+---
+class: inverse, middle, center
+# Estimating multilevel models 
+
+---
+# Multilevel models
+
+Multilevel models allow us to account for the nested, correlated nature of the data, and explicitly model the variability between people.
+
+You may also see them called:
+- Hierarchical models
+- Mixed-effects models
+- Random-effects models
+- Mixed models
+
+---
+# Multilevel models using lme4
+
+The most important library for fitting this type of model is `lme4`.
+
+A multilevel model can be fitted with the `lmer()` function.
+
+
+```r
+library(lme4)
+multilev &lt;- 
+  lmer(Reaction ~ 1 + Days + (1 + Days | Subject), 
+       data = sleepstudy)
+```
+
+--
+
+lmer(Reaction ~ .blue[1 + Days] + (.red[1 + Days| Subject]),
+     data = sleepstudy)
+
+*.blue[Fixed] effects* are highlighted in .blue[blue].
+
+*.red[Random] effects* are highlighted in .red[red].
+
+---
+# Fixed and random effects
+
+.large[  
+*Fixed effects* are the *population-average* effect: e.g. the *average* effect of days of sleep deprivation on reaction time.
+
+*Random effects* are those that vary across the *sampling units*. e.g. the variation in average reaction time across people
+
+They are *random* because the *sampling units* are randomly drawn from a wider *population*. e.g. the specific participants in an experiment are usually a random subset of all possible participants
+]
+
+
+---
+# A basic linear model
+
+
+```r
+basic_lm &lt;- lm(Reaction ~ 1 + Days, data = sleepstudy)
+summary(basic_lm)
+```
+
+```
+## 
+## Call:
+## lm(formula = Reaction ~ 1 + Days, data = sleepstudy)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -110.848  -27.483    1.546   26.142  139.953 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  251.405      6.610  38.033  &lt; 2e-16 ***
+## Days          10.467      1.238   8.454 9.89e-15 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 47.71 on 178 degrees of freedom
+## Multiple R-squared:  0.2865,	Adjusted R-squared:  0.2825 
+## F-statistic: 71.46 on 1 and 178 DF,  p-value: 9.894e-15
+```
+
+---
+class: inverse, middle, center
+# Random intercepts
+
+---
+# Individual intercepts
+
+.panelset[
+.panel[.panel-name[Individual intercepts]
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-12-1.png" width="432" /&gt;
+]
+.pull-right[
+The black line on this plot shows the overall **mean** reaction time. This is the *intercept* of the basic model.
+
+Each coloured line on this plot shows an individual participant's **mean** reaction time.
+]
+]
+.panel[.panel-name[Split by subject]
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/indiv-ints-1.png" width="504" /&gt;
+]
+.pull-right[
+If we look at the plots individually for each subject, we can see a little the individual intercepts a little more clearly. 
+
+Some people are faster on average than the overall mean, while others are slower.
+
+A *random-intercept* model models that variability!
+
+]
+]
+]
+
+---
+# Modelling random intercepts
+
+Remember that in our basic model, the *intercept* represents the mean reaction time.
+
+We can model the variability of the intercept better by including a *random effect* term - *(1 | Subject)*.
+
+
+```r
+int_only &lt;- 
+  lmer(Reaction ~ 1 + Days + (1 | Subject),
+       data = sleepstudy) # Random intercept
+```
+
+This model is a *random-intercept* model - it captures how mean reaction times vary across subjects.
+
+---
+
+
+```r
+summary(int_only)
+```
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Reaction ~ 1 + Days + (1 | Subject)
+##    Data: sleepstudy
+## 
+## REML criterion at convergence: 1786.5
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.2257 -0.5529  0.0109  0.5188  4.2506 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  Subject  (Intercept) 1378.2   37.12   
+##  Residual              960.5   30.99   
+## Number of obs: 180, groups:  Subject, 18
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept) 251.4051     9.7467   25.79
+## Days         10.4673     0.8042   13.02
+## 
+## Correlation of Fixed Effects:
+##      (Intr)
+## Days -0.371
+```
+
+---
+
+
+```r
+tab_model(basic_lm, int_only, dv.labels = c("Reaction time (ms)", "Reaction time (ms)"))
+```
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Reaction time (ms)&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Reaction time (ms)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col7"&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;251.41&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;238.36&amp;nbsp;&amp;ndash;&amp;nbsp;264.45&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;251.41&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;232.17&amp;nbsp;&amp;ndash;&amp;nbsp;270.64&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Days&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.47&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;8.02&amp;nbsp;&amp;ndash;&amp;nbsp;12.91&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.47&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;8.88&amp;nbsp;&amp;ndash;&amp;nbsp;12.05&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="7" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;960.46&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;1378.18 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;ICC&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.59&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;18 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;180&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;180&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;R&lt;sup&gt;2&lt;/sup&gt; / R&lt;sup&gt;2&lt;/sup&gt; adjusted&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.286 / 0.282&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.280 / 0.704&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+---
+
+### Standard linear model
+
+```
+##              Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept) 251.40510   6.610154 38.033169 2.156888e-87
+## Days         10.46729   1.238195  8.453663 9.894096e-15
+```
+
+### Intercept only mixed-model
+
+```
+##              Estimate Std. Error  t value
+## (Intercept) 251.40510  9.7467163 25.79383
+## Days         10.46729  0.8042214 13.01543
+```
+
+The *standard errors* differ, which means the *t-values* differ.
+
+The *intercept* variability increased, while the `Days` variability decreased!
+
+---
+# Random effects
+
+.pull-left[
+The *fixed* effects give us a measure of average performance and the overall effect of Days of sleep deprivation on RT.
+
+```r
+fixef(int_only)
+```
+
+```
+## (Intercept)        Days 
+##   251.40510    10.46729
+```
+]
+.pull-right[
+The *random* effects tell us how much variability there is *between-participants*. In this case, we only estimated participant-specific intercepts.
+
+
+```r
+summary(int_only)$varcor
+```
+
+```
+##  Groups   Name        Std.Dev.
+##  Subject  (Intercept) 37.124  
+##  Residual             30.991
+```
+]
+
+---
+#A quick look at the residuals
+
+.panelset[
+.panel[.panel-name[Standard model]
+.pull-left[
+
+```r
+library(sjPlot)
+plot_model(basic_lm, type = "diag")[[1]]
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-20-1.png" width="504" /&gt;
+]
+.pull-right[
+These residuals don't look great - the dots seems to show a slight curve, and our predictions at each end are also poor.
+
+This suggests there's some structure not being captured by the model.
+]
+]
+.panel[.panel-name[Mixed model]
+.pull-left[
+
+```r
+plot_model(int_only, type = "diag")[[1]]
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-21-1.png" width="504" /&gt;
+]
+.pull-right[
+This model - the *random intercept* model - is doing a *much much* better joib than our basic linear model.
+
+The points now lie almost entirely along the line.
+
+This indicates a better correspondence between the model predictions and the actual data!
+]
+]
+]
+
+---
+#A quick look at the residuals
+
+.panelset[
+.panel[.panel-name[Standard model]
+.pull-left[
+
+```r
+plot_model(basic_lm, type = "diag")[[3]]
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-22-1.png" width="504" /&gt;
+]
+.pull-right[
+
+]
+]
+.panel[.panel-name[Mixed model]
+.pull-left[
+
+```r
+plot_model(int_only, type = "diag")[[4]]
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-23-1.png" width="504" /&gt;
+]
+.pull-right[
+But this plot shows evidence of heteroskedasticity - non-constant variance. 
+
+The dots seem to *curve* somewhat.
+
+This suggests there is still something not quite right in our model.
+]
+]
+]
+
+---
+class: inverse, middle, center
+# Random slopes
+
+---
+# Individual slopes
+
+.pull-left[
+&lt;img src="4-multilevel-modelling_files/figure-html/indiv-regs-1.png" width="504" /&gt;
+]
+.pull-right[
+This plot now show individual plots for each participant with the individual effect of `Days` added.
+
+The general trend is consistent, but it's clear that some participants have stronger effects than others. 
+
+And it looks a little like people who are generally fast responders show *less* effect of `Days` of sleep deprivation.
+]
+
+---
+# Modelling random slopes
+
+We can model how much the effect of `Days` varies between participants by adding  *random slopes* to our model - `(Days | Subject)`.
+
+```r
+random_slope &lt;- lmer(Reaction ~ 1 + Days + (1 + Days | Subject), 
+                     data = sleepstudy)
+```
+
+Note that `Days` now appears twice. 
+
+The first time models the *population-average* effect of `Days`.
+
+The second time models the *individual* effect of `Days`.
+
+---
+
+
+```r
+summary(random_slope)
+```
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: Reaction ~ 1 + Days + (1 + Days | Subject)
+##    Data: sleepstudy
+## 
+## REML criterion at convergence: 1743.6
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.9536 -0.4634  0.0231  0.4634  5.1793 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  Subject  (Intercept) 612.10   24.741       
+##           Days         35.07    5.922   0.07
+##  Residual             654.94   25.592       
+## Number of obs: 180, groups:  Subject, 18
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  251.405      6.825  36.838
+## Days          10.467      1.546   6.771
+## 
+## Correlation of Fixed Effects:
+##      (Intr)
+## Days -0.138
+```
+
+---
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Reaction times (ms)&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Reaction times (ms)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col7"&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;251.41&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;232.17&amp;nbsp;&amp;ndash;&amp;nbsp;270.64&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;251.41&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;237.94&amp;nbsp;&amp;ndash;&amp;nbsp;264.87&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;Days&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.47&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;8.88&amp;nbsp;&amp;ndash;&amp;nbsp;12.05&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;10.47&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;7.42&amp;nbsp;&amp;ndash;&amp;nbsp;13.52&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="7" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;960.46&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;654.94&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;1378.18 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;612.10 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;11&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;35.07 &lt;sub&gt;Subject.Days&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;rho;&lt;sub&gt;01&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;&amp;nbsp;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.07 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;ICC&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.59&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.72&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;18 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;18 &lt;sub&gt;Subject&lt;/sub&gt;&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;180&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;180&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;Marginal R&lt;sup&gt;2&lt;/sup&gt; / Conditional R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.280 / 0.704&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.279 / 0.799&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+---
+# Model comparisons
+
+Is this model an improvement? Use `anova()` to check!
+
+
+```r
+anova(int_only, random_slope)
+```
+
+```
+## refitting model(s) with ML (instead of REML)
+```
+
+```
+## Data: sleepstudy
+## Models:
+## int_only: Reaction ~ 1 + Days + (1 | Subject)
+## random_slope: Reaction ~ 1 + Days + (1 + Days | Subject)
+##              npar    AIC    BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+## int_only        4 1802.1 1814.8 -897.04   1794.1                         
+## random_slope    6 1763.9 1783.1 -875.97   1751.9 42.139  2  7.072e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+(it's significant, so yes!)
+
+---
+# A quick look at the residuals
+
+.pull-left[
+
+```r
+plot_model(random_slope, type = "diag")[[4]]
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-28-1.png" width="504" /&gt;
+]
+.pull-right[
+.large[
+These residuals are the best of all so far.
+
+A few points look suspiciously like outliers, but overall, there's little to suggest any particular problems with this model!
+]
+]
+
+---
+class: middle, center, inverse
+# Multiple random effects
+
+---
+# The "language as fixed-effect" fallacy
+
+A common circumstance in psychological research is that we have more than one random effect.
+
+For example, in language experiments, subject often need to read a many different words; these may be words from different categories, or vary in other ways.
+
+These words themselves are random samples, but many researchers treat them as being *fixed*.
+
+[Clark, 1973](https://www.sciencedirect.com/science/article/pii/S0022537173800143)
+
+---
+# The `politeness` study
+
+Winter and Grawunder (2012) looked at the relationship between vocal pitch and the level of politeness of a sentence.
+
+Participants were asked to imagine how they would respond to a variety of scenarios when talking politely or informally.
+
+
+```r
+politeness &lt;- read_csv("data/politeness_data.csv")
+head(politeness)
+```
+
+```
+## # A tibble: 6 × 5
+##   subject gender scenario attitude frequency
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;
+## 1 F1      F             1 pol           213.
+## 2 F1      F             1 inf           204.
+## 3 F1      F             2 pol           285.
+## 4 F1      F             2 inf           260.
+## 5 F1      F             3 pol           204.
+## 6 F1      F             3 inf           287.
+```
+
+---
+# The `politeness` study
+
+In the `politeness` study, there are *two* distinct groupings: 
+
+1) Subjects repeat the same task (imaging a scenario) over and over again 
+
+2) Individual scenarios are repeated by different subjects
+
+Thus there are *two* possible sources of correlated data - we'd expect responses to particular scenarios to be fairly consistent across subjects, and responses by individual subjects to be fairly consistent across items,
+
+---
+
+.panelset[
+.panel[.panel-name[All data]
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-30-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Subject]
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-31-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Scenario]
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-32-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+.panel[.panel-name[Both]
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-33-1.png" width="576" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+# Variability between subjects
+
+.pull-left[
+
+```r
+boxplot(frequency ~ subject,
+        data = politeness)
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-34-1.png" width="504" /&gt;
+]
+.pull-right[
+Individual participants vary in their baseline vocal frequency.
+
+Male participants typically have lower frequency voices than female participants.
+]
+
+---
+# Variability between scenarios
+
+.pull-left[
+
+```r
+boxplot(frequency ~ scenario,
+        data = politeness)
+```
+
+&lt;img src="4-multilevel-modelling_files/figure-html/unnamed-chunk-35-1.png" width="504" /&gt;
+]
+.pull-right[
+There seems to be some variability across scenarios.
+
+Scenario 7 seems consistently lower than scenario 4, for example.
+
+But there does seem to be less variability than across participants.
+
+]
+
+
+---
+# Multiple random effects
+
+We can model *both* of these sources of variability simultaneously by adding *multiple random effects*.
+
+
+```r
+full_mod &lt;- lmer(frequency ~ attitude + (1|subject) + (1|scenario),
+                 data = politeness)
+```
+
+Whereas before we only added `(1|subject)`, here we also add `(1|scenario)`. 
+
+This models separate intercepts for each subject and each scenario, allowing for, for example, high-pitched individuals or scenarios that typically elicit low-pitched responses.
+
+---
+
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: frequency ~ attitude + (1 | subject) + (1 | scenario)
+##    Data: politeness
+## 
+## REML criterion at convergence: 793.5
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -2.2006 -0.5817 -0.0639  0.5625  3.4385 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  scenario (Intercept)  219     14.80   
+##  subject  (Intercept) 4015     63.36   
+##  Residual              646     25.42   
+## Number of obs: 83, groups:  scenario, 7; subject, 6
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  202.588     26.754   7.572
+## attitudepol  -19.695      5.585  -3.527
+## 
+## Correlation of Fixed Effects:
+##             (Intr)
+## attitudepol -0.103
+```
+
+---
+
+&lt;table style="border-collapse:collapse; border:none;"&gt;
+&lt;tr&gt;
+&lt;th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; "&gt;&amp;nbsp;&lt;/th&gt;
+&lt;th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; "&gt;Frequency (Hz)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; "&gt;Predictors&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;Estimates&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;CI&lt;/td&gt;
+&lt;td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  "&gt;p&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;(Intercept)&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;202.59&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;149.33&amp;nbsp;&amp;ndash;&amp;nbsp;255.85&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;&amp;lt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; "&gt;attitude [pol]&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;19.69&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&amp;#45;30.81&amp;nbsp;&amp;ndash;&amp;nbsp;-8.58&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "&gt;&lt;strong&gt;0.001&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;"&gt;Random Effects&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;646.02&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;scenario&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;218.98&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;&amp;tau;&lt;sub&gt;00&lt;/sub&gt; &lt;sub&gt;subject&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;4014.54&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;ICC&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.87&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;subject&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;6&lt;/td&gt;
+
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;N &lt;sub&gt;scenario&lt;/sub&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;7&lt;/td&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;"&gt;Observations&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3"&gt;83&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;"&gt;Marginal R&lt;sup&gt;2&lt;/sup&gt; / Conditional R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;
+&lt;td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3"&gt;0.020 / 0.870&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+---
+class: center, middle, inverse
+# Some final words and references
+
+---
+# Generalized linear mixed effects models
+
+As discussed last week, there are many types of data for which a linear model is *inappropriate*. 
+
+Fortunately, we can fit **generalized linear mixed effects models** too!
+
+`glmer(DV ~ IV1 + IV2 + (IV1 | random_factor), family = binomial(), data = your_data)`
+
+---
+# Additional reading
+
+[Complete vs Partial vs no pooling](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)
+
+[An introduction to mixed models](https://gkhajduk.github.io/2017-03-09-mixed-models/)
+
+[Keep it Maximal](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3881361/)
+
+[Generalizing over encounters: statistical and theoretical considerations](https://psyarxiv.com/mcrzu/)
+
+[Understanding mixed-effects models through data simulation](https://journals.sagepub.com/doi/full/10.1177/2515245920965119)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
