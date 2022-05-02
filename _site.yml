@@ -44,7 +44,7 @@ navbar:
       - text: "4: Multilevel Analysis - Linear Mixed Effects Models"
         href: slides/4-multilevel-modelling.html
       - text: "5: Moderation and Mediation"
-        #href: slides/5-Moderation-Mediation.html
+        href: slides/5-Moderation-Mediation.html
       - text: "6: Factor Analysis with PCA"
         #href: slides/6-Factor-Analysis.html
       - text: "7: Statistics done wrong"
