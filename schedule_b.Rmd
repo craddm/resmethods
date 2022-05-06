@@ -40,6 +40,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### 6. 10/05/2022, Factor analysis
 
+- [Slides](slides/6-Factor-Analysis.html)
+- [PDF](slides/6-Factor-Analysis.pdf)
+
 ### 7. 17/05/2022, Statistics done wrong
 
 ### 8. 24/05/2022, R from start to finish
