@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R from start to finish</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# R from start to finish
+]
+.date[
+### 2022/05/24
+]
+
+---
+
+
+
+
+class: center, middle, inverse
+# Keeping your analyses organised
+
+---
+background-image: url(https://imgs.xkcd.com/comics/documents.png)
+background-size: contain
+
+???
+
+Image from Xkcd = https://xkcd.com/1459/
+
+---
+# Keeping your analyses organised
+
+You ran an experiment. 
+
+You downloaded the data.
+
+You wrote an Rmarkdown document to process the data and run your analysis.
+
+You wrote your report based on that output.
+
+Where do you put all of this?
+
+---
+# RStudio Projects
+
+On RStudio.cloud, each project you create is in fact a completely separate instance of R
+
+For working on your own projects (e.g. your dissertation) I recommend that you download and install [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/)
+
+Once that's up and running, you can get to grips with [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) 
+
+Projects provide a neat way to organise your work into neat, individually tailored sets of directories.
+
+---
+background-image: url(images/noneproject.png)
+background-size: contain
+
+---
+background-image: url(images/projectdropdown.png)
+background-size: contain
+
+---
+background-image: url(images/createnew.png)
+background-size: contain
+
+---
+background-image: url(images/createdemo.png)
+background-size: contain
+
+---
+background-image: url(images/createnew.png)
+background-size: contain
+
+---
+# Keeping your analyses organised
+
+Make a new RStudio project for each separate "project" - one for your thesis, one for your assessment, and so on.
+
+Follow sensible structure:
+
+Keep your data in a folder called data.
+
+Keep your scripts in a folder called scripts.
+
+[Give your files sensible names!](https://speakerdeck.com/jennybc/how-to-name-files)
+
+For more general workflow advice, check out What They Forgot to Teach You About R at [https://rstats.wtf/](https://rstats.wtf/)
+
+---
+class: center, middle, inverse
+# Watch the workflow demos!
+
+---
+# Watch the workflow demos!
+
+On Panopto you'll find a couple of videos for this week that demonstrate some aspects of this process.
+
+1) A demo of processing the raw data from the Fear of Crime study
+
+2) A demo of processing the raw data from a study of mental rotation.
+
+These videos are *largely improvised*, far from exhaustive, and may occasionally be confusing when I become confused!
+
+---
+class: center, middle, inverse
+# Some other things you can do with R
+
+---
+background-size: contain
+# Create slides
+
+All of the R based lectures are created using RMarkdown and the [`xaringan`](https://slides.yihui.org/xaringan/) package.
+
+&lt;img src="https://github.com/rstudio/hex-stickers/blob/master/PNG/xaringan.png?raw=true" width="300" style="display: block; margin: auto;" /&gt;
+
+---
+# Create websites and blogs
+
+The course website was created using the `distill` package.  
+
+&lt;img src="https://raw.githubusercontent.com/rstudio/distill/master/man/figures/logo.png" width="300" style="display: block; margin: auto;" /&gt;
+[craddm.github.io/resmethods/](https://craddm.github.io/resmethods/)
+
+https://m-clark.github.io/distill-workshop/
+
+---
+# Create websites and blogs
+
+My own website and blog, [www.mattcraddock.com](https://www.mattcraddock.com), was created using `blogdown`
+
+&lt;img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/blogdown.png" width="300" style="display: block; margin: auto;" /&gt;
+
+
+
+https://alison.rbind.io/post/new-year-new-blogdown/
+
+
+
+---
+# Create interactive web apps
+
+R, through the `shiny` package
+
+&lt;img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/thumbs/shiny.png" width="300" style="display: block; margin: auto;" /&gt;
+
+[ERP demo app](https://craddm.shinyapps.io/ERPDemo)
+
+---
+# Create memes
+
+
+```r
+library(memer)
+meme_get("IsThisAPigeon") %&gt;%
+  meme_text_pigeon("Is this a research method?",
+                  "Me",
+                  "Memes")
+```
+
+&lt;img src="8-R-from-start-to-finish_files/figure-html/unnamed-chunk-5-1.png" width="311" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle, inverse
+# The R community
+
+--
+
+[psyTeachR](https://psyteachr.github.io/) - the University of Glasgow
+
+--
+
+[useR](https://user2021.r-project.org/program/overview/)
+
+--
+
+[#rstats](https://twitter.com/hashtag/rstats?lang=en)
+
+--
+
+[R-Ladies Global](https://rladies.org/)
+
+---
+class: center, middle, inverse
+
+&lt;img src="8-R-from-start-to-finish_files/figure-html/unnamed-chunk-6-1.png" width="300" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="js/macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

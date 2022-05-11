@@ -45,4 +45,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### 7. 17/05/2022, Statistics done wrong
 
+- [Slides](slides/7-stats-done-wrong.html)
+- [PDF](slides/7-stats-done-wrong.pdf)
+
 ### 8. 24/05/2022, R from start to finish

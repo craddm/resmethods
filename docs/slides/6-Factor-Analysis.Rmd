@@ -169,7 +169,7 @@ We can shift the *axes* to pass through these points.
 # Factor loadings
 
 .pull-left[
-```{r class-dim, echo = FALSE, fig.show = "hide"}
+```{r class-dim, echo = FALSE, fig.show = "hide", fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 3) +
@@ -208,7 +208,7 @@ Items that measure the *Honesty-Humility* factor load high on the x-axis.
 
 ]
 .pull-right[
-```{r both-facs, echo = FALSE}
+```{r both-facs, echo = FALSE, fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 5) +
@@ -351,7 +351,7 @@ ggplot(class_dims,
 The items that load on the Honesty-Humility axis are close to the centre of the *y-axis*, but distant from zero on the *x-axis*.
 ]
 .pull-right[
-```{r fac-load-emo, echo = FALSE}
+```{r fac-load-emo, echo = FALSE, fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 5) +
@@ -438,7 +438,7 @@ The items that load on the Honesty-Humility axis are close to the centre of the 
 The items that load on the Emotionality factor are close to the centre of the *x-axis*, but distant from zero on the *y-axis*.
 ]
 .pull-right[
-```{r fac-dim-hum, echo = FALSE}
+```{r fac-dim-hum, echo = FALSE, fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 5) +
@@ -526,7 +526,7 @@ These clearly load negatively on both our existing factors, but we may need anot
 ]
 
 .pull-right[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 5) +
@@ -566,7 +566,7 @@ These clearly load negatively on both our existing factors, but we may need anot
 For each distinct *factor*, we need an additional *dimension*.
 ]
 .pull-right[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 ggplot(class_dims, 
        aes(x = x, y = y)) +
   geom_point(size = 5) +
@@ -693,7 +693,7 @@ In theory, we could have one per item.
 Here, it looks like there are at least five different groups.
 ]
 .pull-right[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 latest_data <- 
   data.frame(x = c(rtruncnorm(5, .1, sd = .2,
                               a = -1, b = 1),
@@ -733,7 +733,7 @@ new_plot +
 Catell (1966) proposed the scree plot as a way to choose how many factors to keep.
 
 The y-axis shows the eigenvalue of each potential factor, up to the maximum number possible.
-```{r scree-plot1, fig.show = "hide"}
+```{r scree-plot1, fig.show = "hide", fig.height=6}
 scree(hexaco_only, factors = FALSE)
 ```
 ]
@@ -765,7 +765,7 @@ It's probably around 9 components here!
 ]
 
 .pull_right[
-```{r screeplotmark, echo = FALSE}
+```{r screeplotmark, echo = FALSE, fig.height=6}
 scree(hexaco_only, factors = FALSE)
 abline(v = 9.5, h = 1.5, lty = 2)
 ```
@@ -782,7 +782,7 @@ This would pick out around *16* factors here.
 Kaiser's criterion tends to keep too many factors.
 ]
 .pull-right[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 scree(hexaco_only, factors = FALSE)
 ```
 ]
@@ -791,13 +791,13 @@ scree(hexaco_only, factors = FALSE)
 # Parallel analysis
 
 .pull-left[
-Arguably the best method is **Parallel Analysis**, using the **fa.parallel()** function.
+Arguably the best method is **Parallel Analysis**, using the `fa.parallel()` function.
 
 In parallel analysis, *random* data is generated and compared to the *true* data.
 
 Factors above the *red* line should be kept. Here, it's 9, just like our "point of inflexion" rule would suggest.
 
-```{r parallel-fa, fig.show = "hide"}
+```{r parallel-fa, fig.show = "hide", fig.height=6}
 fa.parallel(hexaco_only,
             fa = "pc")
 ```
@@ -896,7 +896,7 @@ There are two types of rotation:
 # Orthogonal rotation
 
 .pull-left[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 ortho_plot <- 
   class_dims %>% 
   mutate(x = case_when(
@@ -927,7 +927,7 @@ In this case, the items are slightly off the original axes.
 # Orthogonal rotation
 
 .pull-left[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 ortho_plot +
   geom_abline(intercept = 0,
               slope = -.253, 
@@ -960,7 +960,7 @@ principal(hexaco_only,
 # Oblique rotation
 
 .pull-left[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 oblique_plot <- 
   class_dims %>% 
   mutate(x = case_when(
@@ -990,7 +990,7 @@ In this case, the items are displaced from the axes slightly differently.
 ---
 # Oblique rotation
 .pull-left[
-```{r echo = FALSE}
+```{r echo = FALSE, fig.height=6}
 oblique_plot + 
   geom_abline(intercept = 0,
               slope = .3,
