@@ -25,7 +25,7 @@ xaringanExtra::use_panelset()
 knitr::opts_chunk$set(fig.asp = .618,
                       fig.retina = 3)
 library(xaringanthemer)
-style_solarized_light(base_font_size = "20px")
+style_solarized_light(base_font_size = "21px")
 library(tidyverse)
 ```
 
@@ -56,13 +56,11 @@ Where do you put all of this?
 ---
 # RStudio Projects
 
-On RStudio.cloud, each project you create is in fact a completely separate instance of R
-
-For working on your own projects (e.g. your dissertation) I recommend that you download and install [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/)
-
-Once that's up and running, you can get to grips with [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) 
+You should have been using [RStudio projects](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) already during the course - if not, make sure you read up on them.
 
 Projects provide a neat way to organise your work into neat, individually tailored sets of directories.
+
+If you use [RStudio.cloud](https://rstudio.cloud), each project you create is in fact a completely separate instance of R
 
 ---
 background-image: url(images/noneproject.png)
@@ -136,7 +134,7 @@ The course website was created using the `distill` package.
 ```{r echo = FALSE, out.width= 300, fig.align = "center"}
 knitr::include_graphics("https://raw.githubusercontent.com/rstudio/distill/master/man/figures/logo.png")
 ```
-[craddm.github.io/resmethods/](https://craddm.github.io/resmethods/)
+[psyresmeth.github.io/resmethods/](https://craddm.github.io/resmethods/)
 
 https://m-clark.github.io/distill-workshop/
 
@@ -151,7 +149,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/rstudio/hex-stickers/
 
 
 
-https://alison.rbind.io/post/new-year-new-blogdown/
+https://www.apreshill.com/blog/2020-12-new-year-new-blogdown/
 
 
 

@@ -49,3 +49,6 @@ knitr::opts_chunk$set(echo = FALSE)
 - [PDF](slides/7-stats-done-wrong.pdf)
 
 ### 8. 24/05/2022, R from start to finish
+
+- [Slides](slides/8-R-from-start-to-finish.html)
+- [PDF](slides/8-R-from-start-to-finish.pdf)
