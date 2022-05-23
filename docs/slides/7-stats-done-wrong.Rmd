@@ -144,7 +144,7 @@ In their second study, participants listened to "When I'm Sixty-Four" by the Bea
 The authors used *every trick in the book* to get this effect. Here's an honest account of the second study:
 
 ```{r echo = FALSE}
-knitr::include_graphics("https://journals.sagepub.com/na101/home/literatum/publisher/sage/journals/content/pssa/2011/pssa_22_11/0956797611417632/20161120/images/large/10.1177_0956797611417632-table3.jpeg")
+knitr::include_graphics("images/10.1177_0956797611417632-table3.jpeg")
 ```
 
 ---
